@@ -27,15 +27,16 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       async (event, session) => {
         setSession(session);
         setUser(session?.user ?? null);
-        
+
         if (session?.user) {
           // Fetch user profile and role
-          const { data: profileData } = await supabase
+          const { data: profileData ,error:error} = await supabase
             .from('profiles')
             .select('*')
             .eq('user_id', session.user.id)
             .single();
-          
+
+            
           // Fetch user role from user_roles table
           const { data: roleData } = await supabase
             .from('user_roles')

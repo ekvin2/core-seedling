@@ -34,17 +34,24 @@ const ServicesSection = () => {
 
   useEffect(() => {
     const fetchServices = async () => {
-      const { data, error } = await supabase
+      try{
+        const { data, error } = await supabase
         .from('services')
         .select('*')
         .eq('is_active', true)
         .order('display_order', { ascending: true })
         .order('created_at', { ascending: true });
 
+        console.log(error);
+        console.log(data);
+
       if (!error && data) {
         setServices(data);
       }
       setLoading(false);
+      }catch($e){
+        console.log("this");
+      }
     };
 
     fetchServices();

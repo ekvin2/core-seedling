@@ -1,57 +1,58 @@
 import { useState, useEffect } from "react";
-import { Card, CardContent } from "@/components/ui/card";
+import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { ImageIcon, ExternalLink } from "lucide-react";
+import { supabase } from "@/integrations/supabase/client";
 
-// Sample gallery images - replace with actual gallery integration
-const sampleImages = [
-  {
-    id: 1,
-    url: "https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=400&h=300&fit=crop",
-    title: "Living Room Deep Clean",
-    description: "Complete transformation of family living space"
-  },
-  {
-    id: 2,
-    url: "https://images.unsplash.com/photo-1586023492125-27b2c045efd7?w=400&h=300&fit=crop",
-    title: "Kitchen Restoration",
-    description: "Professional kitchen cleaning and sanitization"
-  },
-  {
-    id: 3,
-    url: "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=400&h=300&fit=crop",
-    title: "Bathroom Renovation Clean",
-    description: "Post-construction cleaning perfection"
-  },
-  {
-    id: 4,
-    url: "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=400&h=300&fit=crop",
-    title: "Office Space Cleaning",
-    description: "Corporate office deep cleaning service"
-  },
-  {
-    id: 5,
-    url: "https://images.unsplash.com/photo-1571068316344-75bc76f77890?w=400&h=300&fit=crop",
-    title: "Bedroom Makeover",
-    description: "Complete bedroom cleaning and organization"
-  },
-  {
-    id: 6,
-    url: "https://images.unsplash.com/photo-1600566753190-17f0baa2a6c3?w=400&h=300&fit=crop",
-    title: "Move-Out Cleaning",
-    description: "Professional move-out cleaning service"
-  }
-];
 
 const WorksSection = () => {
-  const [images, setImages] = useState(sampleImages);
-  const [loading, setLoading] = useState(false);
+  // Unified image shape used by the UI — keeps `url` field consistent
+  type UIImage = {
+    id: string | number;
+    url: string;
+    title?: string | null;
+    description?: string | null;
+  };
 
-  // Future: Replace with actual gallery API integration
+  const [images, setImages] = useState<UIImage[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  // Fetch images from Supabase `portfolio` table
   useEffect(() => {
-    // This would fetch from your gallery/portfolio API
-    // For now, using sample images
-    setImages(sampleImages.slice(0, 6));
+    const fetchPortfolio = async () => {
+      try {
+        const { data, error } = await supabase
+          .from("portfolio")
+          .select("id, image_url, title, is_active, taken_at")
+          .eq("is_active", true)
+          .order("taken_at", { ascending: false });
+
+        if (error) {
+          console.error("Error fetching portfolio:", error);
+          // keep sample images as fallback
+        } else if (data && data.length > 0) {
+          // Normalize DB rows (which use `image_url`) into our UI shape (`url`)
+          const mapped = data.map((d: any) => ({
+            id: d.id,
+            url: d.image_url,
+            title: d.title ?? undefined,
+            description: undefined,
+          }));
+
+          setImages(mapped as UIImage[]);
+        } else {
+          // no data, set empty images array
+          setImages([]);
+        }
+        } catch (err) {
+        console.error("Unexpected error fetching portfolio:", err);
+        setImages([]);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchPortfolio();
   }, []);
 
   return (

@@ -103,16 +103,7 @@ const Auth = () => {
             <Button type="submit" className="w-full" disabled={loading}>
               {loading ? (isSignUp ? 'Creating account...' : 'Signing in...') : (isSignUp ? 'Sign Up' : 'Sign In')}
             </Button>
-            <div className="text-center text-sm text-muted-foreground">
-              {isSignUp ? "Already have an account? " : "Don't have an account? "}
-              <button
-                type="button"
-                onClick={() => setIsSignUp(!isSignUp)}
-                className="text-primary hover:underline font-medium"
-              >
-                {isSignUp ? 'Sign In' : 'Sign Up'}
-              </button>
-            </div>
+          
           </CardFooter>
         </form>
       </Card>

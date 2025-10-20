@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
@@ -9,6 +9,7 @@ import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { useToast } from "@/hooks/use-toast";
 import { Loader2 } from "lucide-react";
+import { supabase } from '@/integrations/supabase/client';
 
 interface LeadFormProps {
   onSuccess?: () => void;
@@ -26,6 +27,8 @@ type LeadFormData = z.infer<typeof leadFormSchema>;
 
 const LeadForm = ({ onSuccess }: LeadFormProps) => {
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [servicesList, setServicesList] = useState<Array<{ id: string; title: string }>>([]);
+  const [servicesLoading, setServicesLoading] = useState(false);
   const { toast } = useToast();
 
   const {
@@ -42,16 +45,37 @@ const LeadForm = ({ onSuccess }: LeadFormProps) => {
     setIsSubmitting(true);
     
     try {
-      // Simulate API call - replace with actual backend integration
-      await new Promise(resolve => setTimeout(resolve, 1000));
-      
-      console.log("Lead form submission:", data);
-      
+      // Insert into quotes table
+      const serviceId = data.service;
+      // prevent submitting sentinel values
+      if (serviceId === '__loading' || serviceId === '__none' || !serviceId) {
+        toast({ title: 'Error', description: 'Please select a valid service', variant: 'destructive' });
+        setIsSubmitting(false);
+        return;
+      }
+
+      const { data: inserted, error } = await supabase.from('quotes').insert([
+        {
+          name: data.name,
+          email: data.email,
+          phone: data.phone,
+          service_id: serviceId,
+          note: data.message || null,
+          is_active: true
+        }
+      ]).select();
+
+      console.log('quotes.insert result', { inserted, error });
+
+      if (error) {
+        throw error;
+      }
+
       toast({
         title: "Quote Request Submitted!",
         description: "We'll get back to you within 24 hours with your free quote.",
       });
-      
+
       reset();
       onSuccess?.();
     } catch (error) {
@@ -65,6 +89,37 @@ const LeadForm = ({ onSuccess }: LeadFormProps) => {
       setIsSubmitting(false);
     }
   };
+
+  useEffect(() => {
+    const fetchServices = async () => {
+      setServicesLoading(true);
+      try {
+        const { data, error } = await supabase
+          .from('services')
+          .select('id, title, is_active')
+          .order('display_order', { ascending: true });
+
+        if (error) {
+          console.error('Error fetching services for LeadForm', error);
+          toast({ title: 'Error', description: 'Unable to load services', variant: 'destructive' });
+          setServicesList([]);
+        } else {
+          const list = (data as any[] || [])
+            .filter(s => s.is_active !== false)
+            .map(s => ({ id: s.id, title: s.title }));
+          setServicesList(list);
+        }
+      } catch (err) {
+        console.error('Unexpected error fetching services', err);
+        toast({ title: 'Error', description: 'Unable to load services', variant: 'destructive' });
+        setServicesList([]);
+      } finally {
+        setServicesLoading(false);
+      }
+    };
+
+    fetchServices();
+  }, [toast]);
 
   return (
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
@@ -118,12 +173,15 @@ const LeadForm = ({ onSuccess }: LeadFormProps) => {
               <SelectValue placeholder="Select a service" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="regular-cleaning">Regular House Cleaning</SelectItem>
-              <SelectItem value="deep-cleaning">Deep Cleaning</SelectItem>
-              <SelectItem value="move-in-out">Move In/Out Cleaning</SelectItem>
-              <SelectItem value="post-construction">Post-Construction Cleanup</SelectItem>
-              <SelectItem value="office-cleaning">Office Cleaning</SelectItem>
-              <SelectItem value="other">Other</SelectItem>
+              {servicesLoading ? (
+                <SelectItem value="__loading" disabled>Loading...</SelectItem>
+              ) : servicesList.length > 0 ? (
+                servicesList.map(s => (
+                  <SelectItem key={s.id} value={s.id}>{s.title}</SelectItem>
+                ))
+              ) : (
+                <SelectItem value="__none" disabled>No services available</SelectItem>
+              )}
             </SelectContent>
           </Select>
           {errors.service && (

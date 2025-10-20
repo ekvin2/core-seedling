@@ -219,12 +219,23 @@ const Admin = () => {
 
   const handleDeletePortfolio = async (id: string) => {
     if (!confirm('Are you sure you want to delete this portfolio item?')) return;
-    const { error } = await supabase.from('portfolio').delete().eq('id', id);
-    if (error) {
-      toast({ title: 'Error deleting', description: error.message, variant: 'destructive' });
-    } else {
-      toast({ title: 'Deleted', description: 'Portfolio item removed.' });
-      fetchPortfolio();
+    try {
+      console.log('[portfolio] attempting delete', { id });
+      // Log current user/session for debugging
+      const session = await supabase.auth.getSession();
+      console.log('[auth] session for delete', session?.data?.session ?? null);
+
+      const { data, error } = await supabase.from('portfolio').delete().eq('id', id).select();
+      console.log('[portfolio] delete result', { data, error });
+      if (error) {
+        toast({ title: 'Error deleting', description: error.message, variant: 'destructive' });
+      } else {
+        toast({ title: 'Deleted', description: 'Portfolio item removed.' });
+        fetchPortfolio();
+      }
+    } catch (err: any) {
+      console.error('[portfolio] delete thrown', err);
+      toast({ title: 'Error deleting', description: String(err?.message ?? err), variant: 'destructive' });
     }
   };
 
