@@ -14,6 +14,47 @@ export type Database = {
   }
   public: {
     Tables: {
+      portfolio: {
+        Row: {
+          created_at: string
+          id: string
+          image_url: string
+          is_active: boolean
+          service_id: string | null
+          taken_at: string
+          title: string | null
+          updated_at: string
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          image_url: string
+          is_active?: boolean
+          service_id?: string | null
+          taken_at: string
+          title?: string | null
+          updated_at?: string
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          image_url?: string
+          is_active?: boolean
+          service_id?: string | null
+          taken_at?: string
+          title?: string | null
+          updated_at?: string
+        }
+        Relationships: [
+          {
+            foreignKeyName: "portfolio_service_id_fkey"
+            columns: ["service_id"]
+            isOneToOne: false
+            referencedRelation: "services"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
       faqs: {
         Row: {
           answer: string
@@ -135,10 +176,12 @@ export type Database = {
           heading: string
           id: string
           is_active: boolean
+          service_image_url: string | null
           slug: string
           sub_heading: string | null
           title: string
           updated_at: string
+          youtube_video_url: string | null
         }
         Insert: {
           content: string
@@ -148,10 +191,12 @@ export type Database = {
           heading: string
           id?: string
           is_active?: boolean
+          service_image_url?: string | null
           slug: string
           sub_heading?: string | null
           title: string
           updated_at?: string
+          youtube_video_url?: string | null
         }
         Update: {
           content?: string
@@ -161,10 +206,12 @@ export type Database = {
           heading?: string
           id?: string
           is_active?: boolean
+          service_image_url?: string | null
           slug?: string
           sub_heading?: string | null
           title?: string
           updated_at?: string
+          youtube_video_url?: string | null
         }
         Relationships: []
       }

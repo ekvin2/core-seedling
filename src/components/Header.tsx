@@ -65,12 +65,7 @@ const Header = () => {
               >
                 Services
               </button>
-              <button 
-                onClick={() => handleNavigation('/gallery')}
-                className="text-foreground hover:text-primary transition-colors"
-              >
-                Gallery
-              </button>
+              {/* Gallery removed */}
               <button 
                 onClick={() => scrollToSection("reviews")}
                 className="text-foreground hover:text-primary transition-colors"
@@ -127,12 +122,7 @@ const Header = () => {
                 >
                   Services
                 </button>
-                <button 
-                  onClick={() => handleNavigation('/gallery')}
-                  className="text-left text-foreground hover:text-primary transition-colors"
-                >
-                  Gallery
-                </button>
+                {/* Gallery removed */}
                 <button 
                   onClick={() => scrollToSection("reviews")}
                   className="text-left text-foreground hover:text-primary transition-colors"

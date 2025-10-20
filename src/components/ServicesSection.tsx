@@ -20,6 +20,18 @@ const ServicesSection = () => {
   const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
+  // Function to get service image URL based on service name/slug
+  const getServiceImageUrl = (service: Service) => {
+    // First try the existing URLs from database
+    if (service.featured_image_url) return service.featured_image_url;
+    if (service.service_image_url) return service.service_image_url;
+    
+    // Fallback to uploaded images saved under service name
+    // Convert service title to lowercase and replace spaces with hyphens
+    const imageName = service.title.toLowerCase().replace(/\s+/g, '-').replace(/[^a-z0-9-]/g, '');
+    return `/images/services/${imageName}.jpg`;
+  };
+
   useEffect(() => {
     const fetchServices = async () => {
       const { data, error } = await supabase
@@ -73,28 +85,36 @@ const ServicesSection = () => {
           {services.map((service) => (
             <Card 
               key={service.id} 
-              className="group hover:shadow-lg transition-all duration-300 border-border/50 hover:border-primary/20 overflow-hidden"
+              className="group hover:shadow-lg transition-all duration-300 border-border/50 hover:border-primary/20 overflow-hidden p-0 h-[200px] md:h-[280px] lg:h-[320px]"
             >
-              <div className="aspect-[2/1] md:aspect-[4/3] overflow-hidden bg-muted">
+              {/* Image Container - 80% height with 2:1 aspect ratio and dark overlay */}
+              <div className="relative h-[80%] overflow-hidden bg-muted aspect-[2/1]">
                 <img 
-                  src={service.featured_image_url || service.service_image_url || 'https://images.unsplash.com/photo-1581578731548-c64695cc6952?w=400&h=300&fit=crop'} 
+                  src={getServiceImageUrl(service)} 
                   alt={service.title}
                   className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-300"
                   loading="lazy"
                 />
+                {/* Dark overlay - stronger on mobile for better text contrast */}
+                <div className="absolute inset-0 bg-black/50 md:bg-black/40 group-hover:bg-black/30 transition-colors duration-300"></div>
               </div>
-              <CardHeader className="text-center pb-1 md:pb-3 p-3 md:p-6">
-                <CardTitle className="text-sm md:text-lg font-semibold leading-tight">{service.title}</CardTitle>
-              </CardHeader>
-              <CardContent className="text-center p-3 md:p-6 pt-0">
+              
+              {/* Content Container - 20% height, optimized for mobile and desktop */}
+              <div className="h-[20%] flex flex-col justify-center items-center bg-background px-2">
+                {/* Service Title - Responsive text sizing */}
+                <h3 className="text-xs md:text-sm lg:text-base font-semibold text-center mb-1 leading-tight overflow-hidden" style={{display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical'}}>
+                  {service.title}
+                </h3>
+                {/* Learn More Button - Filled blue button */}
                 <Button 
                   onClick={() => navigate(`/service/${service.slug}`)}
-                  variant="ghost"
-                  className="w-full h-7 md:h-9 text-xs md:text-sm px-2 md:px-4"
+                  variant="default"
+                  size="sm"
+                  className="text-xs md:text-sm px-3 py-1 h-auto min-h-[24px] md:min-h-[28px] bg-blue-600 hover:bg-blue-700 text-white font-medium transition-colors duration-200"
                 >
                   Learn More
                 </Button>
-              </CardContent>
+              </div>
             </Card>
           ))}
         </div>

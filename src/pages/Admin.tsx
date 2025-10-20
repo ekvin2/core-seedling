@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
@@ -10,7 +10,8 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
-import { Trash2, Edit, Eye, LogOut, ArrowUp, ArrowDown, HelpCircle } from 'lucide-react';
+import { Trash2, Edit, Eye, LogOut, ArrowUp, ArrowDown, HelpCircle, X } from 'lucide-react';
+import { uploadImageToSupabase, deleteImageFromSupabase } from '@/lib/imageUpload';
 
 interface Service {
   id: string;
@@ -63,6 +64,12 @@ const Admin = () => {
   const [editingReview, setEditingReview] = useState<Review | null>(null);
   const [editingFaq, setEditingFaq] = useState<FAQ | null>(null);
   
+  // Image upload state
+  const [selectedImage, setSelectedImage] = useState<File | null>(null);
+  const [imagePreview, setImagePreview] = useState<string>('');
+  const [uploadingImage, setUploadingImage] = useState(false);
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  
   // Service form state
   const [title, setTitle] = useState('');
   const [heading, setHeading] = useState('');
@@ -71,6 +78,23 @@ const Admin = () => {
   const [slug, setSlug] = useState('');
   const [serviceImageUrl, setServiceImageUrl] = useState('');
   const [youtubeVideoUrl, setYoutubeVideoUrl] = useState('');
+
+  // Portfolio state
+  type PortfolioItem = {
+    id: string;
+    service_id: string | null;
+    image_url: string;
+    title: string | null;
+    taken_at: string; // ISO date
+    created_at: string;
+  };
+  const [portfolio, setPortfolio] = useState<PortfolioItem[]>([]);
+  const [portfolioTitle, setPortfolioTitle] = useState('');
+  const [portfolioServiceId, setPortfolioServiceId] = useState('');
+  const [portfolioDate, setPortfolioDate] = useState('');
+  const [portfolioImage, setPortfolioImage] = useState<File | null>(null);
+  const [portfolioImagePreview, setPortfolioImagePreview] = useState('');
+  const portfolioFileRef = useRef<HTMLInputElement>(null);
 
   // Review form state
   const [customerName, setCustomerName] = useState('');
@@ -96,6 +120,7 @@ const Admin = () => {
       fetchServices();
       fetchReviews();
       fetchFaqs();
+      fetchPortfolio();
     }
   }, [isAdmin]);
 
@@ -117,10 +142,103 @@ const Admin = () => {
     }
   };
 
+  // Portfolio functions
+  const fetchPortfolio = async () => {
+    const { data, error } = await supabase
+      .from('portfolio')
+      .select('*')
+      .order('created_at', { ascending: false });
+    if (error) {
+      toast({ title: 'Error fetching portfolio', description: error.message, variant: 'destructive' });
+    } else {
+      setPortfolio((data as any) || []);
+    }
+  };
+
+  const handlePortfolioImageSelect = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    if (!file.type.startsWith('image/')) {
+      toast({ title: 'Invalid file type', description: 'Please select an image file.', variant: 'destructive' });
+      return;
+    }
+    if (file.size > 5 * 1024 * 1024) {
+      toast({ title: 'File too large', description: 'Please reduce the image size below 5MB and re-upload.', variant: 'destructive' });
+      return;
+    }
+    setPortfolioImage(file);
+    const reader = new FileReader();
+    reader.onload = (ev) => setPortfolioImagePreview(ev.target?.result as string);
+    reader.readAsDataURL(file);
+  };
+
+  const handlePortfolioSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
+    setLoading(true);
+    try {
+      let imageUrl: string | null = null;
+      if (portfolioImage) {
+        const result = await uploadImageToSupabase(portfolioImage, 'images', 'portfolio');
+        if (!result.success || !result.url) {
+          toast({ title: 'Upload failed', description: result.error || 'Failed to upload image', variant: 'destructive' });
+          setLoading(false);
+          return;
+        }
+        imageUrl = result.url;
+      } else {
+        toast({ title: 'Image required', description: 'Please select an image for the portfolio item.', variant: 'destructive' });
+        setLoading(false);
+        return;
+      }
+
+      const { error } = await supabase.from('portfolio').insert([
+        {
+          service_id: portfolioServiceId || null,
+          image_url: imageUrl,
+          title: portfolioTitle || null,
+          taken_at: portfolioDate, // expect YYYY-MM-DD
+          is_active: true,
+        } as any,
+      ]);
+      if (error) {
+        toast({ title: 'Error saving portfolio', description: error.message, variant: 'destructive' });
+      } else {
+        toast({ title: 'Success', description: 'Portfolio item created.' });
+        setPortfolioTitle('');
+        setPortfolioServiceId('');
+        setPortfolioDate('');
+        setPortfolioImage(null);
+        setPortfolioImagePreview('');
+        if (portfolioFileRef.current) portfolioFileRef.current.value = '';
+        fetchPortfolio();
+      }
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  const handleDeletePortfolio = async (id: string) => {
+    if (!confirm('Are you sure you want to delete this portfolio item?')) return;
+    const { error } = await supabase.from('portfolio').delete().eq('id', id);
+    if (error) {
+      toast({ title: 'Error deleting', description: error.message, variant: 'destructive' });
+    } else {
+      toast({ title: 'Deleted', description: 'Portfolio item removed.' });
+      fetchPortfolio();
+    }
+  };
+
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setLoading(true);
+
+    // Ensure image is uploaded (if a new file is selected)
+    const uploadedUrl = await ensureImageUploaded();
+    if (selectedImage && !uploadedUrl) {
+      setLoading(false);
+      return; // stop submission if upload failed
+    }
 
     const serviceData = {
       title,
@@ -128,7 +246,7 @@ const Admin = () => {
       sub_heading: subHeading || null,
       content,
       slug: slug || title.toLowerCase().replace(/[^a-z0-9]+/g, '-'),
-      service_image_url: serviceImageUrl || null,
+      service_image_url: uploadedUrl || serviceImageUrl || null,
       youtube_video_url: youtubeVideoUrl || null,
       is_active: true
     };
@@ -173,6 +291,79 @@ const Admin = () => {
     setServiceImageUrl('');
     setYoutubeVideoUrl('');
     setEditingService(null);
+    setSelectedImage(null);
+    setImagePreview('');
+  };
+
+  // Image upload functions
+  const handleImageSelect = (event: React.ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+    if (file) {
+      // Validate file type
+      if (!file.type.startsWith('image/')) {
+        toast({
+          title: "Invalid file type",
+          description: "Please select an image file.",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      // Validate file size (5MB limit)
+      if (file.size > 5 * 1024 * 1024) {
+        toast({
+          title: "File too large",
+          description: "Please select an image smaller than 5MB.",
+          variant: "destructive",
+        });
+        return;
+      }
+
+      setSelectedImage(file);
+      
+      // Create preview
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        setImagePreview(e.target?.result as string);
+      };
+      reader.readAsDataURL(file);
+    }
+  };
+
+  // Upload image just-in-time during form submit
+  const ensureImageUploaded = async (): Promise<string | null> => {
+    if (!selectedImage) return serviceImageUrl || null;
+    setUploadingImage(true);
+    try {
+      const result = await uploadImageToSupabase(selectedImage);
+      if (result.success && result.url) {
+        setServiceImageUrl(result.url);
+        return result.url;
+      }
+      toast({
+        title: "Upload failed",
+        description: result.error || "Failed to upload image",
+        variant: "destructive",
+      });
+      return null;
+    } finally {
+      setUploadingImage(false);
+    }
+  };
+
+  const handleRemoveImage = async () => {
+    if (serviceImageUrl) {
+      // Try to delete from Supabase storage
+      await deleteImageFromSupabase(serviceImageUrl);
+    }
+    
+    setServiceImageUrl('');
+    setSelectedImage(null);
+    setImagePreview('');
+    
+    if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
   };
 
   const handleEdit = (service: Service) => {
@@ -184,6 +375,14 @@ const Admin = () => {
     setSlug(service.slug);
     setServiceImageUrl(service.service_image_url || '');
     setYoutubeVideoUrl(service.youtube_video_url || '');
+    
+    // Set image preview if there's an existing image
+    if (service.service_image_url) {
+      setImagePreview(service.service_image_url);
+    } else {
+      setImagePreview('');
+    }
+    setSelectedImage(null);
   };
 
   const handleDelete = async (id: string) => {
@@ -512,10 +711,11 @@ const Admin = () => {
         </div>
 
         <Tabs defaultValue="services" className="w-full">
-          <TabsList className="grid w-full grid-cols-3">
+          <TabsList className="grid w-full grid-cols-4">
             <TabsTrigger value="services">Services</TabsTrigger>
             <TabsTrigger value="reviews">Reviews</TabsTrigger>
             <TabsTrigger value="faqs">Q&A / FAQs</TabsTrigger>
+            <TabsTrigger value="portfolio">Portfolio</TabsTrigger>
           </TabsList>
           
           <TabsContent value="services" className="space-y-6">
@@ -585,16 +785,53 @@ const Admin = () => {
                   
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-2">
-                      <Label htmlFor="serviceImageUrl">Service Image URL</Label>
-                      <Input
-                        id="serviceImageUrl"
-                        value={serviceImageUrl}
-                        onChange={(e) => setServiceImageUrl(e.target.value)}
-                        placeholder="e.g. https://example.com/image.jpg"
-                      />
-                      <p className="text-xs text-muted-foreground">
-                        Main image displayed on the service page hero section
-                      </p>
+                      <Label htmlFor="serviceImage">Service Image</Label>
+                      <div className="space-y-4">
+                        {/* File input */}
+                        <div className="flex items-center gap-2">
+                          <Input
+                            ref={fileInputRef}
+                            id="serviceImage"
+                            type="file"
+                            accept="image/*"
+                            onChange={handleImageSelect}
+                            className="flex-1"
+                          />
+                        </div>
+                        
+                        {/* Image preview */}
+                        {(imagePreview || serviceImageUrl) && (
+                          <div className="relative">
+                            <img
+                              src={imagePreview || serviceImageUrl}
+                              alt="Service preview"
+                              className="w-full h-48 object-cover rounded-md border"
+                            />
+                            <Button
+                              type="button"
+                              variant="destructive"
+                              size="sm"
+                              className="absolute top-2 right-2"
+                              onClick={handleRemoveImage}
+                            >
+                              <X className="w-4 h-4" />
+                            </Button>
+                          </div>
+                        )}
+                        
+                        {/* Current image URL display */}
+                        {serviceImageUrl && (
+                          <div className="text-xs text-muted-foreground">
+                            <strong>Current image URL:</strong>
+                            <br />
+                            <span className="break-all">{serviceImageUrl}</span>
+                          </div>
+                        )}
+                        
+                        <p className="text-xs text-muted-foreground">
+                          Upload an image for the service page hero section. Max size: 5MB
+                        </p>
+                      </div>
                     </div>
                     <div className="space-y-2">
                       <Label htmlFor="youtubeVideoUrl">YouTube Video URL (Optional)</Label>
@@ -702,6 +939,132 @@ const Admin = () => {
                   <p className="text-center text-muted-foreground py-8">
                     No services found. Create your first service!
                   </p>
+                )}
+              </CardContent>
+            </Card>
+          </TabsContent>
+
+          <TabsContent value="portfolio" className="space-y-6">
+            <Card>
+              <CardHeader>
+                <CardTitle>Create Portfolio Item</CardTitle>
+                <CardDescription>Add a new portfolio photo with service and date</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <form onSubmit={handlePortfolioSubmit} className="space-y-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="space-y-2">
+                      <Label htmlFor="portfolioTitle">Name (optional)</Label>
+                      <Input
+                        id="portfolioTitle"
+                        value={portfolioTitle}
+                        onChange={(e) => setPortfolioTitle(e.target.value)}
+                        placeholder="e.g. Roof Wash at Elm St"
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="portfolioService">Service</Label>
+                      <select
+                        id="portfolioService"
+                        value={portfolioServiceId}
+                        onChange={(e) => setPortfolioServiceId(e.target.value)}
+                        className="w-full rounded-md border border-input bg-background px-3 py-2"
+                      >
+                        <option value="">-- None --</option>
+                        {services.map((s) => (
+                          <option key={s.id} value={s.id}>{s.title}</option>
+                        ))}
+                      </select>
+                    </div>
+                  </div>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="space-y-2">
+                      <Label htmlFor="portfolioDate">Date</Label>
+                      <Input
+                        id="portfolioDate"
+                        type="date"
+                        value={portfolioDate}
+                        onChange={(e) => setPortfolioDate(e.target.value)}
+                        required
+                      />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="portfolioImage">Image (max 5MB)</Label>
+                      <Input
+                        ref={portfolioFileRef}
+                        id="portfolioImage"
+                        type="file"
+                        accept="image/*"
+                        onChange={handlePortfolioImageSelect}
+                        required
+                      />
+                      {portfolioImagePreview && (
+                        <img src={portfolioImagePreview} alt="Preview" className="mt-2 h-40 w-full object-cover rounded border" />
+                      )}
+                      <p className="text-xs text-muted-foreground">If the image is larger than 5MB, please reduce its size and re-upload.</p>
+                    </div>
+                  </div>
+
+                  <div className="flex gap-4">
+                    <Button type="submit" disabled={loading}>{loading ? 'Saving...' : 'Create Item'}</Button>
+                    <Button
+                      type="button"
+                      variant="outline"
+                      onClick={() => {
+                        setPortfolioTitle('');
+                        setPortfolioServiceId('');
+                        setPortfolioDate('');
+                        setPortfolioImage(null);
+                        setPortfolioImagePreview('');
+                        if (portfolioFileRef.current) portfolioFileRef.current.value = '';
+                      }}
+                    >
+                      Reset
+                    </Button>
+                  </div>
+                </form>
+              </CardContent>
+            </Card>
+
+            <Card>
+              <CardHeader>
+                <CardTitle>Manage Portfolio</CardTitle>
+                <CardDescription>View and delete portfolio items</CardDescription>
+              </CardHeader>
+              <CardContent>
+                <Table>
+                  <TableHeader>
+                    <TableRow>
+                      <TableHead>Preview</TableHead>
+                      <TableHead>Service</TableHead>
+                      <TableHead>Name</TableHead>
+                      <TableHead>Date</TableHead>
+                      <TableHead className="text-right">Actions</TableHead>
+                    </TableRow>
+                  </TableHeader>
+                  <TableBody>
+                    {portfolio.map((item) => (
+                      <TableRow key={item.id}>
+                        <TableCell>
+                          <img src={item.image_url} alt={item.title || ''} className="h-12 w-20 object-cover rounded border" />
+                        </TableCell>
+                        <TableCell className="text-sm">
+                          {item.service_id ? (services.find(s => s.id === item.service_id)?.title || 'Unknown') : <span className="text-muted-foreground">None</span>}
+                        </TableCell>
+                        <TableCell className="text-sm max-w-xs truncate">{item.title || '-'}</TableCell>
+                        <TableCell className="text-sm">{new Date(item.taken_at).toLocaleDateString()}</TableCell>
+                        <TableCell className="text-right">
+                          <Button variant="destructive" size="sm" onClick={() => handleDeletePortfolio(item.id)}>
+                            <Trash2 className="w-4 h-4" />
+                          </Button>
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+                {portfolio.length === 0 && (
+                  <p className="text-center text-muted-foreground py-8">No portfolio items yet.</p>
                 )}
               </CardContent>
             </Card>
