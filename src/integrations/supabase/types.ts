@@ -14,16 +14,272 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      faqs: {
+        Row: {
+          answer: string
+          created_at: string
+          display_order: number | null
+          id: string
+          is_active: boolean
+          is_general: boolean
+          question: string
+          service_id: string | null
+        }
+        Insert: {
+          answer: string
+          created_at?: string
+          display_order?: number | null
+          id?: string
+          is_active?: boolean
+          is_general?: boolean
+          question: string
+          service_id?: string | null
+        }
+        Update: {
+          answer?: string
+          created_at?: string
+          display_order?: number | null
+          id?: string
+          is_active?: boolean
+          is_general?: boolean
+          question?: string
+          service_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "faqs_service_id_fkey"
+            columns: ["service_id"]
+            isOneToOne: false
+            referencedRelation: "services"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      portfolio: {
+        Row: {
+          created_at: string
+          id: string
+          image_url: string
+          is_active: boolean
+          service_id: string | null
+          taken_at: string
+          title: string | null
+        }
+        Insert: {
+          created_at?: string
+          id?: string
+          image_url: string
+          is_active?: boolean
+          service_id?: string | null
+          taken_at: string
+          title?: string | null
+        }
+        Update: {
+          created_at?: string
+          id?: string
+          image_url?: string
+          is_active?: boolean
+          service_id?: string | null
+          taken_at?: string
+          title?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "portfolio_service_id_fkey"
+            columns: ["service_id"]
+            isOneToOne: false
+            referencedRelation: "services"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      profiles: {
+        Row: {
+          created_at: string
+          display_name: string | null
+          id: string
+          updated_at: string
+          user_id: string
+        }
+        Insert: {
+          created_at?: string
+          display_name?: string | null
+          id?: string
+          updated_at?: string
+          user_id: string
+        }
+        Update: {
+          created_at?: string
+          display_name?: string | null
+          id?: string
+          updated_at?: string
+          user_id?: string
+        }
+        Relationships: []
+      }
+      quotes: {
+        Row: {
+          created_at: string
+          email: string
+          id: string
+          is_active: boolean
+          name: string
+          note: string | null
+          phone: string
+          service_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          email: string
+          id?: string
+          is_active?: boolean
+          name: string
+          note?: string | null
+          phone: string
+          service_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          email?: string
+          id?: string
+          is_active?: boolean
+          name?: string
+          note?: string | null
+          phone?: string
+          service_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "quotes_service_id_fkey"
+            columns: ["service_id"]
+            isOneToOne: false
+            referencedRelation: "services"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      reviews: {
+        Row: {
+          created_at: string
+          customer_name: string
+          id: string
+          is_active: boolean
+          is_featured: boolean
+          rating: number
+          review_text: string
+          service_id: string | null
+        }
+        Insert: {
+          created_at?: string
+          customer_name: string
+          id?: string
+          is_active?: boolean
+          is_featured?: boolean
+          rating: number
+          review_text: string
+          service_id?: string | null
+        }
+        Update: {
+          created_at?: string
+          customer_name?: string
+          id?: string
+          is_active?: boolean
+          is_featured?: boolean
+          rating?: number
+          review_text?: string
+          service_id?: string | null
+        }
+        Relationships: [
+          {
+            foreignKeyName: "reviews_service_id_fkey"
+            columns: ["service_id"]
+            isOneToOne: false
+            referencedRelation: "services"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      services: {
+        Row: {
+          content: string
+          created_at: string
+          display_order: number | null
+          featured_image_url: string | null
+          heading: string
+          id: string
+          is_active: boolean
+          service_image_url: string | null
+          slug: string
+          sub_heading: string | null
+          title: string
+          updated_at: string
+          youtube_video_url: string | null
+        }
+        Insert: {
+          content: string
+          created_at?: string
+          display_order?: number | null
+          featured_image_url?: string | null
+          heading: string
+          id?: string
+          is_active?: boolean
+          service_image_url?: string | null
+          slug: string
+          sub_heading?: string | null
+          title: string
+          updated_at?: string
+          youtube_video_url?: string | null
+        }
+        Update: {
+          content?: string
+          created_at?: string
+          display_order?: number | null
+          featured_image_url?: string | null
+          heading?: string
+          id?: string
+          is_active?: boolean
+          service_image_url?: string | null
+          slug?: string
+          sub_heading?: string | null
+          title?: string
+          updated_at?: string
+          youtube_video_url?: string | null
+        }
+        Relationships: []
+      }
+      user_roles: {
+        Row: {
+          id: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Insert: {
+          id?: string
+          role: Database["public"]["Enums"]["app_role"]
+          user_id: string
+        }
+        Update: {
+          id?: string
+          role?: Database["public"]["Enums"]["app_role"]
+          user_id?: string
+        }
+        Relationships: []
+      }
     }
     Views: {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      has_role: {
+        Args: {
+          _role: Database["public"]["Enums"]["app_role"]
+          _user_id: string
+        }
+        Returns: boolean
+      }
     }
     Enums: {
-      [_ in never]: never
+      app_role: "admin" | "moderator" | "user"
     }
     CompositeTypes: {
       [_ in never]: never
@@ -150,6 +406,8 @@ export type CompositeTypes<
 
 export const Constants = {
   public: {
-    Enums: {},
+    Enums: {
+      app_role: ["admin", "moderator", "user"],
+    },
   },
 } as const
