@@ -14,6 +14,66 @@ export type Database = {
   }
   public: {
     Tables: {
+      business_info: {
+        Row: {
+          business_hours: Json
+          created_at: string
+          facebook_url: string | null
+          id: string
+          instagram_url: string | null
+          phone: string
+          tiktok_url: string | null
+          updated_at: string
+        }
+        Insert: {
+          business_hours?: Json
+          created_at?: string
+          facebook_url?: string | null
+          id?: string
+          instagram_url?: string | null
+          phone: string
+          tiktok_url?: string | null
+          updated_at?: string
+        }
+        Update: {
+          business_hours?: Json
+          created_at?: string
+          facebook_url?: string | null
+          id?: string
+          instagram_url?: string | null
+          phone?: string
+          tiktok_url?: string | null
+          updated_at?: string
+        }
+        Relationships: []
+      }
+      cities: {
+        Row: {
+          country: string
+          created_at: string
+          id: string
+          is_active: boolean
+          name: string
+          state: string | null
+        }
+        Insert: {
+          country?: string
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          name: string
+          state?: string | null
+        }
+        Update: {
+          country?: string
+          created_at?: string
+          id?: string
+          is_active?: boolean
+          name?: string
+          state?: string | null
+        }
+        Relationships: []
+      }
       faqs: {
         Row: {
           answer: string
@@ -119,6 +179,7 @@ export type Database = {
       }
       quotes: {
         Row: {
+          city: string | null
           created_at: string
           email: string
           id: string
@@ -129,6 +190,7 @@ export type Database = {
           service_id: string | null
         }
         Insert: {
+          city?: string | null
           created_at?: string
           email: string
           id?: string
@@ -139,6 +201,7 @@ export type Database = {
           service_id?: string | null
         }
         Update: {
+          city?: string | null
           created_at?: string
           email?: string
           id?: string

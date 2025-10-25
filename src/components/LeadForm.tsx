@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import { useForm } from "react-hook-form";
+import { useForm, Controller } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import * as z from "zod";
 import { Button } from "@/components/ui/button";
@@ -7,6 +7,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Textarea } from "@/components/ui/textarea";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { CityAutocomplete } from "@/components/CityAutocomplete";
 import { useToast } from "@/hooks/use-toast";
 import { Loader2 } from "lucide-react";
 import { supabase } from '@/integrations/supabase/client';
@@ -19,6 +20,7 @@ const leadFormSchema = z.object({
   name: z.string().trim().min(2, "Name must be at least 2 characters").max(100, "Name must be less than 100 characters"),
   email: z.string().trim().email("Invalid email address").max(255, "Email must be less than 255 characters"),
   phone: z.string().trim().min(10, "Phone number must be at least 10 digits").max(20, "Phone number must be less than 20 digits"),
+  city: z.string().min(2, "City is required").max(100),
   service: z.string().min(1, "Please select a service"),
   message: z.string().trim().max(1000, "Message must be less than 1000 characters").optional(),
 });
@@ -36,6 +38,7 @@ const LeadForm = ({ onSuccess }: LeadFormProps) => {
     handleSubmit,
     setValue,
     reset,
+    control,
     formState: { errors },
   } = useForm<LeadFormData>({
     resolver: zodResolver(leadFormSchema),
@@ -59,6 +62,7 @@ const LeadForm = ({ onSuccess }: LeadFormProps) => {
           name: data.name,
           email: data.email,
           phone: data.phone,
+          city: data.city,
           service_id: serviceId,
           note: data.message || null,
           is_active: true
@@ -69,6 +73,41 @@ const LeadForm = ({ onSuccess }: LeadFormProps) => {
 
       if (error) {
         throw error;
+      }
+
+      // Send notification email to admin
+      try {
+        await supabase.functions.invoke('send-lead-notification', {
+          body: {
+            lead: {
+              name: data.name,
+              email: data.email,
+              phone: data.phone,
+              city: data.city,
+              service: servicesList.find(s => s.id === data.service)?.title || 'General Inquiry',
+              message: data.message,
+            },
+          },
+        });
+      } catch (emailError) {
+        console.error('Error sending notification email:', emailError);
+      }
+
+      // Send to CRM
+      try {
+        await supabase.functions.invoke('sync-lead-to-crm', {
+          body: {
+            lead: {
+              name: data.name,
+              email: data.email,
+              phone: data.phone,
+              city: data.city,
+              service_id: data.service,
+            },
+          },
+        });
+      } catch (crmError) {
+        console.error('Error syncing to CRM:', crmError);
       }
 
       toast({
@@ -167,27 +206,43 @@ const LeadForm = ({ onSuccess }: LeadFormProps) => {
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="service">Service Needed *</Label>
-          <Select onValueChange={(value) => setValue("service", value)}>
-            <SelectTrigger className={errors.service ? "border-destructive" : ""}>
-              <SelectValue placeholder="Select a service" />
-            </SelectTrigger>
-            <SelectContent>
-              {servicesLoading ? (
-                <SelectItem value="__loading" disabled>Loading...</SelectItem>
-              ) : servicesList.length > 0 ? (
-                servicesList.map(s => (
-                  <SelectItem key={s.id} value={s.id}>{s.title}</SelectItem>
-                ))
-              ) : (
-                <SelectItem value="__none" disabled>No services available</SelectItem>
-              )}
-            </SelectContent>
-          </Select>
-          {errors.service && (
-            <p className="text-sm text-destructive">{errors.service.message}</p>
-          )}
+          <Controller
+            name="city"
+            control={control}
+            render={({ field }) => (
+              <CityAutocomplete
+                value={field.value}
+                onChange={field.onChange}
+                onBlur={field.onBlur}
+                error={errors.city?.message}
+                required
+              />
+            )}
+          />
         </div>
+      </div>
+
+      <div className="space-y-2">
+        <Label htmlFor="service">Service Needed *</Label>
+        <Select onValueChange={(value) => setValue("service", value)}>
+          <SelectTrigger className={errors.service ? "border-destructive" : ""}>
+            <SelectValue placeholder="Select a service" />
+          </SelectTrigger>
+          <SelectContent>
+            {servicesLoading ? (
+              <SelectItem value="__loading" disabled>Loading...</SelectItem>
+            ) : servicesList.length > 0 ? (
+              servicesList.map(s => (
+                <SelectItem key={s.id} value={s.id}>{s.title}</SelectItem>
+              ))
+            ) : (
+              <SelectItem value="__none" disabled>No services available</SelectItem>
+            )}
+          </SelectContent>
+        </Select>
+        {errors.service && (
+          <p className="text-sm text-destructive">{errors.service.message}</p>
+        )}
       </div>
 
       <div className="space-y-2">

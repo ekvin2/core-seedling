@@ -6,7 +6,9 @@ import {
   Calendar,
   Users,
   Settings,
-  Sparkles
+  Sparkles,
+  Phone,
+  UserCheck
 } from 'lucide-react';
 import {
   Sidebar,
@@ -30,7 +32,7 @@ interface MenuItem {
 }
 
 interface AdminSidebarProps {
-  currentSection?: 'dashboard' | 'services' | 'reviews' | 'bookings' | 'clients' | 'settings';
+  currentSection?: 'dashboard' | 'services' | 'reviews' | 'bookings' | 'clients' | 'settings' | 'contact' | 'leads';
 }
 
 const menuItems: MenuItem[] = [
@@ -48,6 +50,16 @@ const menuItems: MenuItem[] = [
     title: 'Reviews', 
     url: '/admin#reviews', 
     icon: Star 
+  },
+  { 
+    title: 'Leads', 
+    url: '/admin#leads', 
+    icon: UserCheck 
+  },
+  { 
+    title: 'Contact Details', 
+    url: '/admin#contact', 
+    icon: Phone 
   },
   { 
     title: 'Bookings', 

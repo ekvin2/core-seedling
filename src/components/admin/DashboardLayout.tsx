@@ -5,7 +5,7 @@ import { TopBar } from './TopBar';
 
 interface DashboardLayoutProps {
   children: ReactNode;
-  currentSection?: 'dashboard' | 'services' | 'reviews' | 'bookings' | 'clients' | 'settings';
+  currentSection?: 'dashboard' | 'services' | 'reviews' | 'bookings' | 'clients' | 'settings' | 'contact' | 'leads';
 }
 
 /**

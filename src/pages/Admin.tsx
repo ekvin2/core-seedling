@@ -2,6 +2,8 @@ import { useState, useEffect, useRef } from 'react';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { DashboardLayout } from '@/components/admin/DashboardLayout';
+import { ContactDetailsForm } from '@/components/admin/ContactDetailsForm';
+import { LeadsManagement } from '@/components/admin/LeadsManagement';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -694,9 +696,11 @@ const Admin = () => {
   
   // Map tab values to dashboard sections
   const getSectionFromTab = (tab: string) => {
-    const sectionMap: Record<string, 'dashboard' | 'services' | 'reviews' | 'bookings' | 'clients' | 'settings'> = {
+    const sectionMap: Record<string, 'dashboard' | 'services' | 'reviews' | 'bookings' | 'clients' | 'settings' | 'contact' | 'leads'> = {
       'services': 'services',
       'reviews': 'reviews',
+      'leads': 'leads',
+      'contact': 'contact',
       'faqs': 'settings',
       'portfolio': 'services',
     };
@@ -726,9 +730,11 @@ const Admin = () => {
         </div>
 
         <Tabs value={currentTab} onValueChange={(value) => navigate(`/admin#${value}`)} className="w-full">
-          <TabsList className="grid w-full grid-cols-4">
+          <TabsList className="grid w-full grid-cols-6 lg:grid-cols-6">
             <TabsTrigger value="services">Services</TabsTrigger>
             <TabsTrigger value="reviews">Reviews</TabsTrigger>
+            <TabsTrigger value="leads">Leads</TabsTrigger>
+            <TabsTrigger value="contact">Contact</TabsTrigger>
             <TabsTrigger value="faqs">Q&A / FAQs</TabsTrigger>
             <TabsTrigger value="portfolio">Portfolio</TabsTrigger>
           </TabsList>
@@ -1404,6 +1410,14 @@ const Admin = () => {
                 )}
               </CardContent>
             </Card>
+          </TabsContent>
+
+          <TabsContent value="leads" className="space-y-6">
+            <LeadsManagement />
+          </TabsContent>
+
+          <TabsContent value="contact" className="space-y-6">
+            <ContactDetailsForm />
           </TabsContent>
         </Tabs>
       </div>
