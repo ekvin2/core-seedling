@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
+import { DashboardLayout } from '@/components/admin/DashboardLayout';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -10,7 +11,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
-import { Trash2, Edit, Eye, LogOut, ArrowUp, ArrowDown, HelpCircle, X } from 'lucide-react';
+import { Trash2, Edit, Eye, ArrowUp, ArrowDown, HelpCircle, X } from 'lucide-react';
 import { uploadImageToSupabase, deleteImageFromSupabase } from '@/lib/imageUpload';
 
 interface Service {
@@ -688,9 +689,18 @@ const Admin = () => {
   };
 
 
-  const handleSignOut = async () => {
-    await signOut();
-    navigate('/');
+  const location = useLocation();
+  const currentTab = location.hash.replace('#', '') || 'services';
+  
+  // Map tab values to dashboard sections
+  const getSectionFromTab = (tab: string) => {
+    const sectionMap: Record<string, 'dashboard' | 'services' | 'reviews' | 'bookings' | 'clients' | 'settings'> = {
+      'services': 'services',
+      'reviews': 'reviews',
+      'faqs': 'settings',
+      'portfolio': 'services',
+    };
+    return sectionMap[tab] || 'dashboard';
   };
 
   if (authLoading) {
@@ -702,26 +712,20 @@ const Admin = () => {
   }
 
   return (
-    <div className="min-h-screen bg-background p-6">
-      <div className="max-w-6xl mx-auto">
-        <div className="flex justify-between items-center mb-8">
+    <DashboardLayout currentSection={getSectionFromTab(currentTab)}>
+      <div className="space-y-6">
+        <div className="flex justify-between items-center">
           <div>
-            <h1 className="text-3xl font-bold">Admin Panel</h1>
-            <p className="text-muted-foreground">Manage your cleaning services</p>
+            <h1 className="text-3xl font-bold tracking-tight">Content Management</h1>
+            <p className="text-muted-foreground">Manage your cleaning services content</p>
           </div>
-          <div className="flex gap-4">
-            <Button variant="outline" onClick={() => navigate('/')}>
-              <Eye className="w-4 h-4 mr-2" />
-              View Site
-            </Button>
-            <Button variant="outline" onClick={handleSignOut}>
-              <LogOut className="w-4 h-4 mr-2" />
-              Sign Out
-            </Button>
-          </div>
+          <Button variant="outline" onClick={() => navigate('/')}>
+            <Eye className="w-4 h-4 mr-2" />
+            View Site
+          </Button>
         </div>
 
-        <Tabs defaultValue="services" className="w-full">
+        <Tabs value={currentTab} onValueChange={(value) => navigate(`/admin#${value}`)} className="w-full">
           <TabsList className="grid w-full grid-cols-4">
             <TabsTrigger value="services">Services</TabsTrigger>
             <TabsTrigger value="reviews">Reviews</TabsTrigger>
@@ -1403,7 +1407,7 @@ const Admin = () => {
           </TabsContent>
         </Tabs>
       </div>
-    </div>
+    </DashboardLayout>
   );
 };
 
