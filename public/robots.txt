@@ -1,14 +1,27 @@
-User-agent: Googlebot
+# robots.txt for Easy House Wash NZ
+# Allow all search engines to crawl the site
+
+User-agent: *
 Allow: /
+
+# Sitemap location
+Sitemap: https://easyhousewash.nz/sitemap.xml
+
+# Crawl-delay for specific bots (optional)
+User-agent: Googlebot
+Crawl-delay: 0
 
 User-agent: Bingbot
-Allow: /
+Crawl-delay: 0
 
+# Allow social media crawlers
 User-agent: Twitterbot
 Allow: /
 
 User-agent: facebookexternalhit
 Allow: /
 
+# Disallow admin areas
 User-agent: *
-Allow: /
+Disallow: /admin
+Disallow: /auth

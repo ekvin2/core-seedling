@@ -5,8 +5,8 @@ import { useSEO } from "@/hooks/useSEO";
 
 const PrivacyPolicy = () => {
   useSEO({
-    title: "Privacy Policy | SparkleClean House Cleaning Services",
-    description: "Read SparkleClean's privacy policy to understand how we collect, use, and protect your personal information.",
+    title: "Privacy Policy | Easy House Wash NZ - House Washing Services",
+    description: "Read Easy House Wash NZ's privacy policy to understand how we collect, use, and protect your personal information.",
     canonical: `${window.location.origin}/privacy-policy`,
   });
 
@@ -24,7 +24,7 @@ const PrivacyPolicy = () => {
           <section>
             <h2 className="text-2xl font-bold mb-4">1. Information We Collect</h2>
             <p className="text-muted-foreground leading-relaxed mb-4">
-              SparkleClean collects personal information that you provide to us when you:
+              Easy House Wash NZ collects personal information that you provide to us when you:
             </p>
             <ul className="list-disc pl-6 space-y-2 text-muted-foreground">
               <li>Request a quote for our cleaning services</li>
@@ -121,8 +121,8 @@ const PrivacyPolicy = () => {
               information, please contact us:
             </p>
             <div className="mt-4 space-y-2 text-muted-foreground">
-              <p><strong>Email:</strong> info@sparkleclean.com</p>
-              <p><strong>Phone:</strong> (555) 123-4567</p>
+              <p><strong>Email:</strong> info@easyhousewash.nz</p>
+              <p><strong>Phone:</strong> +64 21 123 4567</p>
               <p><strong>Address:</strong> 123 Clean Street, Your City, ST 12345</p>
             </div>
           </section>

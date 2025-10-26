@@ -128,7 +128,7 @@ const ServicesSection = () => {
 
         <div className="text-center mt-4 md:mt-16">
           <div className="bg-subtle-gradient rounded-xl md:rounded-2xl p-4 md:p-8 max-w-4xl mx-auto">
-            <h3 className="text-lg md:text-2xl font-bold mb-3 md:mb-4">Why Choose SparkleClean?</h3>
+            <h3 className="text-lg md:text-2xl font-bold mb-3 md:mb-4">Why Choose Easy House Wash NZ?</h3>
             <div className="grid grid-cols-3 gap-4 md:gap-6 mt-4 md:mt-8">
               <div className="text-center">
                 <div className="text-xl md:text-3xl font-bold text-primary mb-1 md:mb-2">5+</div>

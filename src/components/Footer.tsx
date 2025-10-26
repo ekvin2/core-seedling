@@ -38,13 +38,13 @@ const Footer = () => {
           <div className="space-y-4">
             <div className="flex items-center space-x-2">
               <div className="w-8 h-8 md:w-10 md:h-10 bg-white rounded-lg flex items-center justify-center">
-                <span className="text-primary font-bold text-base md:text-lg">SC</span>
+                <span className="text-primary font-bold text-base md:text-lg">EHW</span>
               </div>
-              <span className="text-xl md:text-2xl font-bold">SparkleClean</span>
+              <span className="text-xl md:text-2xl font-bold">Easy House Wash NZ</span>
             </div>
             <p className="text-sm md:text-base opacity-90 leading-relaxed">
-              Professional house cleaning services you can trust. We transform your home 
-              into a sparkling sanctuary with reliable, eco-friendly cleaning solutions.
+              Professional house washing and exterior cleaning services across New Zealand.
+              We transform your property with reliable, eco-friendly pressure washing solutions.
             </p>
             <div className="flex space-x-4">
               <Button variant="ghost" size="sm" className="p-2 text-primary-foreground hover:bg-white/20">
@@ -91,22 +91,22 @@ const Footer = () => {
             <div className="space-y-3 opacity-90">
               <div className="flex items-center space-x-3">
                 <Phone className="w-3 h-3 md:w-4 md:h-4" />
-                <span className="text-sm md:text-base">(555) 123-4567</span>
+                <span className="text-sm md:text-base">+64 21 123 4567</span>
               </div>
               <div className="flex items-center space-x-3">
                 <Mail className="w-3 h-3 md:w-4 md:h-4" />
-                <span className="text-sm md:text-base">info@sparkleclean.com</span>
+                <span className="text-sm md:text-base">info@easyhousewash.nz</span>
               </div>
               <div className="flex items-start space-x-3">
                 <MapPin className="w-3 h-3 md:w-4 md:h-4 mt-1" />
-                <span className="text-sm md:text-base">123 Clean Street<br />Your City, ST 12345</span>
+                <span className="text-sm md:text-base">Auckland Central<br />Auckland, New Zealand</span>
               </div>
               <div className="flex items-start space-x-3">
                 <Clock className="w-3 h-3 md:w-4 md:h-4 mt-1" />
                 <div className="text-sm md:text-base">
-                  <div>Mon - Fri: 8:00 AM - 6:00 PM</div>
-                  <div>Sat: 9:00 AM - 4:00 PM</div>
-                  <div>Sun: Closed</div>
+                  <div>Mon - Fri: 7:00 AM - 7:00 PM</div>
+                  <div>Sat: 8:00 AM - 5:00 PM</div>
+                  <div>Sun: 9:00 AM - 3:00 PM</div>
                 </div>
               </div>
             </div>
@@ -117,7 +117,7 @@ const Footer = () => {
         <div className="border-t border-white/20 mt-8 md:mt-12 pt-6 md:pt-8">
           <div className="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0">
             <div className="text-sm opacity-90">
-              © {currentYear} SparkleClean. All rights reserved.
+              © {currentYear} Easy House Wash NZ. All rights reserved.
             </div>
             <div className="flex flex-col md:flex-row items-center md:space-x-6 text-sm opacity-90 space-y-2 md:space-y-0">
               <span>Licensed & Insured</span>

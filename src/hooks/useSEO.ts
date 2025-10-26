@@ -46,7 +46,7 @@ export const useSEO = ({
     updateMetaTag('og:type', ogType, true);
     updateMetaTag('og:url', canonical || window.location.href, true);
     updateMetaTag('og:image', ogImage.startsWith('http') ? ogImage : `${window.location.origin}${ogImage}`, true);
-    updateMetaTag('og:site_name', 'SparkleClean', true);
+    updateMetaTag('og:site_name', 'Easy House Wash NZ', true);
 
     // Twitter Card tags
     updateMetaTag('twitter:card', 'summary_large_image');

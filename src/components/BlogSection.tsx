@@ -6,7 +6,7 @@ const blogPosts = [
   {
     title: "10 Essential Spring Cleaning Tips for a Fresh Home",
     excerpt: "Discover the most effective strategies to deep clean your home this spring season and maintain that fresh feeling all year long.",
-    author: "SparkleClean Team",
+    author: "Easy House Wash NZ Team",
     date: "March 15, 2024",
     readTime: "5 min read",
     category: "Cleaning Tips"
@@ -30,7 +30,7 @@ const blogPosts = [
   {
     title: "The Ultimate Guide to Preparing Your Home for Professional Cleaning",
     excerpt: "Maximize the effectiveness of your professional cleaning service with these simple preparation tips and tricks.",
-    author: "SparkleClean Team",
+    author: "Easy House Wash NZ Team",
     date: "February 20, 2024",
     readTime: "4 min read",
     category: "Professional Tips"

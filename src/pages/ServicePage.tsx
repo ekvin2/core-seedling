@@ -58,7 +58,7 @@ const ServicePage = () => {
   const seoValues = useMemo(() => {
     if (!service) {
       return {
-        title: 'Loading Service - SparkleClean',
+        title: 'Loading Service - Easy House Wash NZ',
         description: 'Professional cleaning services',
         canonical: window.location.href,
         keywords: 'professional cleaning, house cleaning service',
@@ -84,7 +84,7 @@ const ServicePage = () => {
     };
 
     return {
-      title: `${service.title} - SparkleClean Professional Cleaning Services`,
+      title: `${service.title} - Easy House Wash NZ Professional Services`,
       description: service.sub_heading || service.heading,
       canonical: `${window.location.origin}/service/${service.slug}`,
       keywords: `${service.title.toLowerCase()}, professional cleaning, house cleaning service, ${service.title.toLowerCase()} near me`,
@@ -314,7 +314,7 @@ const ServicePage = () => {
                           </div>
                           <div className="flex items-center">
                             <Mail className="w-4 h-4 mr-1" />
-                            info@sparkleclean.com
+                            info@easyhousewash.nz
                           </div>
                         </div>
                       </div>
@@ -343,7 +343,7 @@ const ServicePage = () => {
                 Ready to Experience Our {service.title}?
               </h2>
               <p className="text-xl opacity-90 mb-8 leading-relaxed">
-                Join hundreds of satisfied customers who trust SparkleClean for their cleaning needs. 
+                Join hundreds of satisfied customers who trust Easy House Wash NZ for their exterior cleaning needs. 
                 Get your free quote today and see the difference professional cleaning makes.
               </p>
               

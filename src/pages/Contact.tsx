@@ -12,10 +12,10 @@ const Contact = () => {
   const [isQuoteModalOpen, setIsQuoteModalOpen] = useState(false);
 
   useSEO({
-    title: "Contact SparkleClean - Get Your Free Cleaning Quote Today",
-    description: "Contact SparkleClean for professional house cleaning services. Get your free quote, schedule a consultation, or ask questions. Licensed, insured, and ready to help!",
+    title: "Contact Easy House Wash NZ - Get Your Free Washing Quote Today",
+    description: "Contact Easy House Wash NZ for professional house washing and exterior cleaning services across New Zealand. Get your free quote, schedule a consultation, or ask questions. Licensed, insured, and ready to help!",
     canonical: `${window.location.origin}/contact`,
-    keywords: "contact cleaning service, free cleaning quote, schedule cleaning, house cleaning contact, professional cleaners near me"
+    keywords: "contact house washing nz, exterior cleaning quote, pressure washing auckland, roof washing wellington, house wash christchurch, free quote"
   });
 
   return (
@@ -29,7 +29,7 @@ const Contact = () => {
           <div className="container mx-auto px-4 relative z-10">
             <div className="max-w-4xl mx-auto text-center">
               <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
-                Get In Touch With SparkleClean
+                Get In Touch With Easy House Wash NZ
               </h1>
               <p className="text-xl md:text-2xl opacity-90 mb-8 leading-relaxed">
                 Ready to transform your space? Contact us today for a free quote and experience the difference professional cleaning makes.
@@ -91,7 +91,7 @@ const Contact = () => {
                   </div>
                   <h3 className="text-xl font-semibold mb-2">Email Us</h3>
                   <p className="text-muted-foreground mb-4">Send us a detailed message</p>
-                  <p className="text-lg font-semibold text-primary">info@sparkleclean.com</p>
+                  <p className="text-lg font-semibold text-primary">info@easyhousewash.nz</p>
                   <p className="text-sm text-muted-foreground mt-2">Response within 24 hours</p>
                 </CardContent>
               </Card>
@@ -147,7 +147,7 @@ const Contact = () => {
               {/* Business Information */}
               <div className="space-y-8">
                 <div>
-                  <h3 className="text-2xl font-bold mb-6">Why Choose SparkleClean?</h3>
+                  <h3 className="text-2xl font-bold mb-6">Why Choose Easy House Wash NZ?</h3>
                   <div className="space-y-4">
                     <div className="flex items-start space-x-3">
                       <CheckCircle className="w-5 h-5 text-primary mt-1 flex-shrink-0" />

@@ -1,52 +1,114 @@
 // SEO Utility Functions and Schema Generation
 
 export const BUSINESS_INFO = {
-  name: "SparkleClean",
-  description: "Professional house cleaning services you can trust",
-  phone: "(555) 123-4567",
-  email: "info@sparkleclean.com",
+  name: "Easy House Wash NZ",
+  description: "Professional house washing and cleaning services across New Zealand",
+  phone: "+64 21 123 4567",
+  email: "info@easyhousewash.nz",
   address: {
-    streetAddress: "123 Clean Street",
-    addressLocality: "Your City",
-    addressRegion: "ST",
-    postalCode: "12345",
+    streetAddress: "Auckland Central",
+    addressLocality: "Auckland",
+    addressRegion: "Auckland",
+    postalCode: "1010",
+    country: "New Zealand"
   },
   url: typeof window !== 'undefined' ? window.location.origin : '',
   socialProfiles: [
-    "https://www.facebook.com/sparkleclean",
-    "https://www.instagram.com/sparkleclean",
-    "https://twitter.com/sparkleclean"
+    "https://www.facebook.com/easyhousewashnz",
+    "https://www.instagram.com/easyhousewashnz",
+    "https://twitter.com/easyhousewashnz"
   ],
-  openingHours: ["Mo-Fr 08:00-18:00", "Sa 09:00-16:00"],
+  openingHours: ["Mo-Fr 07:00-19:00", "Sa 08:00-17:00", "Su 09:00-15:00"],
   priceRange: "$$",
   aggregateRating: {
     ratingValue: "4.9",
-    reviewCount: "127",
+    reviewCount: "250",
     bestRating: "5",
     worstRating: "1"
-  }
+  },
+  geo: {
+    latitude: "-36.8485",
+    longitude: "174.7633"
+  },
+  areaServed: [
+    "Auckland",
+    "Wellington",
+    "Christchurch",
+    "Hamilton",
+    "Tauranga",
+    "Dunedin"
+  ]
 };
 
 // Generate Local Business Schema
 export const generateLocalBusinessSchema = () => ({
   "@context": "https://schema.org",
   "@type": "LocalBusiness",
+  "@id": `${BUSINESS_INFO.url}#organization`,
   "name": BUSINESS_INFO.name,
   "description": BUSINESS_INFO.description,
   "url": BUSINESS_INFO.url,
   "telephone": BUSINESS_INFO.phone,
   "email": BUSINESS_INFO.email,
+  "image": `${BUSINESS_INFO.url}/placeholder.svg`,
   "address": {
     "@type": "PostalAddress",
     ...BUSINESS_INFO.address
   },
-  "openingHours": BUSINESS_INFO.openingHours,
+  "geo": {
+    "@type": "GeoCoordinates",
+    "latitude": BUSINESS_INFO.geo.latitude,
+    "longitude": BUSINESS_INFO.geo.longitude
+  },
+  "openingHoursSpecification": BUSINESS_INFO.openingHours.map(hours => {
+    const [days, time] = hours.split(' ');
+    const [opens, closes] = time.split('-');
+    return {
+      "@type": "OpeningHoursSpecification",
+      "dayOfWeek": days.split('-').map(day => {
+        const dayMap: Record<string, string> = {
+          Mo: "Monday", Tu: "Tuesday", We: "Wednesday", 
+          Th: "Thursday", Fr: "Friday", Sa: "Saturday", Su: "Sunday"
+        };
+        return dayMap[day] || day;
+      }),
+      "opens": opens,
+      "closes": closes
+    };
+  }),
   "priceRange": BUSINESS_INFO.priceRange,
   "aggregateRating": {
     "@type": "AggregateRating",
     ...BUSINESS_INFO.aggregateRating
   },
-  "sameAs": BUSINESS_INFO.socialProfiles
+  "areaServed": BUSINESS_INFO.areaServed.map(area => ({
+    "@type": "City",
+    "name": area,
+    "addressCountry": "NZ"
+  })),
+  "sameAs": BUSINESS_INFO.socialProfiles,
+  "hasOfferCatalog": {
+    "@type": "OfferCatalog",
+    "name": "House Washing Services",
+    "itemListElement": [
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "Exterior House Washing",
+          "description": "Professional exterior house washing services"
+        }
+      },
+      {
+        "@type": "Offer",
+        "itemOffered": {
+          "@type": "Service",
+          "name": "Roof Cleaning",
+          "description": "Soft wash roof cleaning services"
+        }
+      }
+    ]
+  }
 });
 
 // Generate Service Schema

@@ -69,7 +69,7 @@ const Auth = () => {
     <div className="min-h-screen flex items-center justify-center bg-background p-4">
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
-          <CardTitle className="text-2xl font-bold">SparkleClean Admin</CardTitle>
+          <CardTitle className="text-2xl font-bold">Easy House Wash NZ Admin</CardTitle>
           <CardDescription>
             {isSignUp ? "Create an account to get started" : "Sign in to access the admin panel"}
           </CardDescription>
@@ -82,7 +82,7 @@ const Auth = () => {
               <Input
                 id="email"
                 type="email"
-                placeholder="admin@sparkleclean.com"
+                placeholder="admin@easyhousewash.nz"
                 value={email}
                 onChange={(e) => setEmail(e.target.value)}
                 required

@@ -46,9 +46,9 @@ const Header = () => {
               onClick={() => navigate('/')}
             >
               <div className="w-10 h-10 bg-hero-gradient rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-lg">SC</span>
+                <span className="text-white font-bold text-lg">EHW</span>
               </div>
-              <span className="text-xl font-bold text-primary">SparkleClean</span>
+              <span className="text-xl font-bold text-primary">Easy House Wash NZ</span>
             </div>
 
             {/* Desktop Navigation */}
@@ -84,7 +84,7 @@ const Header = () => {
             <div className="hidden md:flex items-center space-x-4">
               <div className="flex items-center space-x-2 text-sm">
                 <Phone className="w-4 h-4 text-primary" />
-                <span>(555) 123-4567</span>
+                <span>+64 21 123 4567</span>
               </div>
               <Button onClick={() => setIsQuoteModalOpen(true)}>
                 Get Quote
@@ -137,7 +137,7 @@ const Header = () => {
                 </button>
                 <div className="flex items-center space-x-2 text-sm pt-2">
                   <Phone className="w-4 h-4 text-primary" />
-                  <span>(555) 123-4567</span>
+                  <span>+64 21 123 4567</span>
                 </div>
                 <Button onClick={() => setIsQuoteModalOpen(true)} className="mt-2">
                   Get Quote

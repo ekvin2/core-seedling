@@ -95,11 +95,11 @@ const ServiceFAQ = ({ serviceName }: ServiceFAQProps) => {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <div className="text-center">
                 <div className="text-lg font-semibold text-primary">Call Us</div>
-                <div className="text-muted-foreground">(555) 123-4567</div>
+                <div className="text-muted-foreground">+64 21 123 4567</div>
               </div>
               <div className="text-center">
                 <div className="text-lg font-semibold text-primary">Email Us</div>
-                <div className="text-muted-foreground">info@sparkleclean.com</div>
+                <div className="text-muted-foreground">info@easyhousewash.nz</div>
               </div>
             </div>
           </div>

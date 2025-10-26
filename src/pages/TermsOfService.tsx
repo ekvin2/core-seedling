@@ -5,8 +5,8 @@ import { useSEO } from "@/hooks/useSEO";
 
 const TermsOfService = () => {
   useSEO({
-    title: "Terms of Service | SparkleClean House Cleaning Services",
-    description: "Read SparkleClean's terms of service to understand the terms and conditions of using our professional cleaning services.",
+    title: "Terms of Service | Easy House Wash NZ - House Washing Services",
+    description: "Read Easy House Wash NZ's terms of service to understand the terms and conditions of using our professional house washing services.",
     canonical: `${window.location.origin}/terms-of-service`,
   });
 
@@ -24,7 +24,7 @@ const TermsOfService = () => {
           <section>
             <h2 className="text-2xl font-bold mb-4">1. Agreement to Terms</h2>
             <p className="text-muted-foreground leading-relaxed">
-              By accessing or using SparkleClean's services, you agree to be bound by these 
+              By accessing or using Easy House Wash NZ's services, you agree to be bound by these 
               Terms of Service. If you do not agree to these terms, please do not use our services.
             </p>
           </section>
@@ -32,7 +32,7 @@ const TermsOfService = () => {
           <section>
             <h2 className="text-2xl font-bold mb-4">2. Services Description</h2>
             <p className="text-muted-foreground leading-relaxed mb-4">
-              SparkleClean provides professional house cleaning services including, but not limited to:
+              Easy House Wash NZ provides professional house washing services including, but not limited to:
             </p>
             <ul className="list-disc pl-6 space-y-2 text-muted-foreground">
               <li>Regular house cleaning</li>
@@ -153,8 +153,8 @@ const TermsOfService = () => {
               If you have questions about these Terms of Service, please contact us:
             </p>
             <div className="mt-4 space-y-2 text-muted-foreground">
-              <p><strong>Email:</strong> info@sparkleclean.com</p>
-              <p><strong>Phone:</strong> (555) 123-4567</p>
+              <p><strong>Email:</strong> info@easyhousewash.nz</p>
+              <p><strong>Phone:</strong> +64 21 123 4567</p>
               <p><strong>Address:</strong> 123 Clean Street, Your City, ST 12345</p>
             </div>
           </section>
