@@ -88,14 +88,14 @@ const ServicesSection = () => {
           </p>
         </div>
         
-        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-4 md:mb-16">
+        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6 mb-4 md:mb-16">
           {services.map((service) => (
             <Card 
               key={service.id} 
               className="group hover:shadow-lg transition-all duration-300 border-border/50 hover:border-primary/20 overflow-hidden bg-background"
             >
               {/* Image Container */}
-              <div className="relative h-48 overflow-hidden bg-muted">
+              <div className="relative h-32 md:h-48 overflow-hidden bg-muted">
                 <img 
                   src={getServiceImageUrl(service)} 
                   alt={service.title}
@@ -105,22 +105,22 @@ const ServicesSection = () => {
               </div>
               
               {/* Content Container */}
-              <div className="p-6 flex flex-col items-center text-center space-y-4">
+              <div className="p-3 md:p-6 flex flex-col items-center text-center space-y-2 md:space-y-4">
                 {/* Service Title */}
-                <h3 className="text-lg md:text-xl font-bold">
+                <h3 className="text-sm md:text-lg lg:text-xl font-bold line-clamp-2">
                   {service.title}
                 </h3>
                 {/* Service Description */}
-                <p className="text-sm text-muted-foreground line-clamp-3">
+                <p className="text-xs md:text-sm text-muted-foreground line-clamp-2 md:line-clamp-3">
                   {service.sub_heading || "Professional cleaning service tailored to your needs"}
                 </p>
                 {/* Arrow Button */}
                 <button 
                   onClick={() => navigate(`/service/${service.slug}`)}
-                  className="w-10 h-10 rounded-full bg-primary hover:bg-primary/90 text-primary-foreground flex items-center justify-center transition-colors duration-200"
+                  className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-primary hover:bg-primary/90 text-primary-foreground flex items-center justify-center transition-colors duration-200"
                   aria-label={`Learn more about ${service.title}`}
                 >
-                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="md:w-5 md:h-5">
                     <line x1="5" y1="12" x2="19" y2="12"></line>
                     <polyline points="12 5 19 12 12 19"></polyline>
                   </svg>

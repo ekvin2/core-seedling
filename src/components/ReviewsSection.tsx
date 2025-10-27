@@ -65,13 +65,16 @@ const ReviewsSection = () => {
   };
 
   return (
-    <section id="reviews" className="relative py-20 overflow-hidden bg-[#1a3a3a]">
+    <section id="reviews" className="relative py-20 overflow-hidden bg-gradient-to-br from-[#1a3a3a] via-[#0d2626] to-[#1a3a3a]">
       {/* Background Pattern */}
       <div className="absolute inset-0 opacity-5">
         <div className="absolute inset-0" style={{
           backgroundImage: `repeating-linear-gradient(45deg, transparent, transparent 35px, rgba(255,255,255,.1) 35px, rgba(255,255,255,.1) 70px)`
         }} />
       </div>
+      
+      {/* Gradient Overlay for depth */}
+      <div className="absolute inset-0 bg-gradient-to-t from-primary/10 via-transparent to-accent/10 pointer-events-none" />
 
       <div className="container mx-auto px-4 relative z-10">
         <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
@@ -94,7 +97,7 @@ const ReviewsSection = () => {
                 <CarouselContent>
                   {reviews.map((review) => (
                     <CarouselItem key={review.id} className="md:basis-1/2">
-                      <Card className="bg-white border-none shadow-elegant h-full">
+                      <Card className="bg-gradient-to-br from-white to-primary/5 border-none shadow-elegant hover:shadow-2xl transition-all duration-300 h-full">
                         <CardContent className="p-6">
                           {/* Header */}
                           <div className="flex items-start justify-between mb-4">

@@ -4,6 +4,7 @@ import { Button } from "@/components/ui/button";
 import { Menu, X, Phone, Mail, Settings } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import QuoteModal from "./QuoteModal";
+import logo from "@/assets/logo.jpeg";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -42,12 +43,10 @@ const Header = () => {
           <div className="flex items-center justify-between">
             {/* Logo */}
             <div 
-              className="flex items-center space-x-2 cursor-pointer"
+              className="flex items-center space-x-3 cursor-pointer"
               onClick={() => navigate('/')}
             >
-              <div className="w-10 h-10 bg-hero-gradient rounded-lg flex items-center justify-center">
-                <span className="text-white font-bold text-lg">EHW</span>
-              </div>
+              <img src={logo} alt="Easy House Wash NZ Logo" className="h-12 w-auto object-contain" />
               <span className="text-xl font-bold text-primary">Easy House Wash NZ</span>
             </div>
 
