@@ -369,7 +369,7 @@ const ServicePage = () => {
               <div className="flex flex-wrap justify-center gap-6 text-sm opacity-90">
                 <div className="flex items-center space-x-2">
                   <CheckCircle className="w-4 h-4" />
-                  <span>Licensed & Insured</span>
+                  <span>Professional Service</span>
                 </div>
                 <div className="flex items-center space-x-2">
                   <CheckCircle className="w-4 h-4" />

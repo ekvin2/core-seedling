@@ -88,39 +88,43 @@ const ServicesSection = () => {
           </p>
         </div>
         
-        <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-6 mb-4 md:mb-16">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-4 md:mb-16">
           {services.map((service) => (
             <Card 
               key={service.id} 
-              className="group hover:shadow-lg transition-all duration-300 border-border/50 hover:border-primary/20 overflow-hidden p-0 h-[200px] md:h-[280px] lg:h-[320px]"
+              className="group hover:shadow-lg transition-all duration-300 border-border/50 hover:border-primary/20 overflow-hidden bg-background"
             >
-              {/* Image Container - 80% height with 2:1 aspect ratio and dark overlay */}
-              <div className="relative h-[80%] overflow-hidden bg-muted aspect-[2/1]">
+              {/* Image Container */}
+              <div className="relative h-48 overflow-hidden bg-muted">
                 <img 
                   src={getServiceImageUrl(service)} 
                   alt={service.title}
                   className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-300"
                   loading="lazy"
                 />
-                {/* Dark overlay - stronger on mobile for better text contrast */}
-                <div className="absolute inset-0 bg-black/50 md:bg-black/40 group-hover:bg-black/30 transition-colors duration-300"></div>
               </div>
               
-              {/* Content Container - 20% height, optimized for mobile and desktop */}
-              <div className="h-[20%] flex flex-col justify-center items-center bg-background px-2">
-                {/* Service Title - Responsive text sizing */}
-                <h3 className="text-xs md:text-sm lg:text-base font-semibold text-center mb-1 leading-tight overflow-hidden" style={{display: '-webkit-box', WebkitLineClamp: 2, WebkitBoxOrient: 'vertical'}}>
+              {/* Content Container */}
+              <div className="p-6 flex flex-col items-center text-center space-y-4">
+                {/* Service Title */}
+                <h3 className="text-lg md:text-xl font-bold">
                   {service.title}
                 </h3>
-                {/* Learn More Button - Filled blue button */}
-                <Button 
+                {/* Service Description */}
+                <p className="text-sm text-muted-foreground line-clamp-3">
+                  {service.sub_heading || "Professional cleaning service tailored to your needs"}
+                </p>
+                {/* Arrow Button */}
+                <button 
                   onClick={() => navigate(`/service/${service.slug}`)}
-                  variant="default"
-                  size="sm"
-                  className="text-xs md:text-sm px-3 py-1 h-auto min-h-[24px] md:min-h-[28px] bg-blue-600 hover:bg-blue-700 text-white font-medium transition-colors duration-200"
+                  className="w-10 h-10 rounded-full bg-primary hover:bg-primary/90 text-primary-foreground flex items-center justify-center transition-colors duration-200"
+                  aria-label={`Learn more about ${service.title}`}
                 >
-                  Learn More
-                </Button>
+                  <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+                    <line x1="5" y1="12" x2="19" y2="12"></line>
+                    <polyline points="12 5 19 12 12 19"></polyline>
+                  </svg>
+                </button>
               </div>
             </Card>
           ))}

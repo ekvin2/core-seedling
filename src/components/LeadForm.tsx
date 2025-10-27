@@ -18,9 +18,9 @@ interface LeadFormProps {
 
 const leadFormSchema = z.object({
   name: z.string().trim().min(2, "Name must be at least 2 characters").max(100, "Name must be less than 100 characters"),
-  email: z.string().trim().email("Invalid email address").max(255, "Email must be less than 255 characters"),
+  email: z.string().trim().email("Invalid email address").max(255, "Email must be less than 255 characters").optional().or(z.literal('')),
   phone: z.string().trim().min(10, "Phone number must be at least 10 digits").max(20, "Phone number must be less than 20 digits"),
-  city: z.string().min(2, "City is required").max(100),
+  city: z.string().max(100).optional().or(z.literal('')),
   service: z.string().min(1, "Please select a service"),
   message: z.string().trim().max(1000, "Message must be less than 1000 characters").optional(),
 });
@@ -177,7 +177,7 @@ const LeadForm = ({ onSuccess }: LeadFormProps) => {
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="email">Email Address *</Label>
+          <Label htmlFor="email">Email Address (Optional)</Label>
           <Input
             id="email"
             type="email"
@@ -215,7 +215,7 @@ const LeadForm = ({ onSuccess }: LeadFormProps) => {
                 onChange={field.onChange}
                 onBlur={field.onBlur}
                 error={errors.city?.message}
-                required
+                required={false}
               />
             )}
           />

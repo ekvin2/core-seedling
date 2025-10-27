@@ -35,8 +35,8 @@ const ServiceFAQ = ({ serviceName }: ServiceFAQProps) => {
       answer: `Pricing varies based on the size of your space, frequency of service, and specific requirements. We offer competitive rates and provide free, no-obligation quotes. Contact us today for a personalized estimate tailored to your needs.`
     },
     {
-      question: `Are you licensed and insured?`,
-      answer: `Yes, we are fully licensed, bonded, and insured for your peace of mind. Our team members undergo background checks and are trained in professional cleaning techniques. We maintain comprehensive liability insurance to protect both our team and your property.`
+      question: `Do you provide insurance coverage?`,
+      answer: `Yes, we maintain comprehensive liability insurance to protect both our team and your property. Our team members undergo background checks and are trained in professional cleaning techniques for your peace of mind.`
     },
     {
       question: `Can I customize the cleaning checklist?`,

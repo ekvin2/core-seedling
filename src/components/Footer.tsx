@@ -120,8 +120,6 @@ const Footer = () => {
               © {currentYear} Easy House Wash NZ. All rights reserved.
             </div>
             <div className="flex flex-col md:flex-row items-center md:space-x-6 text-sm opacity-90 space-y-2 md:space-y-0">
-              <span>Licensed & Insured</span>
-              <span className="hidden md:inline">•</span>
               <span>100% Satisfaction</span>
               <span className="hidden md:inline">•</span>
               <span className="hidden md:inline">Eco-Friendly Products</span>

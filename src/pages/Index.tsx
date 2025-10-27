@@ -10,10 +10,10 @@ import { generateLocalBusinessSchema } from "@/lib/seo";
 
 const Index = () => {
   useSEO({
-    title: "Easy house wash NZ - Professional House Cleaning Services | Licensed & Insured",
-    description: "Professional house cleaning services you can trust. Licensed, insured, and eco-friendly. Get your free quote today for regular cleaning, deep cleaning, and more!",
+    title: "Easy house wash NZ - Professional House Cleaning Services You Can Trust",
+    description: "Professional house cleaning services you can trust. Eco-friendly products and expert care. Get your free quote today for regular cleaning, deep cleaning, and more!",
     canonical: window.location.origin,
-    keywords: "house cleaning, professional cleaning services, eco-friendly cleaning, home cleaning, deep cleaning, licensed cleaning service",
+    keywords: "house cleaning, professional cleaning services, eco-friendly cleaning, home cleaning, deep cleaning, trusted cleaning service",
     schema: generateLocalBusinessSchema()
   });
 

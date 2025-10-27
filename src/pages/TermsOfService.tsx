@@ -115,9 +115,9 @@ const TermsOfService = () => {
           </section>
 
           <section>
-            <h2 className="text-2xl font-bold mb-4">8. Insurance and Bonding</h2>
+            <h2 className="text-2xl font-bold mb-4">8. Insurance Coverage</h2>
             <p className="text-muted-foreground leading-relaxed">
-              SparkleClean is fully licensed, bonded, and insured. All team members undergo 
+              Easy House Wash NZ maintains comprehensive liability insurance. All team members undergo 
               background checks and professional training.
             </p>
           </section>

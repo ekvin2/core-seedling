@@ -13,7 +13,7 @@ const Contact = () => {
 
   useSEO({
     title: "Contact Easy House Wash NZ - Get Your Free Washing Quote Today",
-    description: "Contact Easy House Wash NZ for professional house washing and exterior cleaning services across New Zealand. Get your free quote, schedule a consultation, or ask questions. Licensed, insured, and ready to help!",
+    description: "Contact Easy House Wash NZ for professional house washing and exterior cleaning services across New Zealand. Get your free quote, schedule a consultation, or ask questions today!",
     canonical: `${window.location.origin}/contact`,
     keywords: "contact house washing nz, exterior cleaning quote, pressure washing auckland, roof washing wellington, house wash christchurch, free quote"
   });
@@ -152,8 +152,8 @@ const Contact = () => {
                     <div className="flex items-start space-x-3">
                       <CheckCircle className="w-5 h-5 text-primary mt-1 flex-shrink-0" />
                       <div>
-                        <h4 className="font-semibold">Licensed & Insured</h4>
-                        <p className="text-muted-foreground text-sm">Fully bonded and insured for your peace of mind</p>
+                        <h4 className="font-semibold">Professional Service</h4>
+                        <p className="text-muted-foreground text-sm">Expert team trained in professional cleaning techniques</p>
                       </div>
                     </div>
                     <div className="flex items-start space-x-3">

@@ -41,15 +41,6 @@ const HeroSection = () => {
               </p>
             </div>
 
-            <div className="flex flex-col sm:flex-row gap-4">
-              <Button 
-                size="lg" 
-                className="text-lg px-8 min-h-[44px]"
-                onClick={() => setIsQuoteModalOpen(true)}
-              >
-                Get Free Quote
-              </Button>
-            </div>
           </div>
 
           {/* Right Content - Lead Form (Hidden on Mobile) */}
