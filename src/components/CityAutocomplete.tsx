@@ -136,13 +136,7 @@ export function CityAutocomplete({
 
   return (
     <div className={cn('relative', className)}>
-      {label && (
-        <Label htmlFor="city-autocomplete" className="flex items-center gap-2">
-          <MapPin className="h-4 w-4" />
-          {label}
-          {required ? <span className="text-destructive">*</span> : <span className="text-muted-foreground">(Optional)</span>}
-        </Label>
-      )}
+     
       <div className="relative">
         <Input
           id="city-autocomplete"

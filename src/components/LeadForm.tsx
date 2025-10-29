@@ -206,6 +206,7 @@ const LeadForm = ({ onSuccess }: LeadFormProps) => {
         </div>
 
         <div className="space-y-2">
+          <Label htmlFor="city">City (Optional)</Label>
           <Controller
             name="city"
             control={control}

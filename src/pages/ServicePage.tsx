@@ -265,22 +265,7 @@ const ServicePage = () => {
                   dangerouslySetInnerHTML={{ __html: service.content }}
                 />
                 
-                <Card className="shadow-elegant">
-                  <CardContent className="p-6">
-                    <h3 className="text-xl font-semibold mb-4 flex items-center">
-                      <CheckCircle className="w-5 h-5 text-primary mr-2" />
-                      Key Benefits
-                    </h3>
-                    <ul className="space-y-2">
-                      {serviceBenefits.map((benefit, index) => (
-                        <li key={index} className="flex items-center text-muted-foreground">
-                          <CheckCircle className="w-4 h-4 text-primary mr-3 flex-shrink-0" />
-                          {benefit}
-                        </li>
-                      ))}
-                    </ul>
-                  </CardContent>
-                </Card>
+                
               </div>
 
               {/* Service Inclusions */}
@@ -327,7 +312,7 @@ const ServicePage = () => {
         </section>
 
         {/* Before & After Gallery */}
-        <ServiceGallery serviceName={service.title} />
+        <ServiceGallery serviceName={service.title} serviceId={service.id} />
 
         {/* Google Reviews Section */}
         <ReviewsSection />
