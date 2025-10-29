@@ -101,7 +101,7 @@ const ReviewsSection = () => {
                 </div>
 
                 {/* Review Text */}
-                <p className="text-gray-700 text-center mb-8 font-normal leading-relaxed text-lg">
+                <p className="text-gray-700 text-center mb-8 font-normal leading-relaxed text-lg line-clamp-4 break-words">
                   "{review.review_text}"
                 </p>
 
