@@ -5,7 +5,7 @@ import { TopBar } from './TopBar';
 
 interface DashboardLayoutProps {
   children: ReactNode;
-  currentSection?: 'dashboard' | 'services' | 'reviews' | 'bookings' | 'clients' | 'settings' | 'contact' | 'leads';
+  currentSection?: 'services' | 'reviews' | 'bookings' | 'clients' | 'settings' | 'contact' | 'leads' | 'faqs' | 'portfolio';
 }
 
 /**
@@ -24,7 +24,7 @@ interface DashboardLayoutProps {
  * </DashboardLayout>
  * ```
  */
-export function DashboardLayout({ children, currentSection = 'dashboard' }: DashboardLayoutProps) {
+export function DashboardLayout({ children, currentSection = 'leads' }: DashboardLayoutProps) {
   return (
     <SidebarProvider defaultOpen>
       <div className="min-h-screen flex w-full bg-background">

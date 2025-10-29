@@ -1,6 +1,5 @@
 import { NavLink } from 'react-router-dom';
 import {
-  LayoutDashboard,
   Briefcase,
   Star,
   Calendar,
@@ -8,7 +7,10 @@ import {
   Settings,
   Sparkles,
   Phone,
-  UserCheck
+  UserCheck,
+  Image,
+  HelpCircle,
+  LayoutDashboard
 } from 'lucide-react';
 import {
   Sidebar,
@@ -32,51 +34,45 @@ interface MenuItem {
 }
 
 interface AdminSidebarProps {
-  currentSection?: 'dashboard' | 'services' | 'reviews' | 'bookings' | 'clients' | 'settings' | 'contact' | 'leads';
+  currentSection?: 'services' | 'portfolio' | 'reviews' | 'bookings' | 'clients' | 'settings' | 'contact' | 'leads' | 'faqs';
 }
 
 const menuItems: MenuItem[] = [
-  { 
-    title: 'Dashboard', 
-    url: '/admin#dashboard', 
-    icon: LayoutDashboard 
+  {
+    title: 'Leads',
+    url: '/admin#leads',
+    icon: UserCheck
   },
-  { 
-    title: 'Services', 
-    url: '/admin#services', 
-    icon: Briefcase 
+  {
+    title: 'Services',
+    url: '/admin#services',
+    icon: Briefcase
   },
-  { 
-    title: 'Reviews', 
-    url: '/admin#reviews', 
-    icon: Star 
+  {
+    title: 'Portfolio',
+    url: '/admin#portfolio',
+    icon: Image
   },
-  { 
-    title: 'Leads', 
-    url: '/admin#leads', 
-    icon: UserCheck 
+  {
+    title: 'Reviews',
+    url: '/admin#reviews',
+    icon: Star
   },
-  { 
-    title: 'Contact Details', 
-    url: '/admin#contact', 
-    icon: Phone 
+  {
+    title: 'FAQs',
+    url: '/admin#faqs',
+    icon: HelpCircle
   },
-  { 
-    title: 'Bookings', 
-    url: '/admin#bookings', 
+  {
+    title: 'Contact Details',
+    url: '/admin#contact',
+    icon: Phone
+  },
+  {
+    title: 'Bookings',
+    url: '/admin#bookings',
     icon: Calendar,
     badge: 'Soon'
-  },
-  { 
-    title: 'Clients', 
-    url: '/admin#clients', 
-    icon: Users,
-    badge: 'Soon'
-  },
-  { 
-    title: 'Settings', 
-    url: '/admin#settings', 
-    icon: Settings 
   },
 ];
 
@@ -90,7 +86,7 @@ const menuItems: MenuItem[] = [
  * - Keyboard accessible
  * - Smooth animations
  */
-export function AdminSidebar({ currentSection = 'dashboard' }: AdminSidebarProps) {
+export function AdminSidebar({ currentSection = 'leads' }: AdminSidebarProps) {
   const { open } = useSidebar();
 
   const isActive = (url: string) => {
@@ -106,7 +102,7 @@ export function AdminSidebar({ currentSection = 'dashboard' }: AdminSidebarProps
       <SidebarHeader className="border-b border-sidebar-border p-4">
         <div className="flex items-center gap-2">
           <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-primary">
-            <Sparkles className="h-5 w-5 text-primary-foreground" />
+            <LayoutDashboard className="h-5 w-5 text-primary-foreground" />
           </div>
           {open && (
             <div className="flex flex-col">
@@ -133,7 +129,7 @@ export function AdminSidebar({ currentSection = 'dashboard' }: AdminSidebarProps
                     isActive={isActive(item.url)}
                     tooltip={item.title}
                   >
-                    <a 
+                    <a
                       href={item.url}
                       className="group relative"
                       aria-label={item.title}

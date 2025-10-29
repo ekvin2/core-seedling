@@ -15,7 +15,7 @@ import { Button } from '@/components/ui/button';
  */
 export function BasicDashboard() {
   return (
-    <DashboardLayout currentSection="dashboard">
+  <DashboardLayout currentSection="leads">
       <div className="space-y-6">
         <div>
           <h1 className="text-3xl font-bold tracking-tight">Dashboard</h1>
@@ -186,7 +186,7 @@ export function EmptyState() {
  */
 export function LoadingState() {
   return (
-    <DashboardLayout currentSection="dashboard">
+  <DashboardLayout currentSection="leads">
       <div className="space-y-6">
         <div className="h-10 w-48 animate-pulse bg-muted rounded" />
         <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">

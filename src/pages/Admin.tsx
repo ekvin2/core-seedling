@@ -5,6 +5,7 @@ import { DashboardLayout } from '@/components/admin/DashboardLayout';
 import { ContactDetailsForm } from '@/components/admin/ContactDetailsForm';
 import { LeadsManagement } from '@/components/admin/LeadsManagement';
 import { ServicesManagement } from '@/components/admin/ServicesManagement';
+import { PortfolioManagement } from '@/components/admin/PortfolioManagement';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -15,6 +16,9 @@ import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@
 import { useToast } from '@/hooks/use-toast';
 import { supabase } from '@/integrations/supabase/client';
 import { Trash2, Edit, Eye, ArrowUp, ArrowDown, HelpCircle, X } from 'lucide-react';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter } from '@/components/ui/dialog';
+import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
+import { ReviewsManagement } from '@/components/admin/ReviewsManagement';
 import { uploadImageToSupabase, deleteImageFromSupabase } from '@/lib/imageUpload';
 
 interface Service {
@@ -57,6 +61,8 @@ interface FAQ {
 
 
 const Admin = () => {
+  // Portfolio modal state
+  const [isPortfolioModalOpen, setIsPortfolioModalOpen] = useState(false);
   const { user, isAdmin, signOut, loading: authLoading } = useAuth();
   const navigate = useNavigate();
   const { toast } = useToast();
@@ -112,6 +118,7 @@ const Admin = () => {
   const [faqAnswer, setFaqAnswer] = useState('');
   const [faqServiceId, setFaqServiceId] = useState('');
   const [isGeneral, setIsGeneral] = useState(false);
+  const [isFaqModalOpen, setIsFaqModalOpen] = useState(false);
 
   useEffect(() => {
     if (!authLoading && (!user || !isAdmin)) {
@@ -221,15 +228,22 @@ const Admin = () => {
     }
   };
 
-  const handleDeletePortfolio = async (id: string) => {
-    if (!confirm('Are you sure you want to delete this portfolio item?')) return;
+  const [isConfirmPortfolioOpen, setIsConfirmPortfolioOpen] = useState(false);
+  const [confirmPortfolioId, setConfirmPortfolioId] = useState<string | null>(null);
+
+  const handleDeletePortfolio = (id: string) => {
+    setConfirmPortfolioId(id);
+    setIsConfirmPortfolioOpen(true);
+  };
+
+  const performDeletePortfolioConfirmed = async () => {
+    if (!confirmPortfolioId) return;
     try {
-      console.log('[portfolio] attempting delete', { id });
-      // Log current user/session for debugging
+      console.log('[portfolio] attempting delete', { id: confirmPortfolioId });
       const session = await supabase.auth.getSession();
       console.log('[auth] session for delete', session?.data?.session ?? null);
 
-      const { data, error } = await supabase.from('portfolio').delete().eq('id', id).select();
+      const { data, error } = await supabase.from('portfolio').delete().eq('id', confirmPortfolioId).select();
       console.log('[portfolio] delete result', { data, error });
       if (error) {
         toast({ title: 'Error deleting', description: error.message, variant: 'destructive' });
@@ -240,6 +254,9 @@ const Admin = () => {
     } catch (err: any) {
       console.error('[portfolio] delete thrown', err);
       toast({ title: 'Error deleting', description: String(err?.message ?? err), variant: 'destructive' });
+    } finally {
+      setIsConfirmPortfolioOpen(false);
+      setConfirmPortfolioId(null);
     }
   };
 
@@ -400,13 +417,20 @@ const Admin = () => {
     setSelectedImage(null);
   };
 
-  const handleDelete = async (id: string) => {
-    if (!confirm('Are you sure you want to delete this service?')) return;
+  const [isConfirmServiceOpen, setIsConfirmServiceOpen] = useState(false);
+  const [confirmServiceId, setConfirmServiceId] = useState<string | null>(null);
 
+  const handleDelete = (id: string) => {
+    setConfirmServiceId(id);
+    setIsConfirmServiceOpen(true);
+  };
+
+  const performDeleteServiceConfirmed = async () => {
+    if (!confirmServiceId) return;
     const { error } = await supabase
       .from('services')
       .delete()
-      .eq('id', id);
+      .eq('id', confirmServiceId);
 
     if (error) {
       toast({
@@ -421,6 +445,9 @@ const Admin = () => {
       });
       fetchServices();
     }
+
+    setIsConfirmServiceOpen(false);
+    setConfirmServiceId(null);
   };
 
   const handleMoveUp = async (service: Service, index: number) => {
@@ -567,13 +594,20 @@ const Admin = () => {
     setIsFeatured(review.is_featured);
   };
 
-  const handleDeleteReview = async (id: string) => {
-    if (!confirm('Are you sure you want to delete this review?')) return;
+  const [isConfirmReviewOpen, setIsConfirmReviewOpen] = useState(false);
+  const [confirmReviewId, setConfirmReviewId] = useState<string | null>(null);
 
+  const handleDeleteReview = (id: string) => {
+    setConfirmReviewId(id);
+    setIsConfirmReviewOpen(true);
+  };
+
+  const performDeleteReviewConfirmed = async () => {
+    if (!confirmReviewId) return;
     const { error } = await supabase
       .from('reviews')
       .delete()
-      .eq('id', id);
+      .eq('id', confirmReviewId);
 
     if (error) {
       toast({
@@ -588,6 +622,9 @@ const Admin = () => {
       });
       fetchReviews();
     }
+
+    setIsConfirmReviewOpen(false);
+    setConfirmReviewId(null);
   };
 
   // FAQ management functions
@@ -647,6 +684,7 @@ const Admin = () => {
         description: `FAQ ${editingFaq ? 'updated' : 'created'} successfully!`,
       });
       resetFaqForm();
+      setIsFaqModalOpen(false);
       fetchFaqs();
     }
     setLoading(false);
@@ -666,15 +704,24 @@ const Admin = () => {
     setFaqAnswer(faq.answer);
     setFaqServiceId(faq.service_id || '');
     setIsGeneral(faq.is_general);
+    setIsFaqModalOpen(true);
   };
 
-  const handleDeleteFaq = async (id: string) => {
-    if (!confirm('Are you sure you want to delete this FAQ?')) return;
+  const [isConfirmFaqOpen, setIsConfirmFaqOpen] = useState(false);
+  const [confirmFaqId, setConfirmFaqId] = useState<string | null>(null);
+
+  const handleDeleteFaq = (id: string) => {
+    setConfirmFaqId(id);
+    setIsConfirmFaqOpen(true);
+  };
+
+  const performDeleteFaqConfirmed = async () => {
+    if (!confirmFaqId) return;
 
     const { error } = await supabase
       .from('faqs')
       .delete()
-      .eq('id', id);
+      .eq('id', confirmFaqId);
 
     if (error) {
       toast({
@@ -689,23 +736,27 @@ const Admin = () => {
       });
       fetchFaqs();
     }
+
+    setIsConfirmFaqOpen(false);
+    setConfirmFaqId(null);
   };
 
 
   const location = useLocation();
-  const currentTab = location.hash.replace('#', '') || 'services';
+  // Default active tab should be 'leads' per new admin ordering
+  const currentTab = location.hash.replace('#', '') || 'leads';
   
   // Map tab values to dashboard sections
   const getSectionFromTab = (tab: string) => {
-    const sectionMap: Record<string, 'dashboard' | 'services' | 'reviews' | 'bookings' | 'clients' | 'settings' | 'contact' | 'leads'> = {
+    const sectionMap: Record<string, 'services' | 'reviews' | 'bookings' | 'clients' | 'settings' | 'contact' | 'leads' | 'faqs' | 'portfolio'> = {
       'services': 'services',
       'reviews': 'reviews',
       'leads': 'leads',
       'contact': 'contact',
-      'faqs': 'settings',
-      'portfolio': 'services',
+      'faqs': 'faqs',
+      'portfolio': 'portfolio',
     };
-    return sectionMap[tab] || 'dashboard';
+    return sectionMap[tab] || 'leads';
   };
 
   if (authLoading) {
@@ -720,10 +771,7 @@ const Admin = () => {
     <DashboardLayout currentSection={getSectionFromTab(currentTab)}>
       <div className="space-y-6">
         <div className="flex justify-between items-center">
-          <div>
-            <h1 className="text-3xl font-bold tracking-tight">Content Management</h1>
-            <p className="text-muted-foreground">Manage your cleaning services content</p>
-          </div>
+          
           <Button variant="outline" onClick={() => navigate('/')}>
             <Eye className="w-4 h-4 mr-2" />
             View Site
@@ -731,321 +779,122 @@ const Admin = () => {
         </div>
 
         <Tabs value={currentTab} onValueChange={(value) => navigate(`/admin#${value}`)} className="w-full">
-          <TabsList className="grid w-full grid-cols-6 lg:grid-cols-6">
-            <TabsTrigger value="services">Services</TabsTrigger>
-            <TabsTrigger value="reviews">Reviews</TabsTrigger>
-            <TabsTrigger value="leads">Leads</TabsTrigger>
-            <TabsTrigger value="contact">Contact</TabsTrigger>
-            <TabsTrigger value="faqs">Q&A / FAQs</TabsTrigger>
-            <TabsTrigger value="portfolio">Portfolio</TabsTrigger>
-          </TabsList>
+          
           
           <TabsContent value="services" className="space-y-6">
             <ServicesManagement />
           </TabsContent>
 
           <TabsContent value="portfolio" className="space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle>Create Portfolio Item</CardTitle>
-                <CardDescription>Add a new portfolio photo with service and date</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <form onSubmit={handlePortfolioSubmit} className="space-y-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="space-y-2">
-                      <Label htmlFor="portfolioTitle">Name (optional)</Label>
-                      <Input
-                        id="portfolioTitle"
-                        value={portfolioTitle}
-                        onChange={(e) => setPortfolioTitle(e.target.value)}
-                        placeholder="e.g. Roof Wash at Elm St"
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="portfolioService">Service</Label>
-                      <select
-                        id="portfolioService"
-                        value={portfolioServiceId}
-                        onChange={(e) => setPortfolioServiceId(e.target.value)}
-                        className="w-full rounded-md border border-input bg-background px-3 py-2"
-                      >
-                        <option value="">-- None --</option>
-                        {services.map((s) => (
-                          <option key={s.id} value={s.id}>{s.title}</option>
-                        ))}
-                      </select>
-                    </div>
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="space-y-2">
-                      <Label htmlFor="portfolioDate">Date</Label>
-                      <Input
-                        id="portfolioDate"
-                        type="date"
-                        value={portfolioDate}
-                        onChange={(e) => setPortfolioDate(e.target.value)}
-                        required
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="portfolioImage">Image (max 5MB)</Label>
-                      <Input
-                        ref={portfolioFileRef}
-                        id="portfolioImage"
-                        type="file"
-                        accept="image/*"
-                        onChange={handlePortfolioImageSelect}
-                        required
-                      />
-                      {portfolioImagePreview && (
-                        <img src={portfolioImagePreview} alt="Preview" className="mt-2 h-40 w-full object-cover rounded border" />
-                      )}
-                      <p className="text-xs text-muted-foreground">If the image is larger than 5MB, please reduce its size and re-upload.</p>
-                    </div>
-                  </div>
-
-                  <div className="flex gap-4">
-                    <Button type="submit" disabled={loading}>{loading ? 'Saving...' : 'Create Item'}</Button>
-                    <Button
-                      type="button"
-                      variant="outline"
-                      onClick={() => {
-                        setPortfolioTitle('');
-                        setPortfolioServiceId('');
-                        setPortfolioDate('');
-                        setPortfolioImage(null);
-                        setPortfolioImagePreview('');
-                        if (portfolioFileRef.current) portfolioFileRef.current.value = '';
-                      }}
-                    >
-                      Reset
-                    </Button>
-                  </div>
-                </form>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle>Manage Portfolio</CardTitle>
-                <CardDescription>View and delete portfolio items</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Preview</TableHead>
-                      <TableHead>Service</TableHead>
-                      <TableHead>Name</TableHead>
-                      <TableHead>Date</TableHead>
-                      <TableHead className="text-right">Actions</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {portfolio.map((item) => (
-                      <TableRow key={item.id}>
-                        <TableCell>
-                          <img src={item.image_url} alt={item.title || ''} className="h-12 w-20 object-cover rounded border" />
-                        </TableCell>
-                        <TableCell className="text-sm">
-                          {item.service_id ? (services.find(s => s.id === item.service_id)?.title || 'Unknown') : <span className="text-muted-foreground">None</span>}
-                        </TableCell>
-                        <TableCell className="text-sm max-w-xs truncate">{item.title || '-'}</TableCell>
-                        <TableCell className="text-sm">{new Date(item.taken_at).toLocaleDateString()}</TableCell>
-                        <TableCell className="text-right">
-                          <Button variant="destructive" size="sm" onClick={() => handleDeletePortfolio(item.id)}>
-                            <Trash2 className="w-4 h-4" />
-                          </Button>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-                {portfolio.length === 0 && (
-                  <p className="text-center text-muted-foreground py-8">No portfolio items yet.</p>
-                )}
-              </CardContent>
-            </Card>
+            <PortfolioManagement />
           </TabsContent>
 
           <TabsContent value="reviews" className="space-y-6">
-            <Card>
-              <CardHeader>
-                <CardTitle>{editingReview ? 'Edit Review' : 'Create New Review'}</CardTitle>
-                <CardDescription>
-                  {editingReview ? 'Update the review details below' : 'Add a customer review'}
-                </CardDescription>
-              </CardHeader>
-              <CardContent>
-                <form onSubmit={handleReviewSubmit} className="space-y-6">
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="space-y-2">
-                      <Label htmlFor="customerName">Customer Name</Label>
-                      <Input
-                        id="customerName"
-                        value={customerName}
-                        onChange={(e) => setCustomerName(e.target.value)}
-                        placeholder="e.g. John Doe"
-                        required
-                      />
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="rating">Rating (1-5)</Label>
-                      <Input
-                        id="rating"
-                        type="number"
-                        min="1"
-                        max="5"
-                        value={rating}
-                        onChange={(e) => setRating(parseInt(e.target.value))}
-                        required
-                      />
-                    </div>
-                  </div>
-                  
-                  <div className="space-y-2">
-                    <Label htmlFor="reviewText">Review Text</Label>
-                    <Textarea
-                      id="reviewText"
-                      value={reviewText}
-                      onChange={(e) => setReviewText(e.target.value)}
-                      placeholder="Enter the review text..."
-                      className="min-h-[100px]"
-                      required
-                    />
-                  </div>
-                  
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="space-y-2">
-                      <Label htmlFor="serviceId">Related Service (Optional)</Label>
-                      <select
-                        id="serviceId"
-                        value={selectedServiceId}
-                        onChange={(e) => setSelectedServiceId(e.target.value)}
-                        className="w-full rounded-md border border-input bg-background px-3 py-2"
-                      >
-                        <option value="">-- None --</option>
-                        {services.map((service) => (
-                          <option key={service.id} value={service.id}>
-                            {service.title}
-                          </option>
-                        ))}
-                      </select>
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="isFeatured" className="flex items-center space-x-2">
-                        <input
-                          type="checkbox"
-                          id="isFeatured"
-                          checked={isFeatured}
-                          onChange={(e) => setIsFeatured(e.target.checked)}
-                          className="rounded border-input"
-                        />
-                        <span>Featured Review</span>
-                      </Label>
-                    </div>
-                  </div>
-                  
-                  <div className="flex gap-4">
-                    <Button type="submit" disabled={loading}>
-                      {loading ? 'Saving...' : (editingReview ? 'Update Review' : 'Create Review')}
-                    </Button>
-                    {editingReview && (
-                      <Button type="button" variant="outline" onClick={resetReviewForm}>
-                        Cancel Edit
-                      </Button>
-                    )}
-                  </div>
-                </form>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle>Manage Reviews</CardTitle>
-                <CardDescription>View, edit, and delete all customer reviews</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Customer</TableHead>
-                      <TableHead>Rating</TableHead>
-                      <TableHead>Review</TableHead>
-                      <TableHead>Status</TableHead>
-                      <TableHead>Date</TableHead>
-                      <TableHead className="text-right">Actions</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {reviews.map((review) => (
-                      <TableRow key={review.id}>
-                        <TableCell className="font-medium">{review.customer_name}</TableCell>
-                        <TableCell>
-                          <div className="flex">
-                            {[...Array(review.rating)].map((_, i) => (
-                              <span key={i} className="text-yellow-400">★</span>
-                            ))}
-                          </div>
-                        </TableCell>
-                        <TableCell className="max-w-md truncate">{review.review_text}</TableCell>
-                        <TableCell>
-                          {review.is_featured && (
-                            <span className="text-xs bg-primary text-primary-foreground px-2 py-1 rounded">
-                              Featured
-                            </span>
-                          )}
-                        </TableCell>
-                        <TableCell className="text-sm text-muted-foreground">
-                          {new Date(review.created_at).toLocaleDateString()}
-                        </TableCell>
-                        <TableCell className="text-right">
-                          <div className="flex gap-2 justify-end">
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              onClick={() => handleEditReview(review)}
-                            >
-                              <Edit className="w-4 h-4" />
-                            </Button>
-                            <Button
-                              variant="destructive"
-                              size="sm"
-                              onClick={() => handleDeleteReview(review.id)}
-                            >
-                              <Trash2 className="w-4 h-4" />
-                            </Button>
-                          </div>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-                {reviews.length === 0 && (
-                  <p className="text-center text-muted-foreground py-8">
-                    No reviews found. Create your first review!
-                  </p>
-                )}
-              </CardContent>
-            </Card>
+            <ReviewsManagement />
           </TabsContent>
 
           <TabsContent value="faqs" className="space-y-6">
+            {/* Header */}
+            <div className="flex items-center justify-between">
+              <div>
+                <h2 className="text-3xl font-bold tracking-tight">Q&A / FAQs</h2>
+                <p className="text-muted-foreground">Manage frequently asked questions</p>
+              </div>
+              <Button onClick={() => { resetFaqForm(); setIsFaqModalOpen(true); }} size="lg">
+                Create FAQ
+              </Button>
+            </div>
+
+            {/* Manage FAQs */}
             <Card>
               <CardHeader>
-                <CardTitle>
-                  <div className="flex items-center gap-2">
-                    <HelpCircle className="w-5 h-5" />
-                    {editingFaq ? 'Edit FAQ' : 'Create New FAQ'}
-                  </div>
-                </CardTitle>
-                <CardDescription>
-                  {editingFaq ? 'Update the FAQ details below' : 'Add a frequently asked question'}
-                </CardDescription>
+                <CardTitle>All FAQs</CardTitle>
+                <CardDescription>{faqs.length} {faqs.length === 1 ? 'FAQ' : 'FAQs'} total</CardDescription>
               </CardHeader>
               <CardContent>
+                {faqs.length === 0 ? (
+                  <div className="flex flex-col items-center justify-center py-12 text-center">
+                    <div className="rounded-full bg-muted p-6 mb-4">
+                      <HelpCircle className="w-12 h-12 text-muted-foreground" />
+                    </div>
+                    <h3 className="text-lg font-semibold mb-2">No FAQs yet</h3>
+                    <p className="text-muted-foreground mb-4 max-w-sm">Get started by creating your first FAQ.</p>
+                    <Button onClick={() => { resetFaqForm(); setIsFaqModalOpen(true); }}>
+                      Create FAQ
+                    </Button>
+                  </div>
+                ) : (
+                  <div className="rounded-md border">
+                    <Table>
+                      <TableHeader>
+                        <TableRow>
+                          <TableHead>Question</TableHead>
+                          <TableHead>Answer</TableHead>
+                          <TableHead>Service</TableHead>
+                          <TableHead>Type</TableHead>
+                          <TableHead className="text-right">Actions</TableHead>
+                        </TableRow>
+                      </TableHeader>
+                      <TableBody>
+                        {faqs.map((faq) => (
+                          <TableRow key={faq.id}>
+                            <TableCell className="font-medium max-w-xs truncate">
+                              {faq.question}
+                            </TableCell>
+                            <TableCell className="max-w-md truncate text-muted-foreground">
+                              {faq.answer}
+                            </TableCell>
+                            <TableCell className="text-sm">
+                              {faq.service_id ? (
+                                services.find(s => s.id === faq.service_id)?.title || 'Unknown'
+                              ) : (
+                                <span className="text-muted-foreground">General</span>
+                              )}
+                            </TableCell>
+                            <TableCell>
+                              {faq.is_general && (
+                                <span className="text-xs bg-blue-500/10 text-blue-500 px-2 py-1 rounded">
+                                  Global
+                                </span>
+                              )}
+                            </TableCell>
+                            <TableCell className="text-right">
+                              <div className="flex gap-2 justify-end">
+                                <Button
+                                  variant="outline"
+                                  size="sm"
+                                  onClick={() => handleEditFaq(faq)}
+                                >
+                                  <Edit className="w-4 h-4" />
+                                </Button>
+                                <Button
+                                  variant="destructive"
+                                  size="sm"
+                                  onClick={() => handleDeleteFaq(faq.id)}
+                                >
+                                  <Trash2 className="w-4 h-4" />
+                                </Button>
+                              </div>
+                            </TableCell>
+                          </TableRow>
+                        ))}
+                      </TableBody>
+                    </Table>
+                  </div>
+                )}
+              </CardContent>
+            </Card>
+
+            {/* FAQ Dialog */}
+            <Dialog open={isFaqModalOpen} onOpenChange={() => { setIsFaqModalOpen(false); resetFaqForm(); }}>
+              <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+                <DialogHeader>
+                  <DialogTitle>{editingFaq ? 'Edit FAQ' : 'Create FAQ'}</DialogTitle>
+                  <DialogDescription>
+                    {editingFaq ? 'Update the FAQ details below.' : 'Fill in the details to create a new FAQ.'}
+                  </DialogDescription>
+                </DialogHeader>
+
                 <form onSubmit={handleFaqSubmit} className="space-y-6">
                   <div className="space-y-2">
                     <Label htmlFor="faqQuestion">Question</Label>
@@ -1057,7 +906,7 @@ const Admin = () => {
                       required
                     />
                   </div>
-                  
+
                   <div className="space-y-2">
                     <Label htmlFor="faqAnswer">Answer</Label>
                     <Textarea
@@ -1069,7 +918,7 @@ const Admin = () => {
                       required
                     />
                   </div>
-                  
+
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                     <div className="space-y-2">
                       <Label htmlFor="faqServiceId">Related Service (Optional)</Label>
@@ -1106,89 +955,18 @@ const Admin = () => {
                       </p>
                     </div>
                   </div>
-                  
-                  <div className="flex gap-4">
+
+                  <DialogFooter>
+                    <Button type="button" variant="outline" onClick={() => { setIsFaqModalOpen(false); resetFaqForm(); }} disabled={loading}>
+                      Cancel
+                    </Button>
                     <Button type="submit" disabled={loading}>
                       {loading ? 'Saving...' : (editingFaq ? 'Update FAQ' : 'Create FAQ')}
                     </Button>
-                    {editingFaq && (
-                      <Button type="button" variant="outline" onClick={resetFaqForm}>
-                        Cancel Edit
-                      </Button>
-                    )}
-                  </div>
+                  </DialogFooter>
                 </form>
-              </CardContent>
-            </Card>
-
-            <Card>
-              <CardHeader>
-                <CardTitle>Manage FAQs</CardTitle>
-                <CardDescription>View, edit, and delete all FAQs</CardDescription>
-              </CardHeader>
-              <CardContent>
-                <Table>
-                  <TableHeader>
-                    <TableRow>
-                      <TableHead>Question</TableHead>
-                      <TableHead>Answer</TableHead>
-                      <TableHead>Service</TableHead>
-                      <TableHead>Type</TableHead>
-                      <TableHead className="text-right">Actions</TableHead>
-                    </TableRow>
-                  </TableHeader>
-                  <TableBody>
-                    {faqs.map((faq) => (
-                      <TableRow key={faq.id}>
-                        <TableCell className="font-medium max-w-xs truncate">
-                          {faq.question}
-                        </TableCell>
-                        <TableCell className="max-w-md truncate text-muted-foreground">
-                          {faq.answer}
-                        </TableCell>
-                        <TableCell className="text-sm">
-                          {faq.service_id ? (
-                            services.find(s => s.id === faq.service_id)?.title || 'Unknown'
-                          ) : (
-                            <span className="text-muted-foreground">General</span>
-                          )}
-                        </TableCell>
-                        <TableCell>
-                          {faq.is_general && (
-                            <span className="text-xs bg-blue-500/10 text-blue-500 px-2 py-1 rounded">
-                              Global
-                            </span>
-                          )}
-                        </TableCell>
-                        <TableCell className="text-right">
-                          <div className="flex gap-2 justify-end">
-                            <Button
-                              variant="outline"
-                              size="sm"
-                              onClick={() => handleEditFaq(faq)}
-                            >
-                              <Edit className="w-4 h-4" />
-                            </Button>
-                            <Button
-                              variant="destructive"
-                              size="sm"
-                              onClick={() => handleDeleteFaq(faq.id)}
-                            >
-                              <Trash2 className="w-4 h-4" />
-                            </Button>
-                          </div>
-                        </TableCell>
-                      </TableRow>
-                    ))}
-                  </TableBody>
-                </Table>
-                {faqs.length === 0 && (
-                  <p className="text-center text-muted-foreground py-8">
-                    No FAQs found. Create your first FAQ!
-                  </p>
-                )}
-              </CardContent>
-            </Card>
+              </DialogContent>
+            </Dialog>
           </TabsContent>
 
           <TabsContent value="leads" className="space-y-6">
@@ -1199,6 +977,46 @@ const Admin = () => {
             <ContactDetailsForm />
           </TabsContent>
         </Tabs>
+        {/* Confirmation dialogs for destructive actions */}
+        <ConfirmDialog
+          open={isConfirmServiceOpen}
+          title="Delete service?"
+          description="This will permanently delete the service and related content."
+          confirmLabel="Delete"
+          cancelLabel="Cancel"
+          onConfirm={performDeleteServiceConfirmed}
+          onCancel={() => { setIsConfirmServiceOpen(false); setConfirmServiceId(null); }}
+        />
+
+        <ConfirmDialog
+          open={isConfirmPortfolioOpen}
+          title="Delete portfolio item?"
+          description="This action cannot be undone."
+          confirmLabel="Delete"
+          cancelLabel="Cancel"
+          onConfirm={performDeletePortfolioConfirmed}
+          onCancel={() => { setIsConfirmPortfolioOpen(false); setConfirmPortfolioId(null); }}
+        />
+
+        <ConfirmDialog
+          open={isConfirmReviewOpen}
+          title="Delete review?"
+          description="Are you sure you want to delete this review?"
+          confirmLabel="Delete"
+          cancelLabel="Cancel"
+          onConfirm={performDeleteReviewConfirmed}
+          onCancel={() => { setIsConfirmReviewOpen(false); setConfirmReviewId(null); }}
+        />
+
+        <ConfirmDialog
+          open={isConfirmFaqOpen}
+          title="Delete FAQ?"
+          description="Are you sure you want to delete this FAQ?"
+          confirmLabel="Delete"
+          cancelLabel="Cancel"
+          onConfirm={performDeleteFaqConfirmed}
+          onCancel={() => { setIsConfirmFaqOpen(false); setConfirmFaqId(null); }}
+        />
       </div>
     </DashboardLayout>
   );

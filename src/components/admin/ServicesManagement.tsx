@@ -34,6 +34,7 @@ import {
   PackageOpen,
   Eye,
 } from 'lucide-react';
+import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
 
 interface Service {
   id: string;
@@ -71,6 +72,8 @@ export const ServicesManagement: React.FC = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [editingService, setEditingService] = useState<Service | null>(null);
   const [submitting, setSubmitting] = useState(false);
+  const [isConfirmOpen, setIsConfirmOpen] = useState(false);
+  const [confirmService, setConfirmService] = useState<Service | null>(null);
 
   // Form state
   const [formData, setFormData] = useState<ServiceFormData>({
@@ -225,14 +228,18 @@ export const ServicesManagement: React.FC = () => {
     }
   };
 
-  const handleDelete = async (service: Service) => {
-    if (!confirm(`Are you sure you want to delete "${service.title}"?`)) return;
+  const handleDelete = (service: Service) => {
+    setConfirmService(service);
+    setIsConfirmOpen(true);
+  };
 
+  const performDeleteConfirmed = async () => {
+    if (!confirmService) return;
     try {
       const { error } = await supabase
         .from('services')
         .delete()
-        .eq('id', service.id);
+        .eq('id', confirmService.id);
 
       if (error) throw error;
 
@@ -247,6 +254,9 @@ export const ServicesManagement: React.FC = () => {
         description: error instanceof Error ? error.message : 'Failed to delete service',
         variant: 'destructive',
       });
+    } finally {
+      setIsConfirmOpen(false);
+      setConfirmService(null);
     }
   };
 
@@ -468,6 +478,16 @@ export const ServicesManagement: React.FC = () => {
           )}
         </CardContent>
       </Card>
+
+        <ConfirmDialog
+          open={isConfirmOpen}
+          title={confirmService ? `Delete \"${confirmService.title}\"?` : 'Delete service?'}
+          description="This will permanently remove the service and any related content."
+          confirmLabel="Delete"
+          cancelLabel="Cancel"
+          onConfirm={performDeleteConfirmed}
+          onCancel={() => { setIsConfirmOpen(false); setConfirmService(null); }}
+        />
 
       {/* Add/Edit Modal */}
       <Dialog open={isModalOpen} onOpenChange={handleCloseModal}>
