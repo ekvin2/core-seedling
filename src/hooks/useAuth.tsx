@@ -110,6 +110,10 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   const signOut = async () => {
     await supabase.auth.signOut();
+    // Ensure local auth state is cleared immediately after sign out
+    setUser(null);
+    setSession(null);
+    setProfile(null);
   };
 
   const isAdmin = profile?.role === 'admin';
