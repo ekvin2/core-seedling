@@ -34,7 +34,17 @@ export function TopBar({ notificationCount = 0 }: TopBarProps) {
 
   const handleSignOut = async () => {
     await signOut();
-    navigate('/auth');
+    // Navigate to auth page. Use replace to avoid extra history entry.
+    navigate('/auth', { replace: true });
+
+    // In some environments the SPA navigation may not take effect immediately
+    // (race with auth state listeners). Fallback to a hard redirect after a
+    // short delay if the path did not change.
+    setTimeout(() => {
+      if (window.location.pathname !== '/auth') {
+        window.location.href = '/auth';
+      }
+    }, 250);
   };
 
   const userInitials = profile?.display_name
