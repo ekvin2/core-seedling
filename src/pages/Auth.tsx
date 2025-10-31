@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { useAuth } from '@/hooks/useAuth';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -15,13 +15,18 @@ const Auth = () => {
   const [isSignUp, setIsSignUp] = useState(false);
   const { signIn, signUp, user } = useAuth();
   const navigate = useNavigate();
+  const location = useLocation();
   const { toast } = useToast();
 
   useEffect(() => {
-    if (user) {
-      navigate('/admin');
+    // Only navigate to /admin when the user becomes authenticated and
+    // we're not already on the admin route. Use replace to avoid
+    // pushing duplicate history entries which can contribute to
+    // unnecessary re-renders.
+    if (user && location.pathname !== '/admin') {
+      navigate('/admin', { replace: true });
     }
-  }, [user, navigate]);
+  }, [user, navigate, location.pathname]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -58,7 +63,7 @@ const Auth = () => {
           title: "Success",
           description: "Signed in successfully!",
         });
-        navigate('/admin');
+        // navigation handled by the effect above when `user` updates
       }
     }
     setLoading(false);
