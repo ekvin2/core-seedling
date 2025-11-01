@@ -110,5 +110,61 @@ All colors MUST be HSL.
 
   body {
     @apply bg-background text-foreground;
+    /* Improve text readability on mobile */
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
   }
+
+  /* Ensure minimum touch target size on mobile only */
+  @media (max-width: 768px) {
+    button, a, input, select, textarea {
+      min-height: 44px;
+    }
+  }
+
+  /* Improve contrast for better readability */
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-bold;
+    line-height: 1.2;
+  }
+
+  p {
+    line-height: 1.7;
+  }
+
+  /* Optimize images for mobile */
+  img {
+    max-width: 100%;
+    height: auto;
+  }
+}
+
+/* Mobile-specific optimizations */
+@media (max-width: 768px) {
+  /* Increase tap targets on mobile */
+  button, a[role="button"] {
+    min-height: 48px;
+    min-width: 48px;
+  }
+
+  /* Better spacing on mobile */
+  section {
+    scroll-margin-top: 80px;
+  }
+
+  /* Improve form readability */
+  input, textarea, select {
+    font-size: 16px; /* Prevents zoom on iOS */
+  }
+}
+
+/* Smooth scrolling */
+html {
+  scroll-behavior: smooth;
+}
+
+/* Focus visible for accessibility */
+:focus-visible {
+  outline: 2px solid hsl(var(--primary));
+  outline-offset: 2px;
 }

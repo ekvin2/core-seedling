@@ -5,6 +5,7 @@ import ServicesSection from "@/components/ServicesSection";
 import WorksSection from "@/components/WorksSection";
 import ReviewsSection from "@/components/ReviewsSection";
 import Footer from "@/components/Footer";
+import StickyCallButton from "@/components/StickyCallButton";
 import { useSEO } from "@/hooks/useSEO";
 import { generateLocalBusinessSchema } from "@/lib/seo";
 
@@ -25,6 +26,7 @@ const Index = () => {
       <WorksSection />
       <ReviewsSection />
       <Footer />
+      <StickyCallButton />
     </main>
   );
 };

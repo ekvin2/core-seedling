@@ -98,9 +98,11 @@ const ServicesSection = () => {
               <div className="relative h-32 md:h-48 overflow-hidden bg-muted">
                 <img 
                   src={getServiceImageUrl(service)} 
-                  alt={service.title}
+                  alt={`${service.title} - Professional house cleaning service by Easy House Wash NZ`}
                   className="w-full h-full object-cover object-center group-hover:scale-105 transition-transform duration-300"
                   loading="lazy"
+                  width="400"
+                  height="300"
                 />
               </div>
               
