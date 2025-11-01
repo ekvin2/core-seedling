@@ -128,10 +128,13 @@ const Admin = () => {
 
   useEffect(() => {
     if (isAdmin) {
-      fetchServices();
-      fetchReviews();
-      fetchFaqs();
-      fetchPortfolio();
+      // Batch all initial data fetches for better performance
+      Promise.all([
+        fetchServices(),
+        fetchReviews(),
+        fetchFaqs(),
+        fetchPortfolio()
+      ]);
     }
   }, [isAdmin]);
 

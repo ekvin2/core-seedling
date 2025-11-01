@@ -22,6 +22,20 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
+    // Optimized auth state handler with single combined query
+    const fetchUserProfile = async (userId: string) => {
+      // Single optimized query combining profile and role data
+      const [{ data: profileData }, { data: roleData }] = await Promise.all([
+        supabase.from('profiles').select('*').eq('user_id', userId).single(),
+        supabase.from('user_roles').select('role').eq('user_id', userId).maybeSingle()
+      ]);
+      
+      return {
+        ...profileData,
+        role: roleData?.role || 'user'
+      };
+    };
+
     // Set up auth state listener
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       async (event, session) => {
@@ -29,25 +43,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
         setUser(session?.user ?? null);
 
         if (session?.user) {
-          // Fetch user profile and role
-          const { data: profileData ,error:error} = await supabase
-            .from('profiles')
-            .select('*')
-            .eq('user_id', session.user.id)
-            .single();
-
-            
-          // Fetch user role from user_roles table
-          const { data: roleData } = await supabase
-            .from('user_roles')
-            .select('role')
-            .eq('user_id', session.user.id)
-            .maybeSingle();
-          
-          setProfile({
-            ...profileData,
-            role: roleData?.role || 'user'
-          });
+          const profileData = await fetchUserProfile(session.user.id);
+          setProfile(profileData);
         } else {
           setProfile(null);
         }
@@ -61,24 +58,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       setUser(session?.user ?? null);
       
       if (session?.user) {
-        // Fetch user profile and role
-        const { data: profileData } = await supabase
-          .from('profiles')
-          .select('*')
-          .eq('user_id', session.user.id)
-          .single();
-        
-        // Fetch user role from user_roles table
-        const { data: roleData } = await supabase
-          .from('user_roles')
-          .select('role')
-          .eq('user_id', session.user.id)
-          .maybeSingle();
-        
-        setProfile({
-          ...profileData,
-          role: roleData?.role || 'user'
-        });
+        const profileData = await fetchUserProfile(session.user.id);
+        setProfile(profileData);
       }
       
       setLoading(false);
