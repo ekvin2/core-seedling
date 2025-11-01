@@ -2,7 +2,7 @@
 
 export const BUSINESS_INFO = {
   name: "Easy House Wash NZ",
-  description: "Professional house washing and cleaning services across New Zealand",
+  description: "Professional house washing services including pressure washing, soft washing, and exterior surface cleaning across New Zealand",
   phone: "+64 21 123 4567",
   email: "info@easyhousewash.nz",
   address: {

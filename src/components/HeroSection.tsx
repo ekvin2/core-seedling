@@ -32,13 +32,13 @@ const HeroSection = () => {
             <div className="space-y-5 md:space-y-6">
               <h1 className="text-3xl sm:text-4xl md:text-6xl font-bold leading-tight">
                 Professional 
-                <span className="text-primary"> House Cleaning</span>
+                <span className="text-primary"> House Washing</span>
                 <br />
                 Services You Can Trust
               </h1>
               <p className="text-lg md:text-xl text-muted-foreground max-w-xl leading-relaxed">
-                Transform your home into a sparkling sanctuary with our reliable, 
-                professional cleaning services. Book today and experience the difference!
+                Expert pressure washing, soft washing, and exterior surface cleaning. 
+                Transform your home's exterior with our professional house washing services!
               </p>
             </div>
             
@@ -50,7 +50,7 @@ const HeroSection = () => {
                   onClick={() => setIsQuoteModalOpen(true)}
                   className="min-h-[56px] text-lg font-semibold shadow-lg"
                 >
-                  Get Free Quote
+                  Get Free Wash Quote
                 </Button>
                 <Button 
                   size="lg"
@@ -73,9 +73,9 @@ const HeroSection = () => {
               <div className="absolute inset-0 bg-hero-gradient opacity-10 rounded-2xl transform rotate-3"></div>
               <div className="relative bg-background/95 backdrop-blur-sm rounded-2xl shadow-trust p-8 border border-border/20">
                 <div className="text-center mb-6">
-                  <h3 className="text-2xl font-bold mb-2">Get Your Free Quote</h3>
+                  <h3 className="text-2xl font-bold mb-2">Get Your Free Washing Quote</h3>
                   <p className="text-muted-foreground">
-                    Fill out the form below and we'll get back to you within 24 hours
+                    Request a quote for pressure washing, soft washing, or exterior cleaning services
                   </p>
                 </div>
                 <LeadForm />
