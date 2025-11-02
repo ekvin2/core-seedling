@@ -11,8 +11,8 @@ const HeroSection = () => {
   const isMobile = useIsMobile();
 
   return (
-    <section id="home" className="min-h-[65vh] md:min-h-screen flex items-center bg-subtle-gradient pt-20 relative overflow-hidden py-8 md:py-12">
-      {/* Background Image Overlay */}
+    <section id="home" className="min-h-[65vh] md:min-h-screen flex items-center bg-gradient-to-br from-[hsl(217,80%,98%)] via-[hsl(217,70%,96%)] to-[hsl(217,60%,97%)] pt-20 relative overflow-hidden py-8 md:py-12">
+      {/* Background Image Overlay with Vibrant Gradient */}
       <div className="absolute inset-0 z-0">
         <img 
           src={heroImage}
@@ -22,7 +22,8 @@ const HeroSection = () => {
           height="1080"
           loading="eager"
         />
-        <div className="absolute inset-0 bg-hero-gradient/30"></div>
+        <div className="absolute inset-0 bg-hero-gradient-vibrant/20"></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-[hsl(217,95%,65%)]/10"></div>
       </div>
       
       <div className="container mx-auto px-6 md:px-4 py-8 md:py-12 relative z-10">
@@ -32,7 +33,7 @@ const HeroSection = () => {
             <div className="space-y-5 md:space-y-6">
               <h1 className="text-3xl sm:text-4xl md:text-6xl font-bold leading-tight">
                 Professional 
-                <span className="text-primary"> House Washing</span>
+                <span className="bg-gradient-to-r from-primary via-[hsl(217,95%,65%)] to-primary bg-clip-text text-transparent"> House Washing</span>
                 <br />
                 Services You Can Trust
               </h1>
@@ -48,7 +49,7 @@ const HeroSection = () => {
                 <Button 
                   size="lg"
                   onClick={() => setIsQuoteModalOpen(true)}
-                  className="min-h-[56px] text-lg font-semibold shadow-lg"
+                  className="min-h-[56px] text-lg font-semibold shadow-vibrant bg-hero-gradient-vibrant hover:shadow-glow transition-all duration-300"
                 >
                   Get Free Wash Quote
                 </Button>

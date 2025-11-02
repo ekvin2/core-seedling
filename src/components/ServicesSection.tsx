@@ -92,9 +92,9 @@ const ServicesSection = () => {
           {services.map((service) => (
             <Card 
               key={service.id} 
-              className="group hover:shadow-lg transition-all duration-300 border-border/50 hover:border-primary/20 overflow-hidden bg-background"
+              className="group hover:shadow-card-hover transition-all duration-300 border-border/50 hover:border-primary/40 overflow-hidden bg-background relative"
             >
-              {/* Image Container */}
+              {/* Image Container with Gradient Overlay */}
               <div className="relative h-32 md:h-48 overflow-hidden bg-muted">
                 <img 
                   src={getServiceImageUrl(service)} 
@@ -104,6 +104,7 @@ const ServicesSection = () => {
                   width="400"
                   height="300"
                 />
+                <div className="absolute inset-0 bg-gradient-to-t from-primary/20 via-transparent to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
               </div>
               
               {/* Content Container */}
@@ -116,10 +117,10 @@ const ServicesSection = () => {
                 <p className="text-xs md:text-sm text-muted-foreground line-clamp-2 md:line-clamp-3">
                   {service.sub_heading || "Professional cleaning service tailored to your needs"}
                 </p>
-                {/* Arrow Button */}
+                {/* Arrow Button with Gradient */}
                 <button 
                   onClick={() => navigate(`/service/${service.slug}`)}
-                  className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-primary hover:bg-primary/90 text-primary-foreground flex items-center justify-center transition-colors duration-200"
+                  className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-colorful-gradient hover:shadow-vibrant text-primary-foreground flex items-center justify-center transition-all duration-300 group-hover:scale-110"
                   aria-label={`Learn more about ${service.title}`}
                 >
                   <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="md:w-5 md:h-5">
@@ -133,19 +134,19 @@ const ServicesSection = () => {
         </div>
 
         <div className="text-center mt-4 md:mt-16">
-          <div className="bg-subtle-gradient rounded-xl md:rounded-2xl p-4 md:p-8 max-w-4xl mx-auto">
-            <h3 className="text-lg md:text-2xl font-bold mb-3 md:mb-4">Why Choose Easy House Wash NZ?</h3>
+          <div className="bg-gradient-to-br from-[hsl(217,80%,98%)] via-[hsl(217,70%,96%)] to-[hsl(217,60%,97%)] rounded-xl md:rounded-2xl p-4 md:p-8 max-w-4xl mx-auto shadow-elegant border border-primary/10">
+            <h3 className="text-lg md:text-2xl font-bold mb-3 md:mb-4 bg-gradient-to-r from-primary via-[hsl(217,95%,65%)] to-primary bg-clip-text text-transparent">Why Choose Easy House Wash NZ?</h3>
             <div className="grid grid-cols-3 gap-4 md:gap-6 mt-4 md:mt-8">
-              <div className="text-center">
-                <div className="text-xl md:text-3xl font-bold text-primary mb-1 md:mb-2">5+</div>
+              <div className="text-center p-2 md:p-4 rounded-lg bg-white/60 backdrop-blur-sm">
+                <div className="text-xl md:text-3xl font-bold bg-gradient-to-br from-primary to-[hsl(217,95%,65%)] bg-clip-text text-transparent mb-1 md:mb-2">5+</div>
                 <div className="text-xs md:text-sm text-muted-foreground">Years of Experience</div>
               </div>
-              <div className="text-center">
-                <div className="text-xl md:text-3xl font-bold text-primary mb-1 md:mb-2">500+</div>
+              <div className="text-center p-2 md:p-4 rounded-lg bg-white/60 backdrop-blur-sm">
+                <div className="text-xl md:text-3xl font-bold bg-gradient-to-br from-primary to-[hsl(217,95%,65%)] bg-clip-text text-transparent mb-1 md:mb-2">500+</div>
                 <div className="text-xs md:text-sm text-muted-foreground">Satisfied Customers</div>
               </div>
-              <div className="text-center">
-                <div className="text-xl md:text-3xl font-bold text-primary mb-1 md:mb-2">100%</div>
+              <div className="text-center p-2 md:p-4 rounded-lg bg-white/60 backdrop-blur-sm">
+                <div className="text-xl md:text-3xl font-bold bg-gradient-to-br from-primary to-[hsl(217,95%,65%)] bg-clip-text text-transparent mb-1 md:mb-2">100%</div>
                 <div className="text-xs md:text-sm text-muted-foreground">Satisfaction Guarantee</div>
               </div>
             </div>

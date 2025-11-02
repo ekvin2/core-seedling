@@ -70,7 +70,7 @@ const WorksSection = () => {
 
         <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-6 mb-8 md:mb-12">
           {images.map((image) => (
-            <Card key={image.id} className="group overflow-hidden hover:shadow-trust transition-all duration-300 hover:scale-[1.02]">
+            <Card key={image.id} className="group overflow-hidden hover:shadow-vibrant transition-all duration-300 hover:scale-[1.02] border-2 border-transparent hover:border-primary/30">
               <div className="relative overflow-hidden aspect-square md:aspect-[4/3]">
                 <img
                   src={image.url}
@@ -78,8 +78,10 @@ const WorksSection = () => {
                   className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
                   loading="lazy"
                 />
-                <div className="absolute inset-0 bg-primary/20 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
-                  <ExternalLink className="w-8 h-8 text-white" />
+                <div className="absolute inset-0 bg-gradient-to-br from-primary/40 via-[hsl(217,95%,65%)]/30 to-primary/40 opacity-0 group-hover:opacity-100 transition-opacity duration-300 flex items-center justify-center">
+                  <div className="bg-white/20 backdrop-blur-sm rounded-full p-3">
+                    <ExternalLink className="w-8 h-8 text-white drop-shadow-lg" />
+                  </div>
                 </div>
               </div>
             </Card>
@@ -87,13 +89,15 @@ const WorksSection = () => {
         </div>
 
         <div className="text-center">
-          <div className="bg-background rounded-xl md:rounded-2xl p-4 md:p-8 max-w-2xl mx-auto shadow-elegant">
-            <ImageIcon className="w-8 md:w-12 h-8 md:h-12 text-primary mx-auto mb-2 md:mb-4" />
-            <h3 className="text-lg md:text-2xl font-bold mb-2 md:mb-4">Ready to Transform Your Space?</h3>
+          <div className="bg-gradient-to-br from-background via-[hsl(217,80%,98%)] to-background rounded-xl md:rounded-2xl p-4 md:p-8 max-w-2xl mx-auto shadow-vibrant border border-primary/20">
+            <div className="bg-gradient-to-br from-primary to-[hsl(217,95%,65%)] rounded-full w-12 md:w-16 h-12 md:h-16 flex items-center justify-center mx-auto mb-2 md:mb-4 shadow-glow">
+              <ImageIcon className="w-6 md:w-8 h-6 md:h-8 text-white" />
+            </div>
+            <h3 className="text-lg md:text-2xl font-bold mb-2 md:mb-4 bg-gradient-to-r from-primary via-[hsl(217,95%,65%)] to-primary bg-clip-text text-transparent">Ready to Transform Your Space?</h3>
             <p className="text-sm md:text-base text-muted-foreground mb-4 md:mb-6">
               Join hundreds of satisfied customers who have experienced our exceptional cleaning services.
             </p>
-            <Button size="lg" className="px-6 md:px-8 h-10 md:h-11 text-sm md:text-base">
+            <Button size="lg" className="px-6 md:px-8 h-10 md:h-11 text-sm md:text-base bg-colorful-gradient hover:shadow-vibrant transition-all duration-300">
               View Full Portfolio
             </Button>
           </div>

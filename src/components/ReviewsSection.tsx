@@ -61,7 +61,7 @@ const ReviewsSection = () => {
   }, [reviews]);
 
   return (
-    <section id="reviews" className="relative py-20 overflow-hidden bg-gradient-to-br from-[#1a3a3a] via-[#0d2626] to-[#1a3a3a]">
+    <section id="reviews" className="relative py-20 overflow-hidden bg-gradient-to-br from-[hsl(217,91%,35%)] via-[hsl(217,85%,25%)] to-[hsl(217,91%,40%)]">
       {/* Background Pattern */}
       <div className="absolute inset-0 opacity-5">
         <div className="absolute inset-0" style={{
@@ -69,8 +69,9 @@ const ReviewsSection = () => {
         }} />
       </div>
       
-      {/* Gradient Overlay for depth */}
-      <div className="absolute inset-0 bg-gradient-to-t from-primary/10 via-transparent to-accent/10 pointer-events-none" />
+      {/* Vibrant Gradient Overlay for depth */}
+      <div className="absolute inset-0 bg-gradient-to-t from-[hsl(217,95%,65%)]/20 via-transparent to-[hsl(217,80%,70%)]/15 pointer-events-none" />
+      <div className="absolute inset-0 bg-radial-gradient opacity-20 pointer-events-none" />
 
       <div className="container mx-auto px-4 relative z-10">
         <div className="text-center mb-12">
@@ -88,8 +89,9 @@ const ReviewsSection = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {reviews.length > 0 ? reviews.map((review) => (
-            <Card key={review.id} className="bg-white/95 backdrop-blur-sm rounded-xl shadow-elegant hover:shadow-2xl transition-all duration-300">
-              <CardContent className="p-8">
+            <Card key={review.id} className="bg-white/95 backdrop-blur-sm rounded-xl shadow-elegant hover:shadow-vibrant transition-all duration-300 border-2 border-transparent hover:border-[hsl(217,95%,65%)]/30 relative overflow-hidden group">
+              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-[hsl(217,95%,65%)]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+              <CardContent className="p-8 relative z-10">
                 {/* Rating Stars */}
                 <div className="flex items-center justify-center mb-6">
                   {[...Array(5)].map((_, i) => (

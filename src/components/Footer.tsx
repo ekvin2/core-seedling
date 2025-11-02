@@ -31,29 +31,31 @@ const Footer = () => {
   }, []);
 
   return (
-    <footer id="contact" className="bg-primary text-primary-foreground">
-      <div className="container mx-auto px-4 py-8 md:py-16">
+    <footer id="contact" className="bg-gradient-to-br from-[hsl(217,91%,60%)] via-[hsl(217,85%,55%)] to-[hsl(217,91%,65%)] text-primary-foreground relative overflow-hidden">
+      {/* Decorative gradient overlay */}
+      <div className="absolute inset-0 bg-radial-gradient opacity-30 pointer-events-none"></div>
+      <div className="container mx-auto px-4 py-8 md:py-16 relative z-10">
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 md:gap-8">
           {/* Company Info */}
           <div className="space-y-4">
             <div className="flex items-center space-x-2">
-              <div className="w-8 h-8 md:w-10 md:h-10 bg-white rounded-lg flex items-center justify-center">
-                <span className="text-primary font-bold text-base md:text-lg">EHW</span>
+              <div className="w-8 h-8 md:w-10 md:h-10 bg-white rounded-lg flex items-center justify-center shadow-glow">
+                <span className="bg-gradient-to-br from-primary to-[hsl(217,95%,65%)] bg-clip-text text-transparent font-bold text-base md:text-lg">EHW</span>
               </div>
-              <span className="text-xl md:text-2xl font-bold">Easy House Wash NZ</span>
+              <span className="text-xl md:text-2xl font-bold drop-shadow-sm">Easy House Wash NZ</span>
             </div>
             <p className="text-sm md:text-base opacity-90 leading-relaxed">
               Professional house washing and exterior cleaning services across New Zealand.
               We transform your property with reliable, eco-friendly pressure washing solutions.
             </p>
             <div className="flex space-x-4">
-              <Button variant="ghost" size="sm" className="p-2 text-primary-foreground hover:bg-white/20">
+              <Button variant="ghost" size="sm" className="p-2 text-primary-foreground hover:bg-white/20 hover:shadow-glow transition-all duration-300">
                 <Facebook className="w-4 h-4" />
               </Button>
-              <Button variant="ghost" size="sm" className="p-2 text-primary-foreground hover:bg-white/20">
+              <Button variant="ghost" size="sm" className="p-2 text-primary-foreground hover:bg-white/20 hover:shadow-glow transition-all duration-300">
                 <Instagram className="w-4 h-4" />
               </Button>
-              <Button variant="ghost" size="sm" className="p-2 text-primary-foreground hover:bg-white/20">
+              <Button variant="ghost" size="sm" className="p-2 text-primary-foreground hover:bg-white/20 hover:shadow-glow transition-all duration-300">
                 <Twitter className="w-4 h-4" />
               </Button>
             </div>

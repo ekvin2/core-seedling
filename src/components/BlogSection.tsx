@@ -56,7 +56,7 @@ const BlogSection = () => {
             <Card key={index} className="shadow-elegant hover:shadow-trust transition-all duration-300 group cursor-pointer">
               <CardHeader>
                 <div className="flex items-center justify-between text-sm text-muted-foreground mb-2">
-                  <span className="bg-secondary px-3 py-1 rounded-full text-xs font-medium">
+                  <span className="bg-gradient-to-r from-primary/20 via-[hsl(217,95%,65%)]/20 to-primary/20 border border-primary/30 text-primary px-3 py-1 rounded-full text-xs font-medium">
                     {post.category}
                   </span>
                   <span className="flex items-center space-x-1">
@@ -95,18 +95,19 @@ const BlogSection = () => {
         </div>
 
         {/* Newsletter Signup */}
-        <div className="mt-16 bg-hero-gradient rounded-2xl p-8 text-center text-white">
-          <h3 className="text-2xl font-bold mb-4">Stay Updated with Cleaning Tips</h3>
-          <p className="mb-6 opacity-90">
+        <div className="mt-16 bg-hero-gradient-vibrant rounded-2xl p-8 text-center text-white shadow-vibrant relative overflow-hidden">
+          <div className="absolute inset-0 bg-colorful-gradient opacity-50"></div>
+          <h3 className="text-2xl font-bold mb-4 relative z-10 drop-shadow-sm">Stay Updated with Cleaning Tips</h3>
+          <p className="mb-6 opacity-90 relative z-10">
             Subscribe to our newsletter for weekly cleaning tips, special offers, and home maintenance advice.
           </p>
-          <div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto">
+          <div className="flex flex-col sm:flex-row gap-4 max-w-md mx-auto relative z-10">
             <input
               type="email"
               placeholder="Enter your email"
-              className="flex-1 px-4 py-3 rounded-lg text-foreground border-0 focus:outline-none focus:ring-2 focus:ring-white/50"
+              className="flex-1 px-4 py-3 rounded-lg text-foreground border-0 focus:outline-none focus:ring-2 focus:ring-white/50 shadow-lg"
             />
-            <Button variant="secondary" className="px-8">
+            <Button variant="secondary" className="px-8 bg-white hover:bg-white/90 text-primary font-semibold shadow-lg hover:shadow-glow transition-all duration-300">
               Subscribe
             </Button>
           </div>

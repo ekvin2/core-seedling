@@ -67,11 +67,19 @@ export default {
       },
       backgroundImage: {
         "hero-gradient": "var(--hero-gradient)",
+        "hero-gradient-vibrant": "var(--hero-gradient-vibrant)",
+        "diagonal-gradient": "var(--diagonal-gradient)",
+        "radial-gradient": "var(--radial-gradient)",
         "subtle-gradient": "var(--subtle-gradient)",
+        "colorful-gradient": "var(--colorful-gradient)",
+        "accent-gradient": "var(--accent-gradient)",
       },
       boxShadow: {
         "trust": "var(--trust-shadow)",
         "elegant": "var(--elegant-shadow)",
+        "vibrant": "var(--vibrant-shadow)",
+        "glow": "var(--glow-shadow)",
+        "card-hover": "var(--card-hover-shadow)",
       },
       keyframes: {
         "accordion-down": {
