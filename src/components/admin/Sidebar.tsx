@@ -58,11 +58,7 @@ const menuItems: MenuItem[] = [
     url: '/admin#reviews',
     icon: Star
   },
-  {
-    title: 'FAQs',
-    url: '/admin#faqs',
-    icon: HelpCircle
-  },
+ 
   {
     title: 'Contact Details',
     url: '/admin#contact',

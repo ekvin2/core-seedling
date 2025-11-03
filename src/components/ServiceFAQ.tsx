@@ -16,7 +16,6 @@ interface ServiceFAQProps {
   serviceId?: string | null;
 }
 
-type FAQRow = Database["public"]["Tables"]["faqs"]["Row"];
 
 const ServiceFAQ = ({ serviceName, serviceId }: ServiceFAQProps) => {
   const [faqs, setFaqs] = useState<Array<{ question: string; answer: string }>>([]);
