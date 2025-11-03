@@ -317,8 +317,8 @@ const ServicePage = () => {
         {/* Google Reviews Section */}
         <ReviewsSection />
 
-        {/* FAQ Section */}
-        <ServiceFAQ serviceName={service.title} />
+  {/* FAQ Section */}
+  <ServiceFAQ serviceName={service.title} serviceId={service.id} />
 
         {/* Final CTA Section */}
         <section className="py-20 bg-primary text-primary-foreground">

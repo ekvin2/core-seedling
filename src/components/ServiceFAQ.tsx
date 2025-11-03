@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import {
   Accordion,
   AccordionContent,
@@ -7,52 +7,76 @@ import {
 } from "@/components/ui/accordion";
 import { generateFAQSchema, injectStructuredData } from "@/lib/seo";
 
+import { supabase } from "@/integrations/supabase/client";
+import type { Database } from "@/integrations/supabase/types";
+
 interface ServiceFAQProps {
   serviceName: string;
+  // Optional service id to fetch service-specific faqs. If omitted, no FAQs will be fetched.
+  serviceId?: string | null;
 }
 
-const ServiceFAQ = ({ serviceName }: ServiceFAQProps) => {
-  // Service-specific FAQs - would be customized per service type
-  const faqs = [
-    {
-      question: `How long does a typical ${serviceName.toLowerCase()} take?`,
-      answer: `The duration depends on the size of your space and specific requirements. Generally, our ${serviceName.toLowerCase()} takes 2-4 hours for an average home. We'll provide an accurate time estimate during your consultation based on your specific needs.`
-    },
-    {
-      question: `What's included in your ${serviceName.toLowerCase()} service?`,
-      answer: `Our comprehensive ${serviceName.toLowerCase()} includes all major cleaning tasks, eco-friendly products, professional equipment, and attention to detail in every room. We provide a detailed checklist so you know exactly what to expect from our service.`
-    },
-    {
-      question: `Do I need to be home during the cleaning?`,
-      answer: `No, you don't need to be present during the cleaning. Many of our clients provide access and go about their day. Our team is fully bonded and insured, and we'll securely lock up when we're finished. We can also work around your schedule if you prefer to be home.`
-    },
-    {
-      question: `What cleaning products do you use?`,
-      answer: `We use professional-grade, eco-friendly cleaning products that are safe for your family and pets. All our products are non-toxic and biodegradable. If you have specific product preferences or allergies, please let us know and we'll accommodate your needs.`
-    },
-    {
-      question: `How much does this service cost?`,
-      answer: `Pricing varies based on the size of your space, frequency of service, and specific requirements. We offer competitive rates and provide free, no-obligation quotes. Contact us today for a personalized estimate tailored to your needs.`
-    },
-    {
-      question: `Do you provide insurance coverage?`,
-      answer: `Yes, we maintain comprehensive liability insurance to protect both our team and your property. Our team members undergo background checks and are trained in professional cleaning techniques for your peace of mind.`
-    },
-    {
-      question: `Can I customize the cleaning checklist?`,
-      answer: `Absolutely! We understand every home is unique. We can customize our ${serviceName.toLowerCase()} checklist to focus on your priorities and specific needs. Just let us know your preferences when you book, and we'll tailor our service accordingly.`
-    },
-    {
-      question: `What is your satisfaction guarantee?`,
-      answer: `We stand behind our work with a 100% satisfaction guarantee. If you're not completely happy with any aspect of our ${serviceName.toLowerCase()}, contact us within 24 hours and we'll return to address any concerns at no additional charge.`
-    }
-  ];
+type FAQRow = Database["public"]["Tables"]["faqs"]["Row"];
 
-  // Inject FAQ schema for SEO
+const ServiceFAQ = ({ serviceName, serviceId }: ServiceFAQProps) => {
+  const [faqs, setFaqs] = useState<Array<{ question: string; answer: string }>>([]);
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
+  // Fetch FAQs from Supabase for the given serviceId (only service-specific FAQs)
   useEffect(() => {
+    let mounted = true;
+
+    const fetchFaqs = async () => {
+      // If no serviceId provided, don't fetch any FAQs.
+      if (!serviceId) {
+        setFaqs([]);
+        return;
+      }
+
+      setLoading(true);
+      setError(null);
+
+      try {
+        const { data, error: fetchError } = await supabase
+          .from("faqs")
+          .select("*")
+          .eq("is_active", true)
+          .eq("service_id", serviceId)
+          .order("display_order", { ascending: true })
+          .order("created_at", { ascending: true });
+
+        if (fetchError) throw fetchError;
+
+        if (mounted && data) {
+          setFaqs(
+            data
+              .filter((row) => row.is_active)
+              .map((row) => ({ question: row.question, answer: row.answer }))
+          );
+        }
+      } catch (err: any) {
+        // Drop to empty list on error and surface a message for diagnostics
+        setError(err?.message || "Failed to load FAQs");
+        setFaqs([]);
+      } finally {
+        if (mounted) setLoading(false);
+      }
+    };
+
+    fetchFaqs();
+
+    return () => {
+      mounted = false;
+    };
+  }, [serviceId]);
+
+  // Inject FAQ schema for SEO (update when faqs change)
+  useEffect(() => {
+    if (!faqs || faqs.length === 0) return;
+
     const cleanup = injectStructuredData(generateFAQSchema(faqs));
     return cleanup;
-  }, [serviceName]);
+  }, [faqs]);
 
   return (
     <section className="py-16 bg-subtle-gradient">
