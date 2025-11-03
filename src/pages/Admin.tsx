@@ -800,30 +800,34 @@ const Admin = () => {
             {/* Header */}
             <div className="flex items-center justify-between">
               <div>
-                <h2 className="text-3xl font-bold tracking-tight">Q&A / FAQs</h2>
-                <p className="text-muted-foreground">Manage frequently asked questions</p>
+                <h2 className="text-3xl font-bold tracking-tight">General FAQs</h2>
+                <p className="text-muted-foreground">Manage general FAQs that appear site-wide</p>
               </div>
-              <Button onClick={() => { resetFaqForm(); setIsFaqModalOpen(true); }} size="lg">
-                Create FAQ
+              <Button onClick={() => { resetFaqForm(); setIsGeneral(true); setIsFaqModalOpen(true); }} size="lg">
+                Create General FAQ
               </Button>
             </div>
 
-            {/* Manage FAQs */}
+            {/* Manage General FAQs */}
             <Card>
               <CardHeader>
-                <CardTitle>All FAQs</CardTitle>
-                <CardDescription>{faqs.length} {faqs.length === 1 ? 'FAQ' : 'FAQs'} total</CardDescription>
+                <CardTitle>General FAQs</CardTitle>
+                <CardDescription>
+                  {faqs.filter(f => f.is_general || !f.service_id).length} general {faqs.filter(f => f.is_general || !f.service_id).length === 1 ? 'FAQ' : 'FAQs'}
+                </CardDescription>
               </CardHeader>
               <CardContent>
-                {faqs.length === 0 ? (
+                {faqs.filter(f => f.is_general || !f.service_id).length === 0 ? (
                   <div className="flex flex-col items-center justify-center py-12 text-center">
                     <div className="rounded-full bg-muted p-6 mb-4">
                       <HelpCircle className="w-12 h-12 text-muted-foreground" />
                     </div>
-                    <h3 className="text-lg font-semibold mb-2">No FAQs yet</h3>
-                    <p className="text-muted-foreground mb-4 max-w-sm">Get started by creating your first FAQ.</p>
-                    <Button onClick={() => { resetFaqForm(); setIsFaqModalOpen(true); }}>
-                      Create FAQ
+                    <h3 className="text-lg font-semibold mb-2">No general FAQs yet</h3>
+                    <p className="text-muted-foreground mb-4 max-w-sm">
+                      Create general FAQs that appear across your website. For service-specific FAQs, edit the service in the Services tab.
+                    </p>
+                    <Button onClick={() => { resetFaqForm(); setIsGeneral(true); setIsFaqModalOpen(true); }}>
+                      Create General FAQ
                     </Button>
                   </div>
                 ) : (
@@ -833,33 +837,17 @@ const Admin = () => {
                         <TableRow>
                           <TableHead>Question</TableHead>
                           <TableHead>Answer</TableHead>
-                          <TableHead>Service</TableHead>
-                          <TableHead>Type</TableHead>
                           <TableHead className="text-right">Actions</TableHead>
                         </TableRow>
                       </TableHeader>
                       <TableBody>
-                        {faqs.map((faq) => (
+                        {faqs.filter(f => f.is_general || !f.service_id).map((faq) => (
                           <TableRow key={faq.id}>
-                            <TableCell className="font-medium max-w-xs truncate">
-                              {faq.question}
+                            <TableCell className="font-medium max-w-xs">
+                              <div className="line-clamp-2">{faq.question}</div>
                             </TableCell>
-                            <TableCell className="max-w-md truncate text-muted-foreground">
-                              {faq.answer}
-                            </TableCell>
-                            <TableCell className="text-sm">
-                              {faq.service_id ? (
-                                services.find(s => s.id === faq.service_id)?.title || 'Unknown'
-                              ) : (
-                                <span className="text-muted-foreground">General</span>
-                              )}
-                            </TableCell>
-                            <TableCell>
-                              {faq.is_general && (
-                                <span className="text-xs bg-blue-500/10 text-blue-500 px-2 py-1 rounded">
-                                  Global
-                                </span>
-                              )}
+                            <TableCell className="max-w-md text-muted-foreground">
+                              <div className="line-clamp-2">{faq.answer}</div>
                             </TableCell>
                             <TableCell className="text-right">
                               <div className="flex gap-2 justify-end">
@@ -888,13 +876,13 @@ const Admin = () => {
               </CardContent>
             </Card>
 
-            {/* FAQ Dialog */}
+            {/* General FAQ Dialog */}
             <Dialog open={isFaqModalOpen} onOpenChange={() => { setIsFaqModalOpen(false); resetFaqForm(); }}>
               <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
                 <DialogHeader>
-                  <DialogTitle>{editingFaq ? 'Edit FAQ' : 'Create FAQ'}</DialogTitle>
+                  <DialogTitle>{editingFaq ? 'Edit General FAQ' : 'Create General FAQ'}</DialogTitle>
                   <DialogDescription>
-                    {editingFaq ? 'Update the FAQ details below.' : 'Fill in the details to create a new FAQ.'}
+                    {editingFaq ? 'Update the general FAQ details.' : 'Create a new general FAQ that appears site-wide.'}
                   </DialogDescription>
                 </DialogHeader>
 
@@ -905,7 +893,7 @@ const Admin = () => {
                       id="faqQuestion"
                       value={faqQuestion}
                       onChange={(e) => setFaqQuestion(e.target.value)}
-                      placeholder="e.g. How long does the service take?"
+                      placeholder="e.g. What areas do you serve?"
                       required
                     />
                   </div>
@@ -920,43 +908,6 @@ const Admin = () => {
                       className="min-h-[120px]"
                       required
                     />
-                  </div>
-
-                  <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-                    <div className="space-y-2">
-                      <Label htmlFor="faqServiceId">Related Service (Optional)</Label>
-                      <select
-                        id="faqServiceId"
-                        value={faqServiceId}
-                        onChange={(e) => setFaqServiceId(e.target.value)}
-                        className="w-full rounded-md border border-input bg-background px-3 py-2"
-                      >
-                        <option value="">-- General FAQ --</option>
-                        {services.map((service) => (
-                          <option key={service.id} value={service.id}>
-                            {service.title}
-                          </option>
-                        ))}
-                      </select>
-                      <p className="text-xs text-muted-foreground">
-                        Leave empty for general FAQs shown on all pages
-                      </p>
-                    </div>
-                    <div className="space-y-2">
-                      <Label htmlFor="isGeneral" className="flex items-center space-x-2">
-                        <input
-                          type="checkbox"
-                          id="isGeneral"
-                          checked={isGeneral}
-                          onChange={(e) => setIsGeneral(e.target.checked)}
-                          className="rounded border-input"
-                        />
-                        <span>Show on all pages</span>
-                      </Label>
-                      <p className="text-xs text-muted-foreground">
-                        General FAQs appear across the website
-                      </p>
-                    </div>
                   </div>
 
                   <DialogFooter>

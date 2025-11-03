@@ -10,4 +10,5 @@ export { TopBar } from './TopBar';
 export { ContactDetailsForm } from './ContactDetailsForm';
 export { LeadsManagement } from './LeadsManagement';
 export { ServicesManagement } from './ServicesManagement';
+export { ServiceFAQManager } from './ServiceFAQManager';
 export { ImageUpload } from './ImageUpload';

@@ -21,9 +21,11 @@ import {
   TableHeader,
   TableRow,
 } from '@/components/ui/table';
+import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs';
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { ImageUpload } from './ImageUpload';
+import { ServiceFAQManager } from './ServiceFAQManager';
 import {
   Plus,
   Edit2,
@@ -491,127 +493,147 @@ export const ServicesManagement: React.FC = () => {
 
       {/* Add/Edit Modal */}
       <Dialog open={isModalOpen} onOpenChange={handleCloseModal}>
-        <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto">
+        <DialogContent className="max-w-4xl max-h-[90vh] overflow-y-auto">
           <DialogHeader>
             <DialogTitle>
               {editingService ? 'Edit Service' : 'Add New Service'}
             </DialogTitle>
             <DialogDescription>
               {editingService
-                ? 'Update the service details below.'
+                ? 'Update the service details and manage FAQs.'
                 : 'Fill in the details to create a new cleaning service.'}
             </DialogDescription>
           </DialogHeader>
 
-          <form onSubmit={handleSubmit} className="space-y-6">
-            <div className="grid gap-4">
-              {/* Title */}
-              <div className="space-y-2">
-                <Label htmlFor="title">
-                  Service Title <span className="text-destructive">*</span>
-                </Label>
-                <Input
-                  id="title"
-                  value={formData.title}
-                  onChange={(e) => setFormData({ ...formData, title: e.target.value })}
-                  placeholder="e.g., Deep House Cleaning"
-                  required
+          <Tabs defaultValue="details" className="w-full">
+            <TabsList className="grid w-full grid-cols-2">
+              <TabsTrigger value="details">Service Details</TabsTrigger>
+              <TabsTrigger value="faqs" disabled={!editingService}>
+                FAQs {!editingService && '(Save service first)'}
+              </TabsTrigger>
+            </TabsList>
+
+            <TabsContent value="details" className="space-y-6 mt-6">
+              <form onSubmit={handleSubmit} className="space-y-6">
+                <div className="grid gap-4">
+                  {/* Title */}
+                  <div className="space-y-2">
+                    <Label htmlFor="title">
+                      Service Title <span className="text-destructive">*</span>
+                    </Label>
+                    <Input
+                      id="title"
+                      value={formData.title}
+                      onChange={(e) => setFormData({ ...formData, title: e.target.value })}
+                      placeholder="e.g., Deep House Cleaning"
+                      required
+                    />
+                  </div>
+
+                  {/* Heading */}
+                  <div className="space-y-2">
+                    <Label htmlFor="heading">
+                      Heading <span className="text-destructive">*</span>
+                    </Label>
+                    <Input
+                      id="heading"
+                      value={formData.heading}
+                      onChange={(e) => setFormData({ ...formData, heading: e.target.value })}
+                      placeholder="e.g., Professional Deep Cleaning Services"
+                      required
+                    />
+                  </div>
+
+                  {/* Sub Heading */}
+                  <div className="space-y-2">
+                    <Label htmlFor="sub_heading">Sub Heading</Label>
+                    <Input
+                      id="sub_heading"
+                      value={formData.sub_heading}
+                      onChange={(e) => setFormData({ ...formData, sub_heading: e.target.value })}
+                      placeholder="Optional tagline or subtitle"
+                    />
+                  </div>
+
+                  {/* Slug */}
+                  <div className="space-y-2">
+                    <Label htmlFor="slug">URL Slug</Label>
+                    <Input
+                      id="slug"
+                      value={formData.slug}
+                      onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
+                      placeholder="Auto-generated from title"
+                    />
+                    <p className="text-xs text-muted-foreground">
+                      Leave empty to auto-generate from title
+                    </p>
+                  </div>
+
+                  {/* Content */}
+                  <div className="space-y-2">
+                    <Label htmlFor="content">
+                      Service Description <span className="text-destructive">*</span>
+                    </Label>
+                    <Textarea
+                      id="content"
+                      value={formData.content}
+                      onChange={(e) => setFormData({ ...formData, content: e.target.value })}
+                      placeholder="Detailed description of the service..."
+                      rows={6}
+                      required
+                    />
+                  </div>
+
+                  {/* Service Image */}
+                  <ImageUpload
+                    value={formData.service_image_url}
+                    onChange={(url) => setFormData({ ...formData, service_image_url: url })}
+                    folder="services"
+                    label="Service Image"
+                    aspectRatio="16/9"
+                  />
+
+                  {/* YouTube Video URL */}
+                  <div className="space-y-2">
+                    <Label htmlFor="youtube_video_url">YouTube Video URL</Label>
+                    <Input
+                      id="youtube_video_url"
+                      value={formData.youtube_video_url || ''}
+                      onChange={(e) =>
+                        setFormData({ ...formData, youtube_video_url: e.target.value })
+                      }
+                      placeholder="https://www.youtube.com/watch?v=..."
+                      type="url"
+                    />
+                  </div>
+                </div>
+
+                <DialogFooter>
+                  <Button
+                    type="button"
+                    variant="outline"
+                    onClick={handleCloseModal}
+                    disabled={submitting}
+                  >
+                    Cancel
+                  </Button>
+                  <Button type="submit" disabled={submitting}>
+                    {submitting && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
+                    {editingService ? 'Update Service' : 'Create Service'}
+                  </Button>
+                </DialogFooter>
+              </form>
+            </TabsContent>
+
+            <TabsContent value="faqs" className="mt-6">
+              {editingService && (
+                <ServiceFAQManager
+                  serviceId={editingService.id}
+                  serviceName={editingService.title}
                 />
-              </div>
-
-              {/* Heading */}
-              <div className="space-y-2">
-                <Label htmlFor="heading">
-                  Heading <span className="text-destructive">*</span>
-                </Label>
-                <Input
-                  id="heading"
-                  value={formData.heading}
-                  onChange={(e) => setFormData({ ...formData, heading: e.target.value })}
-                  placeholder="e.g., Professional Deep Cleaning Services"
-                  required
-                />
-              </div>
-
-              {/* Sub Heading */}
-              <div className="space-y-2">
-                <Label htmlFor="sub_heading">Sub Heading</Label>
-                <Input
-                  id="sub_heading"
-                  value={formData.sub_heading}
-                  onChange={(e) => setFormData({ ...formData, sub_heading: e.target.value })}
-                  placeholder="Optional tagline or subtitle"
-                />
-              </div>
-
-              {/* Slug */}
-              <div className="space-y-2">
-                <Label htmlFor="slug">URL Slug</Label>
-                <Input
-                  id="slug"
-                  value={formData.slug}
-                  onChange={(e) => setFormData({ ...formData, slug: e.target.value })}
-                  placeholder="Auto-generated from title"
-                />
-                <p className="text-xs text-muted-foreground">
-                  Leave empty to auto-generate from title
-                </p>
-              </div>
-
-              {/* Content */}
-              <div className="space-y-2">
-                <Label htmlFor="content">
-                  Service Description <span className="text-destructive">*</span>
-                </Label>
-                <Textarea
-                  id="content"
-                  value={formData.content}
-                  onChange={(e) => setFormData({ ...formData, content: e.target.value })}
-                  placeholder="Detailed description of the service..."
-                  rows={6}
-                  required
-                />
-              </div>
-
-              {/* Service Image */}
-              <ImageUpload
-                value={formData.service_image_url}
-                onChange={(url) => setFormData({ ...formData, service_image_url: url })}
-                folder="services"
-                label="Service Image"
-                aspectRatio="16/9"
-              />
-
-              {/* YouTube Video URL */}
-              <div className="space-y-2">
-                <Label htmlFor="youtube_video_url">YouTube Video URL</Label>
-                <Input
-                  id="youtube_video_url"
-                  value={formData.youtube_video_url || ''}
-                  onChange={(e) =>
-                    setFormData({ ...formData, youtube_video_url: e.target.value })
-                  }
-                  placeholder="https://www.youtube.com/watch?v=..."
-                  type="url"
-                />
-              </div>
-            </div>
-
-            <DialogFooter>
-              <Button
-                type="button"
-                variant="outline"
-                onClick={handleCloseModal}
-                disabled={submitting}
-              >
-                Cancel
-              </Button>
-              <Button type="submit" disabled={submitting}>
-                {submitting && <Loader2 className="w-4 h-4 mr-2 animate-spin" />}
-                {editingService ? 'Update Service' : 'Create Service'}
-              </Button>
-            </DialogFooter>
-          </form>
+              )}
+            </TabsContent>
+          </Tabs>
         </DialogContent>
       </Dialog>
     </div>
