@@ -1,4 +1,5 @@
 import { useEffect, useState } from "react";
+import { supabase } from '@/integrations/supabase/client';
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
 import LeadForm from "@/components/LeadForm";
@@ -10,6 +11,22 @@ import { useSEO } from "@/hooks/useSEO";
 
 const Contact = () => {
   const [isQuoteModalOpen, setIsQuoteModalOpen] = useState(false);
+  const [businessPhone, setBusinessPhone] = useState('(555) 123-4567');
+
+  useEffect(() => {
+    const fetchBusinessInfo = async () => {
+      const { data } = await supabase
+        .from('business_info')
+        .select('phone')
+        .single();
+      
+      if (data?.phone) {
+        setBusinessPhone(data.phone);
+      }
+    };
+
+    fetchBusinessInfo();
+  }, []);
 
   useSEO({
     title: "Contact Easy House Wash NZ - Get Your Free Washing Quote Today",
@@ -50,7 +67,7 @@ const Contact = () => {
                   className="text-lg px-8 bg-white/10 border-white/20 text-white hover:bg-white/20"
                 >
                   <Phone className="w-4 h-4 mr-2" />
-                  Call (555) 123-4567
+                  Call {businessPhone}
                 </Button>
               </div>
             </div>
@@ -78,7 +95,7 @@ const Contact = () => {
                   </div>
                   <h3 className="text-xl font-semibold mb-2">Call Us</h3>
                   <p className="text-muted-foreground mb-4">Speak directly with our team</p>
-                  <p className="text-lg font-semibold text-primary">(555) 123-4567</p>
+                  <p className="text-lg font-semibold text-primary">{businessPhone}</p>
                   <p className="text-sm text-muted-foreground mt-2">Mon-Fri: 8AM-6PM<br />Sat: 9AM-4PM</p>
                 </CardContent>
               </Card>
@@ -104,7 +121,7 @@ const Contact = () => {
                   </div>
                   <h3 className="text-xl font-semibold mb-2">Text Us</h3>
                   <p className="text-muted-foreground mb-4">Quick questions and scheduling</p>
-                  <p className="text-lg font-semibold text-primary">(555) 123-4567</p>
+                  <p className="text-lg font-semibold text-primary">{businessPhone}</p>
                   <p className="text-sm text-muted-foreground mt-2">Fast response during business hours</p>
                 </CardContent>
               </Card>

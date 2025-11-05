@@ -32,27 +32,40 @@ const ServicePage = () => {
   const [service, setService] = useState<Service | null>(null);
   const [loading, setLoading] = useState(true);
   const [isQuoteModalOpen, setIsQuoteModalOpen] = useState(false);
+  const [businessPhone, setBusinessPhone] = useState('(555) 123-4567');
 
   useEffect(() => {
-    const fetchService = async () => {
+    const fetchData = async () => {
       if (!slug) return;
 
-      const { data, error } = await supabase
-        .from('services')
-        .select('*')
-        .eq('slug', slug)
-        .eq('is_active', true)
-        .single();
+      // Fetch service and business info in parallel
+      const [serviceResult, businessResult] = await Promise.all([
+        supabase
+          .from('services')
+          .select('*')
+          .eq('slug', slug)
+          .eq('is_active', true)
+          .single(),
+        supabase
+          .from('business_info')
+          .select('phone')
+          .single()
+      ]);
 
-      if (error || !data) {
+      if (serviceResult.error || !serviceResult.data) {
         navigate('/404');
       } else {
-        setService(data);
+        setService(serviceResult.data);
       }
+
+      if (businessResult.data?.phone) {
+        setBusinessPhone(businessResult.data.phone);
+      }
+
       setLoading(false);
     };
 
-    fetchService();
+    fetchData();
   }, [slug, navigate]);
 
   // Compute SEO values based on service data
@@ -178,7 +191,7 @@ const ServicePage = () => {
                     className="text-lg px-8 bg-white/10 border-white/20 text-white hover:bg-white/20"
                   >
                     <Phone className="w-4 h-4 mr-2" />
-                    Call (555) 123-4567
+                    Call {businessPhone}
                   </Button>
                 </div>
               </div>
@@ -283,7 +296,7 @@ const ServicePage = () => {
                         <div className="flex items-center justify-center space-x-4 text-sm text-muted-foreground">
                           <div className="flex items-center">
                             <Phone className="w-4 h-4 mr-1" />
-                            (555) 123-4567
+                            {businessPhone}
                           </div>
                           <div className="flex items-center">
                             <Mail className="w-4 h-4 mr-1" />
@@ -335,7 +348,7 @@ const ServicePage = () => {
                   className="text-lg px-8 bg-white/10 border-white/20 text-white hover:bg-white/20"
                 >
                   <Phone className="w-4 h-4 mr-2" />
-                  Call (555) 123-4567
+                  Call {businessPhone}
                 </Button>
               </div>
 
