@@ -23,6 +23,7 @@ interface Service {
   slug: string;
   service_image_url?: string;
   youtube_video_url?: string;
+  benefits?: string[] | null;
 }
 
 const ServicePage = () => {
@@ -109,27 +110,6 @@ const ServicePage = () => {
   if (!service) {
     return null;
   }
-
-  // Service inclusions/benefits - would be customized per service
-  const serviceInclusions = [
-    "Professional deep cleaning of all surfaces",
-    "Eco-friendly, non-toxic cleaning products",
-    "Detailed bathroom and kitchen sanitization",
-    "Dusting of all furniture and fixtures",
-    "Vacuuming and mopping of all floors",
-    "Window sill and baseboard cleaning",
-    "Trash removal and fresh liner placement",
-    "Final walkthrough quality check"
-  ];
-
-  const serviceBenefits = [
-    "Healthier living environment",
-    "More time for what matters most",
-    "Professional-grade cleaning results",
-    "Reduced allergens and bacteria",
-    "Enhanced home appearance",
-    "Stress-free maintenance"
-  ];
 
   return (
     <div className="min-h-screen">
@@ -268,18 +248,26 @@ const ServicePage = () => {
                 
               </div>
 
-              {/* Service Inclusions */}
+              {/* Service Benefits */}
               <div>
                 <Card className="shadow-elegant sticky top-8">
                   <CardContent className="p-6">
-                    <h3 className="text-2xl font-bold mb-6">What's Included</h3>
+                    <h3 className="text-2xl font-bold mb-6">
+                      THE BENEFITS OF {service.title.toUpperCase()}
+                    </h3>
                     <ul className="space-y-3 mb-8">
-                      {serviceInclusions.map((inclusion, index) => (
-                        <li key={index} className="flex items-start text-muted-foreground">
-                          <CheckCircle className="w-5 h-5 text-primary mr-3 flex-shrink-0 mt-0.5" />
-                          {inclusion}
+                      {service.benefits && service.benefits.length > 0 ? (
+                        service.benefits.map((benefit, index) => (
+                          <li key={index} className="flex items-start text-muted-foreground">
+                            <CheckCircle className="w-5 h-5 text-primary mr-3 flex-shrink-0 mt-0.5" />
+                            {benefit}
+                          </li>
+                        ))
+                      ) : (
+                        <li className="text-muted-foreground italic">
+                          No benefits listed for this service yet.
                         </li>
-                      ))}
+                      )}
                     </ul>
                     
                     <div className="border-t pt-6">

@@ -51,6 +51,7 @@ interface Service {
   featured_image_url?: string | null;
   service_image_url?: string | null;
   youtube_video_url?: string | null;
+  benefits?: string[] | null;
   updated_at?: string;
 }
 
@@ -87,6 +88,7 @@ export const ServicesManagement: React.FC = () => {
     service_image_url: null,
     featured_image_url: null,
     youtube_video_url: null,
+    benefits: null,
     is_active: true,
     display_order: undefined,
   });
@@ -127,6 +129,7 @@ export const ServicesManagement: React.FC = () => {
       service_image_url: null,
       featured_image_url: null,
       youtube_video_url: null,
+      benefits: null,
       is_active: true,
       display_order: undefined,
     });
@@ -145,6 +148,7 @@ export const ServicesManagement: React.FC = () => {
         service_image_url: service.service_image_url,
         featured_image_url: service.featured_image_url,
         youtube_video_url: service.youtube_video_url || '',
+        benefits: service.benefits || null,
         is_active: service.is_active,
         display_order: service.display_order,
       });
@@ -605,6 +609,24 @@ export const ServicesManagement: React.FC = () => {
                       placeholder="https://www.youtube.com/watch?v=..."
                       type="url"
                     />
+                  </div>
+
+                  {/* Service Benefits */}
+                  <div className="space-y-2">
+                    <Label htmlFor="benefits">Service Benefits</Label>
+                    <Textarea
+                      id="benefits"
+                      value={formData.benefits?.join('\n') || ''}
+                      onChange={(e) => {
+                        const lines = e.target.value.split('\n').filter(line => line.trim());
+                        setFormData({ ...formData, benefits: lines.length > 0 ? lines : null });
+                      }}
+                      placeholder="Enter each benefit on a new line&#10;e.g., Healthier living environment&#10;More time for what matters most&#10;Professional-grade cleaning results"
+                      rows={8}
+                    />
+                    <p className="text-xs text-muted-foreground">
+                      Each line will appear as a bullet point in the "Benefits" section
+                    </p>
                   </div>
                 </div>
 
