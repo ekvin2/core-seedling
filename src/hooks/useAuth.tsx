@@ -22,33 +22,37 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
-    // Optimized auth state handler with single combined query
-    const fetchUserProfile = async (userId: string) => {
-      // Single optimized query combining profile and role data
-      const [{ data: profileData }, { data: roleData }] = await Promise.all([
-        supabase.from('profiles').select('*').eq('user_id', userId).single(),
-        supabase.from('user_roles').select('role').eq('user_id', userId).maybeSingle()
-      ]);
-      
-      return {
-        ...profileData,
-        role: roleData?.role || 'user'
-      };
-    };
-
-    // Set up auth state listener
+    // Set up auth state listener - MUST NOT be async
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
-      async (event, session) => {
+      (event, session) => {
+        // Only synchronous updates here to prevent deadlock
         setSession(session);
         setUser(session?.user ?? null);
 
+        // Defer async profile fetching with setTimeout to prevent deadlock
         if (session?.user) {
-          const profileData = await fetchUserProfile(session.user.id);
-          setProfile(profileData);
+          setTimeout(async () => {
+            try {
+              // Single optimized query combining profile and role data
+              const [{ data: profileData }, { data: roleData }] = await Promise.all([
+                supabase.from('profiles').select('*').eq('user_id', session.user.id).single(),
+                supabase.from('user_roles').select('role').eq('user_id', session.user.id).maybeSingle()
+              ]);
+              
+              setProfile({
+                ...profileData,
+                role: roleData?.role || 'user'
+              });
+            } catch (error) {
+              console.error('Error fetching profile:', error);
+              setProfile(null);
+            }
+            setLoading(false);
+          }, 0);
         } else {
           setProfile(null);
+          setLoading(false);
         }
-        setLoading(false);
       }
     );
 
@@ -58,8 +62,21 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       setUser(session?.user ?? null);
       
       if (session?.user) {
-        const profileData = await fetchUserProfile(session.user.id);
-        setProfile(profileData);
+        try {
+          // Single optimized query combining profile and role data
+          const [{ data: profileData }, { data: roleData }] = await Promise.all([
+            supabase.from('profiles').select('*').eq('user_id', session.user.id).single(),
+            supabase.from('user_roles').select('role').eq('user_id', session.user.id).maybeSingle()
+          ]);
+          
+          setProfile({
+            ...profileData,
+            role: roleData?.role || 'user'
+          });
+        } catch (error) {
+          console.error('Error fetching profile:', error);
+          setProfile(null);
+        }
       }
       
       setLoading(false);
