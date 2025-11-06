@@ -273,7 +273,7 @@ const LeadForm = ({ onSuccess }: LeadFormProps) => {
             Submitting...
           </>
         ) : (
-          "Get My Free Quote"
+          "Get Free Quote"
         )}
       </Button>
 

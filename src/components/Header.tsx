@@ -1,17 +1,34 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import { Menu, X, Phone, Mail, Settings } from "lucide-react";
 import { useAuth } from "@/hooks/useAuth";
 import QuoteModal from "./QuoteModal";
 import logo from "@/assets/logo.jpeg";
+import { supabase } from "@/integrations/supabase/client";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isQuoteModalOpen, setIsQuoteModalOpen] = useState(false);
+  const [phoneNumber, setPhoneNumber] = useState("+64 21 123 4567");
   const navigate = useNavigate();
   const location = useLocation();
   const { user, isAdmin } = useAuth();
+
+  useEffect(() => {
+    const fetchBusinessInfo = async () => {
+      const { data } = await supabase
+        .from('business_info')
+        .select('phone')
+        .single();
+      
+      if (data?.phone) {
+        setPhoneNumber(data.phone);
+      }
+    };
+
+    fetchBusinessInfo();
+  }, []);
 
   const scrollToSection = (sectionId: string) => {
     if (location.pathname !== '/') {
@@ -89,19 +106,19 @@ const Header = () => {
             {/* Contact Info & CTA */}
             <div className="hidden md:flex items-center space-x-4">
               <a 
-                href="tel:+64211234567" 
+                href={`tel:${phoneNumber.replace(/\s/g, '')}`}
                 className="flex items-center space-x-2 text-sm hover:text-primary transition-colors"
-                aria-label="Call us at +64 21 123 4567"
+                aria-label={`Call us at ${phoneNumber}`}
               >
                 <Phone className="w-4 h-4 text-primary" />
-                <span>+64 21 123 4567</span>
+                <span>{phoneNumber}</span>
               </a>
               <Button 
                 onClick={() => setIsQuoteModalOpen(true)}
                 size="lg"
                 className="min-h-[48px]"
               >
-                Get Quote
+                Get Free Quote
               </Button>
               {user && isAdmin && (
                 <Button variant="outline" onClick={() => navigate('/admin')}>
@@ -155,12 +172,12 @@ const Header = () => {
                   Contact
                 </button>
                 <a 
-                  href="tel:+64211234567"
+                  href={`tel:${phoneNumber.replace(/\s/g, '')}`}
                   className="flex items-center space-x-2 text-base pt-3 px-2 min-h-[48px] hover:text-primary transition-colors"
-                  aria-label="Call us at +64 21 123 4567"
+                  aria-label={`Call us at ${phoneNumber}`}
                 >
                   <Phone className="w-5 h-5 text-primary" />
-                  <span>+64 21 123 4567</span>
+                  <span>{phoneNumber}</span>
                 </a>
                 <Button 
                   onClick={() => setIsQuoteModalOpen(true)} 

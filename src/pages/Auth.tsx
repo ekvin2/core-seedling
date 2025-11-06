@@ -5,7 +5,7 @@ import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
-
+import logo from '@/assets/logo.jpeg';
 import { useToast } from '@/hooks/use-toast';
 
 const Auth = () => {
@@ -74,6 +74,13 @@ const Auth = () => {
     <div className="min-h-screen flex items-center justify-center bg-background p-4">
       <Card className="w-full max-w-md">
         <CardHeader className="text-center">
+          <div className="flex justify-center mb-4">
+            <img 
+              src={logo} 
+              alt="Easy House Wash NZ Logo" 
+              className="h-16 w-auto object-contain" 
+            />
+          </div>
           <CardTitle className="text-2xl font-bold">Easy House Wash NZ Admin</CardTitle>
           <CardDescription>
             {isSignUp ? "Create an account to get started" : "Sign in to access the admin panel"}

@@ -388,7 +388,7 @@ const ServicePage = () => {
                   className="text-lg px-8"
                   onClick={() => setIsQuoteModalOpen(true)}
                 >
-                  Get Free Quote Now
+                  Get Free Quote
                 </Button>
                 <Button 
                   size="lg" 

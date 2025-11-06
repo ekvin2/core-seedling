@@ -12,18 +12,18 @@ const HeroSection = () => {
 
   return (
     <section id="home" className="min-h-[65vh] md:min-h-screen flex items-center bg-gradient-to-br from-[hsl(217,80%,98%)] via-[hsl(217,70%,96%)] to-[hsl(217,60%,97%)] pt-20 relative overflow-hidden py-8 md:py-12">
-      {/* Background Image Overlay with Vibrant Gradient */}
+      {/* Background Image Overlay with Enhanced Vibrant Gradient */}
       <div className="absolute inset-0 z-0">
         <img 
           src={heroImage}
           alt="Professional house cleaning service in New Zealand - sparkling clean home interior with modern furniture and pristine surfaces"
-          className="w-full h-full object-cover opacity-10"
+          className="w-full h-full object-cover opacity-5"
           width="1920"
           height="1080"
           loading="eager"
         />
-        <div className="absolute inset-0 bg-hero-gradient-vibrant/20"></div>
-        <div className="absolute inset-0 bg-gradient-to-br from-primary/10 via-transparent to-[hsl(217,95%,65%)]/10"></div>
+        <div className="absolute inset-0 bg-hero-gradient-vibrant/30"></div>
+        <div className="absolute inset-0 bg-gradient-to-br from-primary/20 via-[hsl(217,95%,65%)]/15 to-[hsl(217,85%,55%)]/20"></div>
       </div>
       
       <div className="container mx-auto px-6 md:px-4 py-8 md:py-12 relative z-10">
@@ -51,7 +51,7 @@ const HeroSection = () => {
                   onClick={() => setIsQuoteModalOpen(true)}
                   className="min-h-[56px] text-lg font-semibold shadow-vibrant bg-hero-gradient-vibrant hover:shadow-glow transition-all duration-300"
                 >
-                  Get Free Wash Quote
+                  Get Free Quote
                 </Button>
                 <Button 
                   size="lg"
@@ -74,7 +74,7 @@ const HeroSection = () => {
               <div className="absolute inset-0 bg-hero-gradient opacity-10 rounded-2xl transform rotate-3"></div>
               <div className="relative bg-background/95 backdrop-blur-sm rounded-2xl shadow-trust p-8 border border-border/20">
                 <div className="text-center mb-6">
-                  <h3 className="text-2xl font-bold mb-2">Get Your Free Washing Quote</h3>
+                  <h3 className="text-2xl font-bold mb-2">Get Your Free Quote</h3>
                   <p className="text-muted-foreground">
                     Request a quote for pressure washing, soft washing, or exterior cleaning services
                   </p>

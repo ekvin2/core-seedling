@@ -87,21 +87,6 @@ const WorksSection = () => {
             </Card>
           ))}
         </div>
-
-        <div className="text-center">
-          <div className="bg-gradient-to-br from-background via-[hsl(217,80%,98%)] to-background rounded-xl md:rounded-2xl p-4 md:p-8 max-w-2xl mx-auto shadow-vibrant border border-primary/20">
-            <div className="bg-gradient-to-br from-primary to-[hsl(217,95%,65%)] rounded-full w-12 md:w-16 h-12 md:h-16 flex items-center justify-center mx-auto mb-2 md:mb-4 shadow-glow">
-              <ImageIcon className="w-6 md:w-8 h-6 md:h-8 text-white" />
-            </div>
-            <h3 className="text-lg md:text-2xl font-bold mb-2 md:mb-4 bg-gradient-to-r from-primary via-[hsl(217,95%,65%)] to-primary bg-clip-text text-transparent">Ready to Transform Your Space?</h3>
-            <p className="text-sm md:text-base text-muted-foreground mb-4 md:mb-6">
-              Join hundreds of satisfied customers who have experienced our exceptional cleaning services.
-            </p>
-            <Button size="lg" className="px-6 md:px-8 h-10 md:h-11 text-sm md:text-base bg-colorful-gradient hover:shadow-vibrant transition-all duration-300">
-              View Full Portfolio
-            </Button>
-          </div>
-        </div>
       </div>
     </section>
   );
