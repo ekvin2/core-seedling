@@ -21,6 +21,23 @@ const ServiceFAQ = ({ serviceName, serviceId }: ServiceFAQProps) => {
   const [faqs, setFaqs] = useState<Array<{ question: string; answer: string }>>([]);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
+  const [phoneNumber, setPhoneNumber] = useState("+64 21 123 4567");
+  // Fetch phone number
+  useEffect(() => {
+    const fetchBusinessInfo = async () => {
+      const { data } = await supabase
+        .from('business_info')
+        .select('phone')
+        .single();
+      
+      if (data?.phone) {
+        setPhoneNumber(data.phone);
+      }
+    };
+
+    fetchBusinessInfo();
+  }, []);
+
   // Fetch FAQs from Supabase for the given serviceId (only service-specific FAQs)
   useEffect(() => {
     let mounted = true;
@@ -118,7 +135,7 @@ const ServiceFAQ = ({ serviceName, serviceId }: ServiceFAQProps) => {
             <div className="flex flex-col sm:flex-row gap-4 justify-center">
               <div className="text-center">
                 <div className="text-lg font-semibold text-primary">Call Us</div>
-                <div className="text-muted-foreground">+64 21 123 4567</div>
+                <div className="text-muted-foreground">{phoneNumber}</div>
               </div>
               <div className="text-center">
                 <div className="text-lg font-semibold text-primary">Email Us</div>

@@ -12,16 +12,20 @@ import { useSEO } from "@/hooks/useSEO";
 const Contact = () => {
   const [isQuoteModalOpen, setIsQuoteModalOpen] = useState(false);
   const [businessPhone, setBusinessPhone] = useState('(555) 123-4567');
+  const [businessAddress, setBusinessAddress] = useState('123 Clean Street\nYour City, ST 12345');
 
   useEffect(() => {
     const fetchBusinessInfo = async () => {
       const { data } = await supabase
         .from('business_info')
-        .select('phone')
+        .select('phone, address')
         .single();
       
       if (data?.phone) {
         setBusinessPhone(data.phone);
+      }
+      if (data?.address) {
+        setBusinessAddress(data.address);
       }
     };
 
@@ -134,7 +138,7 @@ const Contact = () => {
                   </div>
                   <h3 className="text-xl font-semibold mb-2">Visit Us</h3>
                   <p className="text-muted-foreground mb-4">Stop by our office</p>
-                  <p className="text-sm font-medium">123 Clean Street<br />Your City, ST 12345</p>
+                  <p className="text-sm font-medium whitespace-pre-line">{businessAddress}</p>
                   <p className="text-sm text-muted-foreground mt-2">By appointment only</p>
                 </CardContent>
               </Card>

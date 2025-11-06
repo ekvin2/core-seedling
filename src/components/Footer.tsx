@@ -12,22 +12,52 @@ interface Service {
 
 const Footer = () => {
   const [services, setServices] = useState<Service[]>([]);
+  const [phoneNumber, setPhoneNumber] = useState("+64 21 123 4567");
+  const [address, setAddress] = useState("Auckland Central\nAuckland, New Zealand");
+  const [businessHours, setBusinessHours] = useState({
+    monday: "7:00 AM - 7:00 PM",
+    tuesday: "7:00 AM - 7:00 PM",
+    wednesday: "7:00 AM - 7:00 PM",
+    thursday: "7:00 AM - 7:00 PM",
+    friday: "7:00 AM - 7:00 PM",
+    saturday: "8:00 AM - 5:00 PM",
+    sunday: "9:00 AM - 3:00 PM"
+  });
   const currentYear = new Date().getFullYear();
 
   useEffect(() => {
-    const fetchServices = async () => {
-      const { data } = await supabase
+    const fetchData = async () => {
+      // Fetch services
+      const { data: servicesData } = await supabase
         .from('services')
         .select('id, title, slug')
         .eq('is_active', true)
         .order('created_at', { ascending: true });
 
-      if (data) {
-        setServices(data);
+      if (servicesData) {
+        setServices(servicesData);
+      }
+
+      // Fetch business info
+      const { data: businessData } = await supabase
+        .from('business_info')
+        .select('phone, address, business_hours')
+        .single();
+      
+      if (businessData) {
+        if (businessData.phone) {
+          setPhoneNumber(businessData.phone);
+        }
+        if (businessData.address) {
+          setAddress(businessData.address);
+        }
+        if (businessData.business_hours) {
+          setBusinessHours(businessData.business_hours);
+        }
       }
     };
 
-    fetchServices();
+    fetchData();
   }, []);
 
   return (
@@ -93,7 +123,7 @@ const Footer = () => {
             <div className="space-y-3 opacity-90">
               <div className="flex items-center space-x-3">
                 <Phone className="w-3 h-3 md:w-4 md:h-4" />
-                <span className="text-sm md:text-base">+64 21 123 4567</span>
+                <span className="text-sm md:text-base">{phoneNumber}</span>
               </div>
               <div className="flex items-center space-x-3">
                 <Mail className="w-3 h-3 md:w-4 md:h-4" />
@@ -101,14 +131,14 @@ const Footer = () => {
               </div>
               <div className="flex items-start space-x-3">
                 <MapPin className="w-3 h-3 md:w-4 md:h-4 mt-1" />
-                <span className="text-sm md:text-base">Auckland Central<br />Auckland, New Zealand</span>
+                <span className="text-sm md:text-base whitespace-pre-line">{address}</span>
               </div>
               <div className="flex items-start space-x-3">
                 <Clock className="w-3 h-3 md:w-4 md:h-4 mt-1" />
                 <div className="text-sm md:text-base">
-                  <div>Mon - Fri: 7:00 AM - 7:00 PM</div>
-                  <div>Sat: 8:00 AM - 5:00 PM</div>
-                  <div>Sun: 9:00 AM - 3:00 PM</div>
+                  <div>Mon - Fri: {businessHours.monday}</div>
+                  <div>Sat: {businessHours.saturday}</div>
+                  <div>Sun: {businessHours.sunday}</div>
                 </div>
               </div>
             </div>

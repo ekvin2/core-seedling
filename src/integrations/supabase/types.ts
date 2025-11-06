@@ -16,6 +16,7 @@ export type Database = {
     Tables: {
       business_info: {
         Row: {
+          address: string | null
           business_hours: Json
           created_at: string
           facebook_url: string | null
@@ -26,6 +27,7 @@ export type Database = {
           updated_at: string
         }
         Insert: {
+          address?: string | null
           business_hours?: Json
           created_at?: string
           facebook_url?: string | null
@@ -36,6 +38,7 @@ export type Database = {
           updated_at?: string
         }
         Update: {
+          address?: string | null
           business_hours?: Json
           created_at?: string
           facebook_url?: string | null
