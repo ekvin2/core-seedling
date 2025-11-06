@@ -185,3 +185,89 @@ html {
   outline: 2px solid hsl(var(--primary));
   outline-offset: 2px;
 }
+
+/* React Quill Editor Styling */
+.ql-toolbar.ql-snow {
+  border: 1px solid hsl(var(--border));
+  border-radius: 0.5rem 0.5rem 0 0;
+  background: hsl(var(--background));
+}
+
+.ql-container.ql-snow {
+  border: 1px solid hsl(var(--border));
+  border-radius: 0 0 0.5rem 0.5rem;
+  background: hsl(var(--background));
+  font-size: 1rem;
+  min-height: 200px;
+}
+
+.ql-editor {
+  min-height: 200px;
+  color: hsl(var(--foreground));
+}
+
+.ql-editor.ql-blank::before {
+  color: hsl(var(--muted-foreground));
+  font-style: italic;
+}
+
+.ql-stroke {
+  stroke: hsl(var(--foreground));
+}
+
+.ql-fill {
+  fill: hsl(var(--foreground));
+}
+
+.ql-picker-label {
+  color: hsl(var(--foreground));
+}
+
+/* Rich text content display styling */
+.prose {
+  color: hsl(var(--foreground));
+}
+
+.prose h1, .prose h2, .prose h3 {
+  color: hsl(var(--foreground));
+  font-weight: bold;
+  margin-top: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.prose h1 {
+  font-size: 2rem;
+  line-height: 2.5rem;
+}
+
+.prose h2 {
+  font-size: 1.5rem;
+  line-height: 2rem;
+}
+
+.prose h3 {
+  font-size: 1.25rem;
+  line-height: 1.75rem;
+}
+
+.prose p {
+  margin-bottom: 1rem;
+}
+
+.prose strong {
+  font-weight: 600;
+}
+
+.prose ul, .prose ol {
+  margin: 1rem 0;
+  padding-left: 1.5rem;
+}
+
+.prose li {
+  margin-bottom: 0.5rem;
+}
+
+.prose a {
+  color: hsl(var(--primary));
+  text-decoration: underline;
+}

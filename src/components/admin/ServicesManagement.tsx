@@ -37,6 +37,8 @@ import {
   Eye,
 } from 'lucide-react';
 import { ConfirmDialog } from '@/components/ui/ConfirmDialog';
+import ReactQuill from 'react-quill';
+import 'react-quill/dist/quill.snow.css';
 
 interface Service {
   id: string;
@@ -578,13 +580,22 @@ export const ServicesManagement: React.FC = () => {
                     <Label htmlFor="content">
                       Service Description <span className="text-destructive">*</span>
                     </Label>
-                    <Textarea
-                      id="content"
+                    <ReactQuill
+                      theme="snow"
                       value={formData.content}
-                      onChange={(e) => setFormData({ ...formData, content: e.target.value })}
+                      onChange={(value) => setFormData({ ...formData, content: value })}
                       placeholder="Detailed description of the service..."
-                      rows={6}
-                      required
+                      modules={{
+                        toolbar: [
+                          [{ 'header': [1, 2, 3, false] }],
+                          ['bold', 'italic', 'underline', 'strike'],
+                          [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+                          [{ 'align': [] }],
+                          ['link'],
+                          ['clean']
+                        ]
+                      }}
+                      className="bg-background"
                     />
                   </div>
 

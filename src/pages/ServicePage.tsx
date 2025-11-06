@@ -153,19 +153,21 @@ const ServicePage = () => {
         </nav>
 
         {/* Hero Section */}
-        <section className="bg-hero-gradient text-white py-20 relative overflow-hidden">
+        <section className="bg-hero-gradient text-white py-12 md:py-20 relative overflow-hidden">
           <div className="absolute inset-0 bg-primary/20"></div>
           <div className="container mx-auto px-4 relative z-10">
+            {/* Back button - hidden on mobile */}
             <Button 
               variant="outline" 
               onClick={() => navigate('/')}
-              className="mb-8 bg-white/10 border-white/20 text-white hover:bg-white/20"
+              className="hidden md:flex mb-8 bg-white/10 border-white/20 text-white hover:bg-white/20"
             >
               <ArrowLeft className="w-4 h-4 mr-2" />
               Back to Home
             </Button>
             
-            <div className="grid lg:grid-cols-2 gap-12 items-center">
+            {/* Desktop Layout */}
+            <div className="hidden lg:grid lg:grid-cols-2 gap-12 items-center">
               <div>
                 <h1 className="text-4xl md:text-6xl font-bold mb-6 leading-tight">
                   {service.heading}
@@ -196,7 +198,6 @@ const ServicePage = () => {
                 </div>
               </div>
 
-              {/* Service Image */}
               {service.service_image_url && (
                 <div className="relative rounded-2xl overflow-hidden shadow-trust">
                   <img
@@ -209,6 +210,53 @@ const ServicePage = () => {
                   />
                 </div>
               )}
+            </div>
+
+            {/* Mobile Layout - Reordered */}
+            <div className="lg:hidden space-y-6">
+              {/* 1. Heading */}
+              <h1 className="text-3xl md:text-4xl font-bold leading-tight">
+                {service.heading}
+              </h1>
+              
+              {/* 2. Sub Heading */}
+              {service.sub_heading && (
+                <p className="text-lg md:text-xl opacity-90 leading-relaxed">
+                  {service.sub_heading}
+                </p>
+              )}
+              
+              {/* 3. Service Image - 4:3 ratio */}
+              {service.service_image_url && (
+                <div className="relative rounded-2xl overflow-hidden shadow-trust aspect-[4/3]">
+                  <img
+                    src={service.service_image_url}
+                    alt={`${service.title} - Professional cleaning service demonstration`}
+                    className="w-full h-full object-cover"
+                    loading="eager"
+                  />
+                </div>
+              )}
+              
+              {/* 4. CTA Buttons */}
+              <div className="flex flex-col gap-3">
+                <Button 
+                  size="lg" 
+                  variant="secondary"
+                  className="text-lg px-8 w-full"
+                  onClick={() => setIsQuoteModalOpen(true)}
+                >
+                  Get Free Quote
+                </Button>
+                <Button 
+                  size="lg" 
+                  variant="outline"
+                  className="text-lg px-8 bg-white/10 border-white/20 text-white hover:bg-white/20 w-full"
+                >
+                  <Phone className="w-4 h-4 mr-2" />
+                  Call {businessPhone}
+                </Button>
+              </div>
             </div>
           </div>
         </section>
