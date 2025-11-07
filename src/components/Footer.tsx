@@ -51,8 +51,8 @@ const Footer = () => {
         if (businessData.address) {
           setAddress(businessData.address);
         }
-        if (businessData.business_hours) {
-          setBusinessHours(businessData.business_hours);
+        if (businessData.business_hours && typeof businessData.business_hours === 'object' && !Array.isArray(businessData.business_hours)) {
+          setBusinessHours(businessData.business_hours as any);
         }
       }
     };
