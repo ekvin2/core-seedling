@@ -71,10 +71,10 @@ const HeroSection = () => {
           {/* Right Content - Lead Form (Hidden on Mobile) */}
           {!isMobile && (
             <div className="relative">
-              <div className="absolute inset-0 bg-gradient-to-br from-white/10 to-white/5 rounded-2xl transform rotate-3"></div>
-              <div className="relative bg-white/98 backdrop-blur-sm rounded-2xl shadow-2xl p-8 border border-white/40">
+              <div className="absolute inset-0 bg-hero-gradient opacity-10 rounded-2xl transform rotate-3"></div>
+              <div className="relative bg-background/95 backdrop-blur-sm rounded-2xl shadow-trust p-8 border border-border/20">
                 <div className="text-center mb-6">
-                  <h3 className="text-2xl font-bold mb-2 text-primary">Get Your Free Quote</h3>
+                  <h3 className="text-2xl font-bold mb-2">Get Your Free Quote</h3>
                   <p className="text-muted-foreground">
                     Request a quote for pressure washing, soft washing, or exterior cleaning services
                   </p>
