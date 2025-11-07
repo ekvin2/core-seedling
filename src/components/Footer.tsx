@@ -52,7 +52,25 @@ const Footer = () => {
           setAddress(businessData.address);
         }
         if (businessData.business_hours && typeof businessData.business_hours === 'object' && !Array.isArray(businessData.business_hours)) {
-          setBusinessHours(businessData.business_hours as any);
+          const hours = businessData.business_hours as any;
+          // Convert to string format if needed
+          const formatHours = (dayHours: any) => {
+            if (typeof dayHours === 'string') return dayHours;
+            if (typeof dayHours === 'object' && dayHours.open && dayHours.close) {
+              return `${dayHours.open} - ${dayHours.close}`;
+            }
+            return "7:00 AM - 7:00 PM";
+          };
+          
+          setBusinessHours({
+            monday: formatHours(hours.monday),
+            tuesday: formatHours(hours.tuesday),
+            wednesday: formatHours(hours.wednesday),
+            thursday: formatHours(hours.thursday),
+            friday: formatHours(hours.friday),
+            saturday: formatHours(hours.saturday),
+            sunday: formatHours(hours.sunday)
+          });
         }
       }
     };
