@@ -120,10 +120,10 @@ const ServicesSection = () => {
                 {/* Arrow Button with Gradient */}
                 <button 
                   onClick={() => navigate(`/service/${service.slug}`)}
-                  className="w-8 h-8 md:w-10 md:h-10 rounded-full bg-colorful-gradient hover:shadow-vibrant text-primary-foreground flex items-center justify-center transition-all duration-300 group-hover:scale-110"
+                  className="w-6 h-6 md:w-10 md:h-10 rounded-full bg-colorful-gradient hover:shadow-vibrant text-primary-foreground flex items-center justify-center transition-all duration-300 group-hover:scale-110"
                   aria-label={`Learn more about ${service.title}`}
                 >
-                  <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="md:w-5 md:h-5">
+                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="md:w-5 md:h-5">
                     <line x1="5" y1="12" x2="19" y2="12"></line>
                     <polyline points="12 5 19 12 12 19"></polyline>
                   </svg>

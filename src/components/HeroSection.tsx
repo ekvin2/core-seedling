@@ -30,14 +30,14 @@ const HeroSection = () => {
         <div className="grid lg:grid-cols-2 gap-8 md:gap-12 items-center">
           {/* Left Content */}
           <div className="space-y-6 md:space-y-8">
-            <div className="space-y-5 md:space-y-6">
+            <div className="space-y-5 md:space-y-6 text-center md:text-left">
               <h1 className="text-3xl sm:text-4xl md:text-6xl font-bold leading-tight text-white">
                 Professional 
                 <span className="bg-gradient-to-r from-[hsl(200,100%,80%)] via-[hsl(210,100%,75%)] to-[hsl(200,100%,80%)] bg-clip-text text-transparent"> House Washing</span>
                 <br />
                 Services You Can Trust
               </h1>
-              <p className="text-lg md:text-xl text-white/90 max-w-xl leading-relaxed">
+              <p className="text-lg md:text-xl text-white/90 max-w-xl leading-relaxed mx-auto md:mx-0">
                 Expert pressure washing, soft washing, and exterior surface cleaning. 
                 Transform your home's exterior with our professional house washing services!
               </p>
