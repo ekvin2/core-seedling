@@ -108,7 +108,7 @@ const ServicesSection = () => {
               </div>
               
               {/* Content Container */}
-              <div className="p-3 md:p-6 flex flex-col items-center text-center space-y-2 md:space-y-4">
+              <div className="p-3 md:p-6 flex flex-col items-center text-center space-y-3 md:space-y-4">
                 {/* Service Title */}
                 <h3 className="text-sm md:text-lg lg:text-xl font-bold line-clamp-2">
                   {service.title}
@@ -117,16 +117,13 @@ const ServicesSection = () => {
                 <p className="text-xs md:text-sm text-muted-foreground line-clamp-2 md:line-clamp-3">
                   {service.sub_heading || "Professional cleaning service tailored to your needs"}
                 </p>
-                {/* Arrow Button with Gradient */}
-                <button 
+                {/* Learn More Button - Mobile Optimized */}
+                <button
                   onClick={() => navigate(`/service/${service.slug}`)}
-                  className="w-6 h-6 md:w-10 md:h-10 rounded-full bg-colorful-gradient hover:shadow-vibrant text-primary-foreground flex items-center justify-center transition-all duration-300 group-hover:scale-110"
+                  className="w-full min-h-[48px] px-4 py-3 rounded-lg bg-colorful-gradient hover:shadow-vibrant text-primary-foreground font-semibold text-sm md:text-base transition-all duration-300 hover:scale-105 active:scale-95"
                   aria-label={`Learn more about ${service.title}`}
                 >
-                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="md:w-5 md:h-5">
-                    <line x1="5" y1="12" x2="19" y2="12"></line>
-                    <polyline points="12 5 19 12 12 19"></polyline>
-                  </svg>
+                  Learn More
                 </button>
               </div>
             </Card>
