@@ -6,17 +6,14 @@ import { useAuth } from "@/hooks/useAuth";
 import QuoteModal from "./QuoteModal";
 import logo from "@/assets/logo.jpeg";
 import { supabase } from "@/integrations/supabase/client";
-import { useIsMobile } from "@/hooks/use-mobile";
 
 const Header = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
   const [isQuoteModalOpen, setIsQuoteModalOpen] = useState(false);
   const [phoneNumber, setPhoneNumber] = useState("+64 21 123 4567");
-  const [showStickyQuote, setShowStickyQuote] = useState(false);
   const navigate = useNavigate();
   const location = useLocation();
   const { user, isAdmin } = useAuth();
-  const isMobile = useIsMobile();
 
   useEffect(() => {
     const fetchBusinessInfo = async () => {
@@ -24,7 +21,7 @@ const Header = () => {
         .from('business_info')
         .select('phone')
         .single();
-
+      
       if (data?.phone) {
         setPhoneNumber(data.phone);
       }
@@ -32,18 +29,6 @@ const Header = () => {
 
     fetchBusinessInfo();
   }, []);
-
-  useEffect(() => {
-    if (!isMobile) return;
-
-    const handleScroll = () => {
-      const scrollPosition = window.scrollY;
-      setShowStickyQuote(scrollPosition > 300);
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    return () => window.removeEventListener('scroll', handleScroll);
-  }, [isMobile]);
 
   const scrollToSection = (sectionId: string) => {
     if (location.pathname !== '/') {
@@ -208,23 +193,10 @@ const Header = () => {
       </header>
       
       {/* Quote Modal */}
-      <QuoteModal
-        isOpen={isQuoteModalOpen}
-        onClose={() => setIsQuoteModalOpen(false)}
+      <QuoteModal 
+        isOpen={isQuoteModalOpen} 
+        onClose={() => setIsQuoteModalOpen(false)} 
       />
-
-      {/* Sticky Quote Button for Mobile - Appears on scroll */}
-      {isMobile && showStickyQuote && (
-        <div className="fixed bottom-6 left-4 right-4 z-50 animate-in slide-in-from-bottom-4 duration-300">
-          <Button
-            onClick={() => setIsQuoteModalOpen(true)}
-            size="lg"
-            className="w-full min-h-[56px] text-lg font-semibold shadow-vibrant bg-hero-gradient-vibrant hover:shadow-glow"
-          >
-            Get Free Quote
-          </Button>
-        </div>
-      )}
     </>
   );
 };
