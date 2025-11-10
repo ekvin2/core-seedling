@@ -92,7 +92,7 @@ const ServicesSection = () => {
           {services.map((service) => (
             <Card 
               key={service.id} 
-              className="group hover:shadow-card-hover transition-all duration-300 border-border/50 hover:border-primary/40 overflow-hidden bg-background relative"
+              className="group hover:shadow-card-hover transition-all duration-300 border-border/50 hover:border-primary/40 overflow-hidden bg-background relative flex flex-col h-full"
             >
               {/* Image Container with Gradient Overlay */}
               <div className="relative h-32 md:h-48 overflow-hidden bg-muted">
@@ -108,7 +108,7 @@ const ServicesSection = () => {
               </div>
               
               {/* Content Container */}
-              <div className="p-3 md:p-6 flex flex-col items-center text-center space-y-2 md:space-y-4">
+              <div className="p-3 md:p-6 flex flex-col items-center text-center space-y-2 md:space-y-4 flex-1">
                 {/* Service Title */}
                 <h3 className="text-sm md:text-lg lg:text-xl font-bold line-clamp-2">
                   {service.title}
@@ -117,17 +117,33 @@ const ServicesSection = () => {
                 <p className="text-xs md:text-sm text-muted-foreground line-clamp-2 md:line-clamp-3">
                   {service.sub_heading || "Professional cleaning service tailored to your needs"}
                 </p>
-                {/* Arrow Button with Gradient */}
-                <button 
-                  onClick={() => navigate(`/service/${service.slug}`)}
-                  className="w-6 h-6 md:w-10 md:h-10 rounded-full bg-colorful-gradient hover:shadow-vibrant text-primary-foreground flex items-center justify-center transition-all duration-300 group-hover:scale-110"
-                  aria-label={`Learn more about ${service.title}`}
-                >
-                  <svg xmlns="http://www.w3.org/2000/svg" width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" className="md:w-5 md:h-5">
-                    <line x1="5" y1="12" x2="19" y2="12"></line>
-                    <polyline points="12 5 19 12 12 19"></polyline>
-                  </svg>
-                </button>
+                {/* CTA placeholder: moved to card footer so it can be fixed to the bottom */}
+                
+              </div>
+              {/* Card footer: anchors CTA to card bottom */}
+              <div className="p-3 md:p-6 mt-auto">
+                <div className="w-full">
+                  {/* Mobile: plain text link (visible only on small screens) */}
+                  <div
+                    role="link"
+                    tabIndex={0}
+                    onClick={() => navigate(`/service/${service.slug}`)}
+                    onKeyDown={(e) => { if (e.key === 'Enter') navigate(`/service/${service.slug}`); }}
+                    className="block md:hidden w-full text-center font-semibold text-sm text-blue-600 dark:text-blue-400 hover:underline cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-200 rounded"
+                    aria-label={`Learn more about ${service.title}`}
+                  >
+                    Learn More...
+                  </div>
+
+                  {/* Desktop/tablet: prominent button (hidden on mobile) */}
+                  <button
+                    onClick={() => navigate(`/service/${service.slug}`)}
+                    className="hidden md:flex w-full h-12 rounded-lg bg-colorful-gradient hover:shadow-vibrant text-primary-foreground font-semibold text-base items-center justify-center leading-none py-0 px-4 transition-colors duration-200"
+                    aria-label={`Learn more about ${service.title}`}
+                  >
+                    Learn More
+                  </button>
+                </div>
               </div>
             </Card>
           ))}
