@@ -31,12 +31,12 @@ const HeroSection = () => {
           {/* Left Content */}
           <div className="space-y-6 md:space-y-8">
             <div className="space-y-5 md:space-y-6 text-center md:text-left">
-              <h1 className="text-3xl sm:text-4xl md:text-6xl font-bold leading-tight text-white animate-fade-in">
+              <h1 className="text-4xl sm:text-4xl md:text-7xl font-bold leading-tight text-white animate-fade-in">
                 Professional<br />
                 <span className="bg-gradient-to-r from-[hsl(200,100%,80%)] via-[hsl(210,100%,75%)] to-[hsl(200,100%,80%)] bg-clip-text text-transparent">House Washing</span><br />
                 You Can Trust
               </h1>
-              <p className="text-lg md:text-xl text-white/90 max-w-xl leading-relaxed mx-auto md:mx-0">
+              <p className="text-md md:text-xl text-white/90 max-w-xl leading-relaxed mx-auto md:mx-0">
                 Your All-in-One Exterior Cleaning Experts — Roof, Gutter, Driveway, Deck, Windows, and More.
               </p>
             </div>

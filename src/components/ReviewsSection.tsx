@@ -89,30 +89,38 @@ const ReviewsSection = () => {
 
         <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
           {reviews.length > 0 ? reviews.map((review) => (
-            <Card key={review.id} className="bg-white/95 backdrop-blur-sm rounded-xl shadow-elegant hover:shadow-vibrant transition-all duration-300 border-2 border-transparent hover:border-[hsl(217,95%,65%)]/30 relative overflow-hidden group">
-              <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-[hsl(217,95%,65%)]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
-              <CardContent className="p-8 relative z-10">
-                {/* Rating Stars */}
-                <div className="flex items-center justify-center mb-6">
-                  {[...Array(5)].map((_, i) => (
-                    <Star 
-                      key={i} 
-                      className={`w-6 h-6 ${i < review.rating ? 'fill-amber-400 text-amber-400' : 'fill-gray-200 text-gray-200'}`}
-                    />
-                  ))}
-                </div>
+            <a
+              key={review.id}
+              href="https://share.google/PLoMOKKeNdYpvoIn9"
+              target="_blank"
+              rel="noopener noreferrer"
+              className="block"
+            >
+              <Card className="bg-white/95 backdrop-blur-sm rounded-xl shadow-elegant hover:shadow-vibrant transition-all duration-300 border-2 border-transparent hover:border-[hsl(217,95%,65%)]/30 relative overflow-hidden group">
+                <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-[hsl(217,95%,65%)]/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300"></div>
+                <CardContent className="p-8 relative z-10">
+                  {/* Rating Stars */}
+                  <div className="flex items-center justify-center mb-6">
+                    {[...Array(5)].map((_, i) => (
+                      <Star 
+                        key={i} 
+                        className={`w-6 h-6 ${i < review.rating ? 'fill-amber-400 text-amber-400' : 'fill-gray-200 text-gray-200'}`}
+                      />
+                    ))}
+                  </div>
 
-                {/* Review Text */}
-                <p className="text-gray-700 text-center mb-8 font-normal leading-relaxed text-lg line-clamp-4 break-words">
-                  "{review.review_text}"
-                </p>
+                  {/* Review Text */}
+                  <p className="text-gray-700 text-center mb-8 font-normal leading-relaxed text-lg line-clamp-4 break-words">
+                    "{review.review_text}"
+                  </p>
 
-                {/* Customer Name */}
-                <p className="text-center font-semibold text-gray-900 text-lg">
-                  {review.customer_name}
-                </p>
-              </CardContent>
-            </Card>
+                  {/* Customer Name */}
+                  <p className="text-center font-semibold text-gray-900 text-lg">
+                    {review.customer_name}
+                  </p>
+                </CardContent>
+              </Card>
+            </a>
           )) : (
             <div className="col-span-3 text-center py-8">
               <p className="text-white/70">No reviews yet. Check back soon!</p>
