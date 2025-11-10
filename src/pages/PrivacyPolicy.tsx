@@ -122,8 +122,8 @@ const PrivacyPolicy = () => {
             </p>
             <div className="mt-4 space-y-2 text-muted-foreground">
               <p><strong>Email:</strong> info@easyhousewash.nz</p>
-              <p><strong>Phone:</strong> +64 21 123 4567</p>
-              <p><strong>Address:</strong> 123 Clean Street, Your City, ST 12345</p>
+              <p><strong>Phone:</strong> +64225171878</p>
+              <p><strong>Address:</strong> 13 Selbourne Street, Grey Lynn, Auckland 1021, New Zealand</p>
             </div>
           </section>
         </section>

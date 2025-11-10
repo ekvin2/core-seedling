@@ -87,14 +87,12 @@ const Footer = () => {
           {/* Company Info */}
           <div className="space-y-4">
             <div className="flex items-center space-x-2">
-              <div className="w-8 h-8 md:w-10 md:h-10 bg-gradient-to-br from-primary to-[hsl(217,95%,65%)] rounded-lg flex items-center justify-center shadow-lg">
-                <span className="text-white font-bold text-base md:text-lg">EHW</span>
-              </div>
+             
               <span className="text-xl md:text-2xl font-bold text-primary">Easy House Wash NZ</span>
             </div>
             <p className="text-sm md:text-base text-muted-foreground leading-relaxed">
               Professional house washing and exterior cleaning services across New Zealand.
-              We transform your property with reliable, eco-friendly pressure washing solutions.
+             
             </p>
             <div className="flex space-x-4">
               <Button variant="ghost" size="sm" className="p-2 text-primary hover:bg-primary/10 hover:text-primary transition-all duration-300">

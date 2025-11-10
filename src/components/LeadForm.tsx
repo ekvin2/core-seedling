@@ -164,7 +164,7 @@ const LeadForm = ({ onSuccess }: LeadFormProps) => {
     <form onSubmit={handleSubmit(onSubmit)} className="space-y-6">
       <div className="grid md:grid-cols-2 gap-4">
         <div className="space-y-2">
-          <Label htmlFor="name">Full Name *</Label>
+          <Label htmlFor="name">Name *</Label>
           <Input
             id="name"
             {...register("name")}
@@ -197,7 +197,7 @@ const LeadForm = ({ onSuccess }: LeadFormProps) => {
           <Input
             id="phone"
             {...register("phone")}
-            placeholder="(555) 123-4567"
+            placeholder="+64123456789"
             className={errors.phone ? "border-destructive" : ""}
           />
           {errors.phone && (

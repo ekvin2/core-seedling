@@ -70,7 +70,7 @@ const WorksSection = () => {
 
         <div className="grid grid-cols-2 md:grid-cols-2 lg:grid-cols-3 gap-3 md:gap-6 mb-8 md:mb-12">
           {images.map((image) => (
-            <Card key={image.id} className="group overflow-hidden hover:shadow-vibrant transition-all duration-300 hover:scale-[1.02] border-2 border-transparent hover:border-primary/30">
+            <Card key={image.id} className="group overflow-hidden hover:shadow-vibrant transition-all duration-300 hover:scale-[1.02] border-2 border-transparent hover:border-primary/2">
               <div className="relative overflow-hidden aspect-square md:aspect-[4/3]">
                 <img
                   src={image.url}

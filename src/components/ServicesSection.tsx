@@ -92,7 +92,7 @@ const ServicesSection = () => {
           {services.map((service) => (
             <Card 
               key={service.id} 
-              className="group hover:shadow-card-hover transition-all duration-300 border-border/50 hover:border-primary/40 overflow-hidden bg-background relative flex flex-col h-full"
+              className="group hover:shadow-card-hover transition-all duration-300 border-border/50 hover:border-primary/2 overflow-hidden bg-background relative flex flex-col h-full"
             >
               {/* Image Container with Gradient Overlay */}
               <div className="relative h-32 md:h-48 overflow-hidden bg-muted">
@@ -150,15 +150,15 @@ const ServicesSection = () => {
         </div>
 
         <div className="text-center mt-4 md:mt-16">
-          <div className="bg-gradient-to-br from-[hsl(217,80%,98%)] via-[hsl(217,70%,96%)] to-[hsl(217,60%,97%)] rounded-xl md:rounded-2xl p-4 md:p-8 max-w-4xl mx-auto shadow-elegant border border-primary/10">
+          <div className="bg-gradient-to-br from-[hsl(217,80%,98%)] via-[hsl(217,70%,96%)] to-[hsl(217,60%,97%)] rounded-xl md:rounded-2xl p-4 md:p-8 max-w-4xl mx-auto shadow-elegant border border-primary/2">
             <h3 className="text-lg md:text-2xl font-bold mb-3 md:mb-4 bg-gradient-to-r from-primary via-[hsl(217,95%,65%)] to-primary bg-clip-text text-transparent">Why Choose Easy House Wash NZ?</h3>
             <div className="grid grid-cols-3 gap-4 md:gap-6 mt-4 md:mt-8">
               <div className="text-center p-2 md:p-4 rounded-lg bg-white/60 backdrop-blur-sm">
-                <div className="text-xl md:text-3xl font-bold bg-gradient-to-br from-primary to-[hsl(217,95%,65%)] bg-clip-text text-transparent mb-1 md:mb-2">5+</div>
+                <div className="text-xl md:text-3xl font-bold bg-gradient-to-br from-primary to-[hsl(217,95%,65%)] bg-clip-text text-transparent mb-1 md:mb-2">2+</div>
                 <div className="text-xs md:text-sm text-muted-foreground">Years of Experience</div>
               </div>
               <div className="text-center p-2 md:p-4 rounded-lg bg-white/60 backdrop-blur-sm">
-                <div className="text-xl md:text-3xl font-bold bg-gradient-to-br from-primary to-[hsl(217,95%,65%)] bg-clip-text text-transparent mb-1 md:mb-2">500+</div>
+                <div className="text-xl md:text-3xl font-bold bg-gradient-to-br from-primary to-[hsl(217,95%,65%)] bg-clip-text text-transparent mb-1 md:mb-2">50+</div>
                 <div className="text-xs md:text-sm text-muted-foreground">Satisfied Customers</div>
               </div>
               <div className="text-center p-2 md:p-4 rounded-lg bg-white/60 backdrop-blur-sm">
