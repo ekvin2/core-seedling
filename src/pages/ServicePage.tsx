@@ -311,7 +311,7 @@ const ServicePage = () => {
 
               {/* Service Benefits */}
               <div>
-                <Card className="shadow-elegant sticky top-8">
+                <Card className="shadow-elegant sticky top-8 bg-[hsl(var(--secondary))]">
                   <CardContent className="p-6">
                     <h3 className="text-2xl font-bold mb-6">
                       THE BENEFITS OF {service.title.toUpperCase()}
@@ -319,7 +319,7 @@ const ServicePage = () => {
                     <ul className="space-y-3 mb-8">
                       {service.benefits && service.benefits.length > 0 ? (
                         service.benefits.map((benefit, index) => (
-                          <li key={index} className="flex items-start text-muted-foreground">
+                          <li key={index} className="flex items-start ">
                             <CheckCircle className="w-5 h-5 text-primary mr-3 flex-shrink-0 mt-0.5" />
                             {benefit}
                           </li>
