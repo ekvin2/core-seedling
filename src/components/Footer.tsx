@@ -14,15 +14,7 @@ const Footer = () => {
   const [services, setServices] = useState<Service[]>([]);
   const [phoneNumber, setPhoneNumber] = useState("+64 21 123 4567");
   const [address, setAddress] = useState("Auckland Central\nAuckland, New Zealand");
-  const [businessHours, setBusinessHours] = useState({
-    monday: "7:00 AM - 7:00 PM",
-    tuesday: "7:00 AM - 7:00 PM",
-    wednesday: "7:00 AM - 7:00 PM",
-    thursday: "7:00 AM - 7:00 PM",
-    friday: "7:00 AM - 7:00 PM",
-    saturday: "8:00 AM - 5:00 PM",
-    sunday: "9:00 AM - 3:00 PM"
-  });
+  const [businessHours, setBusinessHours] = useState<Record<string, string>>({});
   const currentYear = new Date().getFullYear();
 
   useEffect(() => {
@@ -56,8 +48,14 @@ const Footer = () => {
           // Convert to string format if needed
           const formatHours = (dayHours: any) => {
             if (typeof dayHours === 'string') return dayHours;
-            if (typeof dayHours === 'object' && dayHours.open && dayHours.close) {
-              return `${dayHours.open} - ${dayHours.close}`;
+            if (typeof dayHours === 'object') {
+              if (dayHours.closed) {
+                return 'Closed';
+              }
+              if (dayHours.open && dayHours.close) {
+                return `${dayHours.open} - ${dayHours.close}`;
+              }
+              return `${dayHours.open || 'N/A'} - ${dayHours.close || 'N/A'}`;
             }
             return "7:00 AM - 7:00 PM";
           };
@@ -151,10 +149,23 @@ const Footer = () => {
               </div>
               <div className="flex items-start space-x-3">
                 <Clock className="w-3 h-3 md:w-4 md:h-4 mt-1" />
-                <div className="text-sm md:text-base">
-                  <div>Mon - Fri: {businessHours.monday}</div>
-                  <div>Sat: {businessHours.saturday}</div>
-                  <div>Sun: {businessHours.sunday}</div>
+                <div className="text-sm md:text-base space-y-1">
+                  {businessHours.monday && businessHours.monday === businessHours.tuesday && 
+                   businessHours.tuesday === businessHours.wednesday && 
+                   businessHours.wednesday === businessHours.thursday && 
+                   businessHours.thursday === businessHours.friday ? (
+                    <div><span className="font-medium">Mon - Fri:</span> {businessHours.monday}</div>
+                  ) : (
+                    <>
+                      {businessHours.monday && <div><span className="font-medium">Mon:</span> {businessHours.monday}</div>}
+                      {businessHours.tuesday && <div><span className="font-medium">Tue:</span> {businessHours.tuesday}</div>}
+                      {businessHours.wednesday && <div><span className="font-medium">Wed:</span> {businessHours.wednesday}</div>}
+                      {businessHours.thursday && <div><span className="font-medium">Thu:</span> {businessHours.thursday}</div>}
+                      {businessHours.friday && <div><span className="font-medium">Fri:</span> {businessHours.friday}</div>}
+                    </>
+                  )}
+                  {businessHours.saturday && <div><span className="font-medium">Sat:</span> {businessHours.saturday}</div>}
+                  {businessHours.sunday && <div><span className="font-medium">Sun:</span> {businessHours.sunday}</div>}
                 </div>
               </div>
             </div>

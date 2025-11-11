@@ -19,6 +19,7 @@ const businessHoursSchema = z.object({
 
 const contactDetailsSchema = z.object({
   phone: z.string().min(10, 'Phone number must be at least 10 characters'),
+  address: z.string().min(5, 'Address must be at least 5 characters').optional().or(z.literal('')),
   facebook_url: z.string().url('Must be a valid URL').optional().or(z.literal('')),
   instagram_url: z.string().url('Must be a valid URL').optional().or(z.literal('')),
   tiktok_url: z.string().url('Must be a valid URL').optional().or(z.literal('')),
@@ -38,6 +39,7 @@ type ContactDetailsFormData = z.infer<typeof contactDetailsSchema>;
 interface BusinessInfo {
   id: string;
   phone: string;
+  address?: string;
   business_hours: Record<string, { open?: string; close?: string; closed?: boolean }>;
   facebook_url?: string;
   instagram_url?: string;
@@ -79,6 +81,7 @@ export function ContactDetailsForm() {
         setBusinessInfoId(data.id);
         reset({
           phone: data.phone,
+          address: data.address || '',
           facebook_url: data.facebook_url || '',
           instagram_url: data.instagram_url || '',
           tiktok_url: data.tiktok_url || '',
@@ -105,6 +108,7 @@ export function ContactDetailsForm() {
         .from('business_info')
         .update({
           phone: data.phone,
+          address: data.address || null,
           business_hours: data.business_hours,
           facebook_url: data.facebook_url || null,
           instagram_url: data.instagram_url || null,
@@ -160,6 +164,20 @@ export function ContactDetailsForm() {
             />
             {errors.phone && (
               <p className="text-sm text-destructive mt-1">{errors.phone.message}</p>
+            )}
+          </div>
+
+          <div>
+            <Label htmlFor="address">Address</Label>
+            <Input
+              id="address"
+              type="text"
+              {...register('address')}
+              placeholder="123 Main Street, City, State 12345"
+              aria-invalid={errors.address ? 'true' : 'false'}
+            />
+            {errors.address && (
+              <p className="text-sm text-destructive mt-1">{errors.address.message}</p>
             )}
           </div>
         </CardContent>

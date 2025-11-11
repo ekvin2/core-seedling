@@ -13,12 +13,13 @@ const Contact = () => {
   const [isQuoteModalOpen, setIsQuoteModalOpen] = useState(false);
   const [businessPhone, setBusinessPhone] = useState('(555) 123-4567');
   const [businessAddress, setBusinessAddress] = useState('123 Clean Street\nYour City, ST 12345');
+  const [businessHours, setBusinessHours] = useState<Record<string, { open?: string; close?: string; closed?: boolean }> | null>(null);
 
   useEffect(() => {
     const fetchBusinessInfo = async () => {
       const { data } = await supabase
         .from('business_info')
-        .select('phone, address')
+        .select('phone, address, business_hours')
         .single();
       
       if (data?.phone) {
@@ -26,6 +27,9 @@ const Contact = () => {
       }
       if (data?.address) {
         setBusinessAddress(data.address);
+      }
+      if (data?.business_hours) {
+        setBusinessHours(data.business_hours as Record<string, { open?: string; close?: string; closed?: boolean }>);
       }
     };
 
@@ -194,7 +198,7 @@ const Contact = () => {
                     <div className="flex items-start space-x-3">
                       <CheckCircle className="w-5 h-5 text-primary mt-1 flex-shrink-0" />
                       <div>
-                        <h4 className="font-semibold">5+ Years Experience</h4>
+                        <h4 className="font-semibold">2+ Years Experience</h4>
                         <p className="text-muted-foreground text-sm">Trusted by 500+ satisfied customers</p>
                       </div>
                     </div>
@@ -208,46 +212,41 @@ const Contact = () => {
                       Business Hours
                     </h4>
                     <div className="space-y-2 text-sm">
-                      <div className="flex justify-between">
-                        <span>Monday - Friday</span>
-                        <span className="font-medium">8:00 AM - 6:00 PM</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span>Saturday</span>
-                        <span className="font-medium">9:00 AM - 4:00 PM</span>
-                      </div>
-                      <div className="flex justify-between">
-                        <span>Sunday</span>
-                        <span className="font-medium">Closed</span>
-                      </div>
+                      {businessHours ? (
+                        Object.entries(businessHours).map(([day, hours]) => (
+                          <div key={day} className="flex justify-between">
+                            <span className="capitalize">{day}</span>
+                            <span className="font-medium">
+                              {hours.closed ? (
+                                'Closed'
+                              ) : (
+                                `${hours.open || 'N/A'} - ${hours.close || 'N/A'}`
+                              )}
+                            </span>
+                          </div>
+                        ))
+                      ) : (
+                        <>
+                          <div className="flex justify-between">
+                            <span>Monday - Friday</span>
+                            <span className="font-medium">8:00 AM - 6:00 PM</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span>Saturday</span>
+                            <span className="font-medium">9:00 AM - 4:00 PM</span>
+                          </div>
+                          <div className="flex justify-between">
+                            <span>Sunday</span>
+                            <span className="font-medium">Closed</span>
+                          </div>
+                        </>
+                      )}
                     </div>
-                    <div className="mt-4 pt-4 border-t">
-                      <p className="text-sm text-muted-foreground">
-                        <strong>Emergency cleaning services</strong> available 24/7 for urgent situations.
-                      </p>
-                    </div>
+                   
                   </CardContent>
                 </Card>
 
-                <Card className="shadow-elegant">
-                  <CardContent className="p-6">
-                    <h4 className="text-xl font-semibold mb-4">Service Areas</h4>
-                    <p className="text-muted-foreground mb-4">
-                      We proudly serve the following areas within a 30-mile radius:
-                    </p>
-                    <div className="grid grid-cols-2 gap-2 text-sm">
-                      <div>• Downtown District</div>
-                      <div>• Riverside Area</div>
-                      <div>• Westside</div>
-                      <div>• Oak Park</div>
-                      <div>• Business Park</div>
-                      <div>• Suburban Heights</div>
-                    </div>
-                    <p className="text-sm text-muted-foreground mt-4">
-                      Don't see your area listed? Contact us - we may still be able to help!
-                    </p>
-                  </CardContent>
-                </Card>
+                
               </div>
             </div>
           </div>
