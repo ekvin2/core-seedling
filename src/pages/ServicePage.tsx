@@ -23,7 +23,7 @@ interface Service {
   slug: string;
   service_image_url?: string;
   youtube_video_url?: string;
-  benefits?: string[] | null;
+  benefits?: string | null;
 }
 
 const ServicePage = () => {
@@ -311,28 +311,38 @@ const ServicePage = () => {
 
               {/* Service Benefits */}
               <div>
-                <Card className="shadow-elegant sticky top-8 bg-[hsl(var(--secondary))]">
+                <Card className="shadow-elegant sticky top-8 bg-[hsl(var(--secondary))] border-primary">
                   <CardContent className="p-6">
-                    <h3 className="text-2xl font-bold mb-6">
+                    <h3 className="text-2xl font-bold mb-6 text-center">
                       THE BENEFITS OF {service.title.toUpperCase()}
                     </h3>
-                    <ul className="space-y-3 mb-8">
-                      {service.benefits && service.benefits.length > 0 ? (
-                        service.benefits.map((benefit, index) => (
-                          <li key={index} className="flex items-start ">
-                            <CheckCircle className="w-5 h-5 text-primary mr-3 flex-shrink-0 mt-0.5" />
-                            {benefit}
-                          </li>
-                        ))
-                      ) : (
-                        <li className="text-muted-foreground italic">
-                          No benefits listed for this service yet.
-                        </li>
-                      )}
-                    </ul>
+                    <div className="space-y-3 mb-8 text-lg">
+                        {service.benefits ? (
+                          typeof service.benefits === 'string' ? (
+                            (() => {
+                              // Remove Quill-specific classes (e.g. ql-indent-1) so native list markers render
+                              const sanitized = service.benefits
+                                .replace(/ql-indent-\d+/g, '')
+                                .replace(/class=("|')\s*("|')/g, '')
+                                .replace(/class=("|')\s*(?=\s)/g, '');
+
+                              return (
+                                <div
+                                  className="prose text-muted-foreground [&_ul]:list-disc [&_ul]:ml-6 [&_ol]:list-decimal [&_ol]:ml-6"
+                                  dangerouslySetInnerHTML={{ __html: sanitized }}
+                                />
+                              );
+                            })()
+                          ) : (
+                            <div className="text-muted-foreground italic">No benefits listed for this service yet.</div>
+                          )
+                        ) : (
+                          <div className="text-muted-foreground italic">No benefits listed for this service yet.</div>
+                        )}
+                    </div>
                     
                     <div className="border-t pt-6">
-                      <h4 className="font-semibold mb-4">Ready to Get Started?</h4>
+                      <h4 className="font-semibold mb-4 text-center">Ready to Get Started?</h4>
                       <div className="space-y-3">
                         <Button 
                           className="w-full" 

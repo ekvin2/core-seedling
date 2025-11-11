@@ -267,7 +267,7 @@ export type Database = {
       }
       services: {
         Row: {
-          benefits: string[] | null
+          benefits: string | null
           content: string
           created_at: string
           display_order: number | null
@@ -283,7 +283,7 @@ export type Database = {
           youtube_video_url: string | null
         }
         Insert: {
-          benefits?: string[] | null
+          benefits?: string | null
           content: string
           created_at?: string
           display_order?: number | null
@@ -299,7 +299,7 @@ export type Database = {
           youtube_video_url?: string | null
         }
         Update: {
-          benefits?: string[] | null
+          benefits?: string | null
           content?: string
           created_at?: string
           display_order?: number | null
