@@ -93,22 +93,7 @@ const LeadForm = ({ onSuccess }: LeadFormProps) => {
         console.error('Error sending notification email:', emailError);
       }
 
-      // Send to CRM
-      try {
-        await supabase.functions.invoke('sync-lead-to-crm', {
-          body: {
-            lead: {
-              name: data.name,
-              email: data.email,
-              phone: data.phone,
-              city: data.city,
-              service_id: data.service,
-            },
-          },
-        });
-      } catch (crmError) {
-        console.error('Error syncing to CRM:', crmError);
-      }
+    
 
       toast({
         title: "Quote Request Submitted!",
