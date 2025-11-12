@@ -34,8 +34,8 @@ const handler = async (req: Request): Promise<Response> => {
     console.log("Sending lead notification email for:", lead.name);
 
     const emailResponse = await resend.emails.send({
-      from: "Cleaning Services <onboarding@resend.dev>",
-      to: ["admin@cleaningservices.com"], // Replace with actual admin email
+      from: "Cleaning Services <notify@easyhousewash.co.nz>",
+      to: ["rojithonline@gmail.com"],
       subject: `New Lead: ${lead.name} - ${lead.service}`,
       html: `
         <h2>New Lead Submission</h2>
