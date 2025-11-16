@@ -358,7 +358,7 @@ const ServicePage = () => {
                           </div>
                           <div className="flex items-center">
                             <Mail className="w-4 h-4 mr-1" />
-                            info@easyhousewash.nz
+                            info@easyhousewash.co.nz
                           </div>
                         </div>
                       </div>
