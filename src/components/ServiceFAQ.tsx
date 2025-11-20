@@ -139,7 +139,7 @@ const ServiceFAQ = ({ serviceName, serviceId }: ServiceFAQProps) => {
               </div>
               <div className="text-center">
                 <div className="text-lg font-semibold text-primary">Email Us</div>
-                <div className="text-muted-foreground">info@easyhousewash.nz</div>
+                <div className="text-muted-foreground">info@easyhousewash.co.nz</div>
               </div>
             </div>
           </div>
