@@ -18,7 +18,7 @@ All colors MUST be HSL.
     --popover-foreground: 222.2 84% 4.9%;
 
     /* Professional Blue Theme */
-    --primary: 217 91%,25%;  /* Professional blue */
+    --primary: 217 91% 25%;  /* Professional blue */
     --primary-foreground: 0 0% 100%;
 
     --secondary: 217 50% 95%;  /* Light blue */

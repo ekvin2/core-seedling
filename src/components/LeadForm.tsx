@@ -46,7 +46,7 @@ const LeadForm = ({ onSuccess }: LeadFormProps) => {
 
   const onSubmit = async (data: LeadFormData) => {
     setIsSubmitting(true);
-    
+
     try {
       // Insert into quotes table
       const serviceId = data.service;
@@ -93,7 +93,7 @@ const LeadForm = ({ onSuccess }: LeadFormProps) => {
         console.error('Error sending notification email:', emailError);
       }
 
-    
+
 
       toast({
         title: "Quote Request Submitted!",
@@ -245,9 +245,9 @@ const LeadForm = ({ onSuccess }: LeadFormProps) => {
         )}
       </div>
 
-      <Button 
-        type="submit" 
-        size="lg" 
+      <Button
+        type="submit"
+        size="lg"
         className="w-full min-h-[52px] text-base md:text-lg font-semibold"
         disabled={isSubmitting}
         aria-label="Submit quote request form"
